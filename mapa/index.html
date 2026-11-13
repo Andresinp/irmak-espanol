@@ -31,8 +31,8 @@ ul,ol{margin:0;padding:0;list-style:none}
 
 /* ---------- bars ---------- */
 .top{position:fixed;left:0;right:0;top:0;z-index:20;padding:calc(env(safe-area-inset-top,0px) + 8px) 16px 8px;
-  display:flex;gap:10px;align-items:center;background:color-mix(in srgb,var(--board) 88%,transparent);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  display:flex;gap:10px;align-items:center;background:color-mix(in srgb,var(--board) 96%,transparent);
+  border-bottom:1px solid var(--line)}
 .top a.back{color:var(--muted);text-decoration:none;font-size:.9rem;white-space:nowrap}
 .top .ttl{font-family:var(--display);font-weight:700;font-size:1.05rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .btn{font:inherit;font-size:.95rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap;min-height:40px}
@@ -40,8 +40,8 @@ ul,ol{margin:0;padding:0;list-style:none}
 .btn:disabled{opacity:.45;cursor:default}
 .btn:focus-visible{outline:2px solid var(--in);outline-offset:2px}
 .nav{position:fixed;left:0;bottom:0;z-index:20;right:0;padding:8px 12px calc(env(safe-area-inset-bottom,0px) + 8px);
-  display:flex;gap:8px;align-items:center;background:color-mix(in srgb,var(--board) 88%,transparent);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--line)}
+  display:flex;gap:8px;align-items:center;background:color-mix(in srgb,var(--board) 96%,transparent);
+  border-top:1px solid var(--line)}
 .nav .go{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:none}
 .nav .go::-webkit-scrollbar{display:none}
 .nav .go button{font:inherit;font-size:.9rem;border:0;border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap;color:var(--ink);background:var(--surface);min-height:40px}
@@ -688,6 +688,7 @@ view.addEventListener('pointerdown',e=>{
   if(!field){ try{ view.setPointerCapture(e.pointerId); }catch(_){} }
   if(pts.size===0) inField=field;
   pts.set(e.pointerId,{x:e.clientX,y:e.clientY,type:e.pointerType});
+  if(e.pointerType!=='mouse') lastTouch=performance.now();
   if(pts.size===1){ last={x:e.clientX,y:e.clientY}; moved=0; hinted=false; }
   if(pts.size===2){ const [a,b]=[...pts.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y),cx:(a.x+b.x)/2,cy:(a.y+b.y)/2};
     moved=99; hinted=true; two.classList.remove('on'); }
@@ -699,7 +700,7 @@ addEventListener('pointermove',e=>{
   if(pts.size===2 && pinch){
     const [a,b]=[...pts.values()], d=Math.hypot(a.x-b.x,a.y-b.y), cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
     x+=cx-pinch.cx; y+=cy-pinch.cy;
-    const vr=view.getBoundingClientRect(); zoomAt(d/pinch.d,cx-vr.left,cy-vr.top);
+    zoomAt(d/pinch.d,cx,cy);   // #view is fixed at 0,0: no layout read per frame
     pinch={d,cx,cy};
   } else if(pts.size===1 && last){
     const dx=e.clientX-last.x, dy=e.clientY-last.y;
@@ -718,13 +719,24 @@ function up(e){
   if(pts.size===0){ pinch=null; view.classList.remove('grabbing'); }   // no glide: the map stops where the fingers left it
 }
 addEventListener('pointerup',up); addEventListener('pointercancel',up);
+/* Trackpad and mouse wheel. Chrome, Edge and Firefox send a trackpad pinch as ctrl+wheel; scroll pans.
+   ZOOM_SPEED 0.02 = twice the browser's own pinch rate, which felt sluggish on a big board.
+   Line and page deltas (some mice) become pixels; one wheel notch is capped so a mouse doesn't jump. */
+const ZOOM_SPEED=0.02;
+let gs=null, lastTouch=-1e9;
 view.addEventListener('wheel',e=>{
   e.preventDefault(); stopAnim();
-  const vr=view.getBoundingClientRect();
-  if(e.ctrlKey||e.metaKey) zoomAt(Math.exp(-e.deltaY*0.01),e.clientX-vr.left,e.clientY-vr.top);
-  else { x-=e.deltaX; y-=e.deltaY; apply(); }
+  if(gs!==null) return;                                    // Safari pinch in progress: the gesture events zoom
+  const k=e.deltaMode===1?16:e.deltaMode===2?view.clientHeight:1;
+  if(e.ctrlKey||e.metaKey) zoomAt(Math.exp(-clamp(e.deltaY*k,-20,20)*ZOOM_SPEED),e.clientX,e.clientY);
+  else { x-=e.deltaX*k; y-=e.deltaY*k; apply(); }
 },{passive:false});
-['gesturestart','gesturechange'].forEach(t=>document.addEventListener(t,e=>e.preventDefault()));
+/* Safari on the Mac (and an iPad with a trackpad) sends a pinch as gesturestart/change/end with a cumulative
+   scale, not as ctrl+wheel. On a touch screen the pointer code already handles the pinch, so a gesture that
+   comes with or right after a finger is ignored (otherwise iPad and iPhone would zoom twice). */
+document.addEventListener('gesturestart',e=>{ e.preventDefault(); if(pts.size||performance.now()-lastTouch<800) return; stopAnim(); gs=e.scale||1; });
+document.addEventListener('gesturechange',e=>{ e.preventDefault(); if(gs===null) return; const sc=e.scale||1; zoomAt(Math.pow(sc/gs,1.4),e.clientX,e.clientY); gs=sc; });
+document.addEventListener('gestureend',e=>{ e.preventDefault(); gs=null; });
 function zoomCenter(f){ const vr=view.getBoundingClientRect(), ns=clamp(s*f,MIN,MAX);
   flyTo({s:ns, x:vr.width/2-(vr.width/2-x)*ns/s, y:vr.height/2-(vr.height/2-y)*ns/s},300); }
 document.getElementById('zi').onclick=()=>zoomCenter(1.5);
