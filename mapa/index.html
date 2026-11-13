@@ -1,0 +1,803 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>El mapa de la columna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Engine from the study-map skill. Poppins = Irmak's site font; Atkinson Hyperlegible for reading.
+   Pastel colour per part of the column: entrada = blue, consecuencias = rose, lo que hace falta = mint,
+   llamamiento y cierre = lavender, gramática = butter, conectores = peach */
+:root{
+  --board:#e3e8ed; --dots:#c9d1d9; --surface:#ffffff; --ink:#17212b; --muted:#55636f; --line:#d3dbe2;
+  --in:#2b5a9e; --in-s:#dce8fa;
+  --pr:#a43a2d; --pr-s:#fbe0db;
+  --so:#22744a; --so-s:#d8efe1;
+  --co:#5a44a6; --co-s:#e7e0f9;
+  --gr:#835c00; --gr-s:#fbf0cb;
+  --cn:#a0501a; --cn-s:#fde3cf;
+  --display:"Poppins","Avenir Next",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+}
+/* Always light: brighter for studying, whatever the device setting. */
+:root{color-scheme:light}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;overflow:hidden;margin:0}
+body{background:var(--board);color:var(--ink);font-family:var(--body);-webkit-text-size-adjust:100%;overscroll-behavior:none}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.12;margin:0;text-wrap:balance}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+
+/* ---------- bars ---------- */
+.top{position:fixed;left:0;right:0;top:0;z-index:20;padding:calc(env(safe-area-inset-top,0px) + 8px) 16px 8px;
+  display:flex;gap:10px;align-items:center;background:color-mix(in srgb,var(--board) 88%,transparent);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top a.back{color:var(--muted);text-decoration:none;font-size:.9rem;white-space:nowrap}
+.top .ttl{font-family:var(--display);font-weight:700;font-size:1.05rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{font:inherit;font-size:.95rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap;min-height:40px}
+.btn.main{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:700}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible{outline:2px solid var(--in);outline-offset:2px}
+.nav{position:fixed;left:0;bottom:0;z-index:20;right:0;padding:8px 12px calc(env(safe-area-inset-bottom,0px) + 8px);
+  display:flex;gap:8px;align-items:center;background:color-mix(in srgb,var(--board) 88%,transparent);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--line)}
+.nav .go{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:none}
+.nav .go::-webkit-scrollbar{display:none}
+.nav .go button{font:inherit;font-size:.9rem;border:0;border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap;color:var(--ink);background:var(--surface);min-height:40px}
+.nav .go button[data-k="in"]{background:var(--in-s)} .nav .go button[data-k="pr"]{background:var(--pr-s)}
+.nav .go button[data-k="so"]{background:var(--so-s)} .nav .go button[data-k="co"]{background:var(--co-s)}
+.nav .go button[data-k="cn"]{background:var(--cn-s)} .nav .go button[data-k="gr"]{background:var(--gr-s)}
+.nav .go button[data-k="w"]{background:var(--ink);color:var(--surface);font-weight:700}
+.zoom{display:flex;gap:4px}
+.zoom .btn{width:40px;padding:0;font-size:1.2rem;font-weight:700}
+@media (max-width:520px){.top .ttl{visibility:hidden}}
+
+/* ---------- board ---------- */
+#view{position:fixed;inset:0;overflow:hidden;touch-action:none;cursor:grab;
+  background-color:var(--board);background-image:radial-gradient(var(--dots) 1.4px,transparent 1.6px);background-size:28px 28px}
+#view.grabbing{cursor:grabbing}
+#board{position:absolute;left:0;top:0;transform-origin:0 0;display:grid;padding:80px;
+  grid-template-columns:740px 1040px 740px;gap:90px 110px;align-items:start;font-size:21px;line-height:1.5}
+#board.moving{will-change:transform}
+.col{display:grid;gap:40px;align-content:start}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:24px 28px;display:grid;gap:14px;align-content:start;
+  box-shadow:0 1px 0 rgba(0,0,0,.03),0 8px 24px -14px rgba(20,33,43,.25);cursor:zoom-in}
+.card > h3{font-size:30px;font-weight:700;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.card > h3 small{font:400 18px/1.3 var(--body);color:var(--muted)}
+.kick{font:700 15px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sec{display:grid;gap:4px}
+.sec .kick{margin-bottom:2px}
+.sec h2{font-size:50px;font-weight:800;letter-spacing:-.02em}
+.in .sec .kick,.in h2{color:var(--in)} .pr .sec .kick,.pr h2{color:var(--pr)}
+.so .sec .kick,.so h2{color:var(--so)} .co .sec .kick,.co h2{color:var(--co)}
+.in{border-top:8px solid var(--in)} .pr{border-top:8px solid var(--pr)} .so{border-top:8px solid var(--so)} .co{border-top:8px solid var(--co)}
+.gr{background:var(--gr-s);border-color:transparent}
+.cn{background:var(--cn-s);border-color:transparent}
+
+/* plain tappable list */
+.ls{display:grid;gap:2px}
+.ls .ph{position:relative;padding:6px 10px 6px 30px;border-radius:10px;font-weight:700;font-size:23px;line-height:1.35;cursor:pointer}
+.ls .ph::before{content:"";position:absolute;left:10px;top:.72em;width:9px;height:9px;border-radius:50%;background:currentColor;opacity:.55}
+.in .ls .ph{color:var(--in)} .pr .ls .ph{color:var(--pr)} .so .ls .ph{color:var(--so)} .co .ls .ph{color:var(--co)}
+.ph:hover{background:color-mix(in srgb,currentColor 8%,transparent)}
+.ph.flash{background:color-mix(in srgb,var(--so) 22%,transparent)}
+.ls .ph i{font-style:normal;font-weight:400;color:var(--muted);font-size:18px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--surface);border-radius:999px;padding:5px 14px;font-size:19px;cursor:pointer;border:1px solid var(--line)}
+.gr .chip,.cn .chip{border-color:transparent}
+.chip b{font-weight:700}
+.chip i{font-style:normal;color:var(--muted);font-size:16px;margin-left:4px}
+.cn .chip b{color:var(--cn)}
+.formula{font-family:var(--display);font-size:23px;font-weight:700;line-height:1.35}
+.formula .p{color:var(--in)} .formula .f{color:var(--gr)} .formula .x{color:var(--pr)}
+.rule{display:grid;gap:8px}
+.rule > div{background:color-mix(in srgb,var(--surface) 70%,transparent);border-radius:12px;padding:8px 12px}
+.note{font-size:18px;color:var(--muted)}
+.end{color:var(--gr);font-weight:800}
+
+/* imperative table */
+.imp{border-collapse:collapse;width:100%;font-size:20px}
+.imp th,.imp td{text-align:left;padding:7px 10px;border-bottom:1px solid color-mix(in srgb,var(--gr) 22%,transparent)}
+.imp thead th{font:700 14px/1.2 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--gr)}
+.imp tbody th{font-family:var(--display);font-weight:600;font-size:18px;color:var(--muted);white-space:nowrap}
+.imp td{font-weight:700}
+.imp td.sj{background:color-mix(in srgb,var(--surface) 75%,transparent)}
+.imp tr:last-child th,.imp tr:last-child td{border-bottom:0}
+
+/* ---------- writing page (centre) ---------- */
+#k-write{cursor:auto;padding:34px 40px;gap:16px;border:2px solid var(--ink);box-shadow:0 20px 60px -30px rgba(20,33,43,.5)}
+#k-write h2{font-size:48px;font-weight:800}
+.parts{display:flex;flex-wrap:wrap;gap:8px}
+.parts span{border-radius:999px;padding:4px 14px;font-size:18px;font-weight:700}
+.parts .pa{background:var(--in-s);color:var(--in)} .parts .pb{background:var(--pr-s);color:var(--pr)}
+.parts .pc{background:var(--so-s);color:var(--so)} .parts .pd{background:var(--co-s);color:var(--co)}
+#draft{width:100%;min-height:1100px;font:22px/1.75 var(--body);color:var(--ink);border:0;border-radius:12px;padding:20px 24px;resize:none;overflow:hidden;
+  background:repeating-linear-gradient(to bottom,transparent 0 calc(1.75em - 1px),var(--line) calc(1.75em - 1px) 1.75em) var(--board);
+  background-attachment:local;background-position:0 20px}
+#draft:focus-visible{outline:3px solid var(--in);outline-offset:2px}
+.wbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.wc{font-variant-numeric:tabular-nums;font-weight:700;padding:6px 14px;border-radius:999px;font-size:19px;background:var(--board)}
+.wc.ok{background:var(--so-s);color:var(--so)} .wc.over{background:var(--pr-s);color:var(--pr)}
+.paras{font-size:18px;color:var(--muted)}
+#k-write .btn{font-size:18px}
+
+/* ---------- info band (top) ---------- */
+#info{grid-column:1/-1;display:grid;grid-template-columns:1.15fr 1.25fr .78fr 1.2fr;gap:40px;align-items:start}
+.band-h{grid-column:1/-1;display:flex;align-items:baseline;gap:20px;flex-wrap:wrap}
+.band-h h2{font-size:62px;font-weight:800;letter-spacing:-.02em}
+.band-h p{font-size:24px;color:var(--muted)}
+.tl{display:grid;gap:7px}
+.tl > div{display:grid;grid-template-columns:118px 1fr;gap:12px;font-size:18.5px;line-height:1.35}
+.tl b{font-family:var(--display);font-weight:700;color:var(--muted);font-size:17px;padding-top:1px}
+.tl .now b,.tl .now span{color:var(--pr);font-weight:700}
+.tl .oil b{color:var(--cn)}
+.views{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.views > div{border-radius:16px;padding:14px 16px;display:grid;gap:8px;align-content:start}
+.views .out{background:var(--cn-s)} .views .ins{background:var(--co-s)}
+.views h4{font-size:21px;font-weight:700}
+.views .out h4{color:var(--cn)} .views .ins h4{color:var(--co)}
+.views .t{font:700 13px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.views ul{display:grid;gap:6px}
+.views li{position:relative;padding-left:18px;font-size:18px;line-height:1.35}
+.views li::before{content:"";position:absolute;left:2px;top:.55em;width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.5}
+.big{font-family:var(--display);font-size:25px;font-weight:700;line-height:1.25}
+.big em{font-style:normal;color:var(--pr)}
+.chain{display:grid;gap:0}
+.chain .s{font-weight:700;font-size:19px;padding:5px 0;line-height:1.3}
+.chain .s.hot{color:var(--pr);font-family:var(--display);font-size:24px;font-weight:700}
+.chain .ar{color:var(--pr);font:700 20px/1 var(--display);padding-left:4px}
+.tbx{overflow:hidden;border-radius:14px}
+.all{border-collapse:collapse;width:100%;font-size:18px;line-height:1.35}
+.all th,.all td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.all thead th{font:700 14px/1.2 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.all tbody th{font-family:var(--display);font-size:18px;font-weight:600;white-space:nowrap}
+.all tr:last-child td,.all tr:last-child th{border-bottom:0}
+.all td.max{background:var(--pr-s);font-weight:700}
+.src{font-size:14px;color:var(--muted)}
+
+/* who acts */
+.who{display:grid;gap:14px}
+.who .lvl{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:6px}
+.who .lvl b{font-family:var(--display);font-size:21px;font-weight:700}
+.who .lvl span{font-size:15px;color:var(--muted);white-space:nowrap}
+.who .chip{background:var(--so-s);border-color:transparent;color:var(--so);font-weight:700}
+
+/* model */
+.para{padding:10px 14px;border-radius:12px;border-left:6px solid;font-size:19px;line-height:1.6}
+.para.p1{border-color:var(--in);background:var(--in-s)} .para.p2{border-color:var(--pr);background:var(--pr-s)}
+.para.p3{border-color:var(--so);background:var(--so-s)} .para.p4{border-color:var(--co);background:var(--co-s)}
+.mt{font-family:var(--display);font-size:28px;font-weight:800}
+.st{font-weight:700}
+.cx{color:var(--cn);font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.vs{color:var(--gr);font-weight:700;background:var(--gr-s);border-radius:4px;padding:0 3px}
+.vm{color:var(--co);font-weight:700;background:var(--surface);border-radius:4px;padding:0 3px;outline:2px solid var(--co)}
+.vi{color:var(--in);font-weight:700}
+.mkey{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:15px;color:var(--muted);align-items:center}
+.mold .ph{padding:6px 10px;border-radius:10px;font-size:19px;cursor:pointer}
+.mold .ph u{text-decoration:none;color:var(--muted)}
+.mold h4{font:700 14px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
+.checks{display:grid;gap:4px}
+.checks li{position:relative;padding-left:32px;font-size:19px}
+.checks li::before{content:"☐";position:absolute;left:0;top:-3px;font-size:23px;color:var(--co)}
+
+/* spot the errors */
+.errtxt{font-size:20px;line-height:1.7;background:var(--board);border-radius:12px;padding:14px 18px}
+.errtxt sup{font:700 13px/1 var(--display);color:var(--pr);margin-right:2px}
+details.sol{border-radius:12px;background:var(--pr-s);padding:10px 16px}
+details.sol summary{cursor:pointer;font:700 18px/1.4 var(--display);color:var(--pr)}
+.fix{display:grid;gap:10px;margin-top:10px}
+.fix > div{font-size:18px;line-height:1.4;background:var(--surface);border-radius:10px;padding:8px 12px}
+.fix s{color:var(--pr)} .fix b{color:var(--so)}
+.fix span{display:block;color:var(--muted);font-size:16.5px}
+
+/* toast + help */
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 70px);transform:translate(-50%,-10px);z-index:40;background:var(--ink);color:var(--surface);
+  padding:8px 16px;border-radius:999px;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:90vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.help{position:fixed;z-index:25;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 76px);transform:translateX(-50%);background:var(--surface);border:1px solid var(--line);
+  border-radius:16px;padding:12px 16px;display:flex;gap:12px;align-items:center;font-size:.95rem;box-shadow:0 10px 30px -16px rgba(0,0,0,.4);width:min(600px,calc(100vw - 32px))}
+.help p{flex:1;line-height:1.4}
+.two{position:fixed;inset:0;z-index:15;display:grid;place-items:center;pointer-events:none;opacity:0;transition:opacity .25s;
+  background:color-mix(in srgb,var(--ink) 38%,transparent)}
+.two.on{opacity:1}
+.two p{background:var(--surface);color:var(--ink);border-radius:18px;padding:16px 22px;font:700 1.15rem/1.3 var(--body);display:flex;gap:12px;align-items:center;
+  box-shadow:0 12px 40px -16px rgba(0,0,0,.5);max-width:calc(100vw - 32px)}
+.two p span{font-size:1.8rem}
+@media (prefers-reduced-motion: reduce){.toast,.two{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <a class="back" href="../">← Irmak · Español</a>
+  <span class="ttl">El mapa de la columna · Irán</span>
+  <button class="btn main" data-go="k-write" type="button">✍︎ Mi texto</button>
+</div>
+
+<div id="view" aria-label="Mapa: dos dedos para moverte y hacer zoom">
+<div id="board">
+
+  <!-- ================= TOP BAND · what is going on ================= -->
+  <div id="info">
+    <div class="band-h"><h2>Irán: lo que hay detrás</h2><p>Antes de opinar, entiende la historia, las dos miradas y el camino de los precios.</p></div>
+
+    <div class="card" id="k-roots">
+      <h3>Un siglo de petróleo y poder</h3>
+      <div class="tl">
+        <div class="oil"><b>1908</b><span>Una empresa británica encuentra petróleo (la futura BP).</span></div>
+        <div class="oil"><b>1951</b><span>El primer ministro Mosaddeq nacionaliza el petróleo.</span></div>
+        <div class="oil"><b>1953</b><span>Golpe de Estado de la CIA y el MI6. Vuelve el sha, con su policía secreta.</span></div>
+        <div><b>1979</b><span>Revolución: nace la República Islámica de Jomeini.</span></div>
+        <div><b>1980–88</b><span>Guerra con Irak: cientos de miles de muertos.</span></div>
+        <div><b>2015</b><span>Acuerdo nuclear con las grandes potencias.</span></div>
+        <div><b>2018</b><span>Trump saca a EE. UU. del acuerdo. Vuelven las sanciones.</span></div>
+        <div><b>2022</b><span>Muere Mahsa Amini bajo custodia policial: «Mujer, vida, libertad».</span></div>
+        <div><b>jun. 2025</b><span>Guerra de 12 días con Israel. EE. UU. bombardea Fordow.</span></div>
+        <div><b>28 feb. 2026</b><span>EE. UU. e Israel atacan. Muere el líder supremo Jamenei.</span></div>
+        <div class="now"><b>nov. 2026</b><span>Nueve meses de guerra. Ormuz, minado. Trump pide «victoria total».</span></div>
+      </div>
+    </div>
+
+    <div class="card" id="k-views">
+      <h3>Dos miradas, un pueblo</h3>
+      <div class="views">
+        <div class="out">
+          <span class="t">Desde fuera</span>
+          <h4>Un país que otros quieren controlar</h4>
+          <ul>
+            <li>1953: Londres y Washington derriban un gobierno elegido por el petróleo.</li>
+            <li>Apoyo al sha durante 25 años.</li>
+            <li>Sanciones: faltan medicinas, la moneda se hunde, pagan los civiles.</li>
+            <li>2026: bombas sobre ciudades; cerca de 1,5 millones de empleos perdidos (estimación).</li>
+          </ul>
+        </div>
+        <div class="ins">
+          <span class="t">Desde dentro</span>
+          <h4>Un régimen que controla a su gente</h4>
+          <ul>
+            <li>Teocracia: el líder supremo manda por encima del voto.</li>
+            <li>Velo obligatorio y «policía de la moral».</li>
+            <li>Cárcel para periodistas, activistas y artistas.</li>
+            <li>Uno de los países con más ejecuciones del mundo.</li>
+            <li>Cortes de internet en cada protesta.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="big">Muchos iraníes no quieren <em>ni</em> bombas de fuera <em>ni</em> represión de dentro.</p>
+    </div>
+
+    <div class="card" id="k-chain">
+      <h3>Del estrecho a la cesta</h3>
+      <div class="chain">
+        <div class="s">Minas y ataques en Ormuz <span class="note">(1 de cada 5 barriles del mundo)</span></div><div class="ar">↓</div>
+        <div class="s">Los seguros de guerra se multiplican</div><div class="ar">↓</div>
+        <div class="s">El crudo supera los 100 $</div><div class="ar">↓</div>
+        <div class="s">Gasóleo y queroseno, más caros</div><div class="ar">↓</div>
+        <div class="s">Fletes y recargos por combustible</div><div class="ar">↓</div>
+        <div class="s hot">Todo cuesta más: comida, ropa, viajes</div>
+      </div>
+    </div>
+
+    <div class="card" id="k-route">
+      <h3>Londres ↔ Estambul <small>cómo viaja la guerra</small></h3>
+      <div class="tbx"><table class="all">
+        <thead><tr><th></th><th>Qué pasa</th><th>Qué cambia</th></tr></thead>
+        <tbody>
+          <tr><th>🚢 Barco</th><td>Ormuz y el mar Rojo, zonas de guerra</td><td class="max">seguro: del 0,25 % al 6–10 % del valor del barco</td></tr>
+          <tr><th>🚛 Camión</th><td>unos 3.000 km por Europa, con gasóleo caro</td><td>recargo por combustible en cada envío</td></tr>
+          <tr><th>✈︎ Avión</th><td>espacio aéreo del Golfo cerrado, vuelos desviados</td><td class="max">el queroseno se duplica; billetes +5–10 %</td></tr>
+          <tr><th>🛣 Turquía–Irán</th><td>534 km de frontera; rutas a Asia Central cortadas</td><td>rutas alternativas por el Cáucaso: más largas</td></tr>
+        </tbody>
+      </table></div>
+      <p class="src">Datos aproximados, 2026: The National, Al Jazeera, Oxford Economics, IATA, Wikipedia.</p>
+    </div>
+  </div>
+
+  <!-- ================= LEFT ================= -->
+  <div class="col" id="c-left">
+    <div class="card in" id="k-in">
+      <div class="sec"><span class="kick">Párrafo 1 · ~60 palabras</span><h2>Entrada</h2></div>
+      <ul class="ls">
+        <li class="ph" data-ins="Cuando abro el periódico en Londres, ">Cuando abro el periódico en…</li>
+        <li class="ph" data-ins="parece que Irán está muy lejos. Sin embargo, ">Parece que… está muy lejos. Sin embargo, …</li>
+        <li class="ph" data-ins="Esta guerra ya ha llegado a ">Esta guerra ya ha llegado a…</li>
+        <li class="ph" data-ins="Desde que empezó la guerra, ">Desde que empezó la guerra, …</li>
+        <li class="ph" data-ins="Muchos piensan que ">Muchos piensan que…; sin embargo, …</li>
+        <li class="ph" data-ins="No creo que sea exagerado decir que ">No creo que sea exagerado decir que…</li>
+        <li class="ph" data-ins="Lo que pasa en Ormuz se paga en ">Lo que pasa en Ormuz se paga en…</li>
+      </ul>
+    </div>
+
+    <div class="card gr" id="k-op">
+      <h3>Opinar <small>¿indicativo o subjuntivo?</small></h3>
+      <div class="rule">
+        <div><p class="formula"><span class="p">Creo que · Está claro que</span> + indicativo</p></div>
+        <div><p class="formula"><span class="x">No creo que · No está claro que</span> + <span class="f">subjuntivo</span></p></div>
+        <div><p class="formula"><span class="x">Es / Me parece</span> + adjetivo + que + <span class="f">subjuntivo</span></p></div>
+      </div>
+      <div class="chips">
+        <span class="chip ph" data-ins="sea "><b>sea</b></span>
+        <span class="chip ph" data-ins="haya "><b>haya</b></span>
+        <span class="chip ph" data-ins="esté "><b>esté</b></span>
+        <span class="chip ph" data-ins="vaya "><b>vaya</b></span>
+        <span class="chip ph" data-ins="pueda "><b>pueda</b></span>
+        <span class="chip ph" data-ins="tenga "><b>tenga</b></span>
+        <span class="chip ph" data-ins="sepa "><b>sepa</b></span>
+        <span class="chip ph" data-ins="quiera "><b>quiera</b></span>
+      </div>
+      <p class="note">⚠︎ Es evidente / cierto / verdad que + <b>indicativo</b>: es un dato, no una valoración.</p>
+    </div>
+
+    <div class="card pr" id="k-pr">
+      <div class="sec"><span class="kick">Párrafo 2 · ~80 palabras</span><h2>Consecuencias</h2></div>
+      <ul class="ls">
+        <li class="ph" data-ins="Es preocupante que ">Es preocupante que…</li>
+        <li class="ph" data-ins="Me parece increíble que ">Me parece increíble que…</li>
+        <li class="ph" data-ins="Lo más grave es que ">Lo más grave es que…</li>
+        <li class="ph" data-ins="Debido a ">Debido a…, …</li>
+        <li class="ph" data-ins="Cuando sube el combustible, sube todo. ">Cuando sube el combustible, sube todo.</li>
+        <li class="ph" data-ins="En cuanto ">En cuanto…, … <i>→ subjuntivo</i></li>
+        <li class="ph" data-ins="A menos que ">A menos que…, … <i>→ subjuntivo</i></li>
+        <li class="ph" data-ins="Al final, lo pagará ">Al final, lo pagará…</li>
+      </ul>
+    </div>
+
+    <div class="card gr" id="k-time">
+      <h3>Futuro y condición <small>el subjuntivo mira adelante</small></h3>
+      <div class="rule">
+        <div><p class="formula"><span class="p">cuando · en cuanto · hasta que</span> + <span class="f">subjuntivo</span>, futuro</p><p class="note">cuando + indicativo = siempre / en el pasado</p></div>
+        <div><p class="formula"><span class="x">antes de que</span> + <span class="f">subjuntivo</span>, siempre</p></div>
+        <div><p class="formula"><span class="x">a menos que · siempre que · en caso de que</span> + <span class="f">subjuntivo</span></p></div>
+      </div>
+      <div class="chips">
+        <span class="chip ph" data-ins="cuando termine "><b>cuando termine</b></span>
+        <span class="chip ph" data-ins="en cuanto se reabra "><b>en cuanto se reabra</b></span>
+        <span class="chip ph" data-ins="hasta que haya "><b>hasta que haya</b></span>
+        <span class="chip ph" data-ins="antes de que llegue "><b>antes de que llegue</b></span>
+        <span class="chip ph" data-ins="a menos que se firme "><b>a menos que se firme</b></span>
+        <span class="chip ph" data-ins="siempre que se respete "><b>siempre que se respete</b></span>
+      </div>
+      <p class="note">⚠︎ <b>cuando baje</b>, nunca <s>cuando bajará</s> · <b>si sube</b>, nunca <s>si suba</s></p>
+    </div>
+
+    <div class="card" id="k-voc">
+      <h3>Palabras clave</h3>
+      <div class="chips">
+        <span class="chip ph" data-ins="el estrecho de Ormuz ">el estrecho de Ormuz</span>
+        <span class="chip ph" data-ins="el alto el fuego ">el alto el fuego</span>
+        <span class="chip ph" data-ins="las sanciones ">las sanciones</span>
+        <span class="chip ph" data-ins="el bloqueo ">el bloqueo</span>
+        <span class="chip ph" data-ins="las represalias ">las represalias</span>
+        <span class="chip ph" data-ins="el régimen ">el régimen</span>
+        <span class="chip ph" data-ins="la población civil ">la población civil</span>
+        <span class="chip ph" data-ins="el crudo ">el crudo</span>
+        <span class="chip ph" data-ins="el gasóleo ">el gasóleo</span>
+        <span class="chip ph" data-ins="el queroseno ">el queroseno</span>
+        <span class="chip ph" data-ins="los fletes ">los fletes</span>
+        <span class="chip ph" data-ins="el seguro de guerra ">el seguro de guerra</span>
+        <span class="chip ph" data-ins="el recargo por combustible ">el recargo por combustible</span>
+        <span class="chip ph" data-ins="la cadena de suministro ">la cadena de suministro</span>
+        <span class="chip ph" data-ins="una ruta alternativa ">una ruta alternativa</span>
+        <span class="chip ph" data-ins="encarecerse ">encarecerse</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CENTRE · writing page ================= -->
+  <div class="col" id="c-mid">
+    <div class="card" id="k-write">
+      <h2>Mi columna</h2>
+      <p>Sección de Opinión de un periódico de Madrid · «La guerra que llega a casa» · <b>250–300 palabras</b></p>
+      <div class="parts"><span class="pa">1 · Entrada</span><span class="pb">2 · Consecuencias</span><span class="pc">3 · Lo que hace falta</span><span class="pd">4 · Llamamiento y cierre</span></div>
+      <p class="note">Toca una frase del mapa y aparece aquí, donde está el cursor.</p>
+      <textarea id="draft" lang="es" spellcheck="false" placeholder="Título&#10;&#10;Cuando abro el periódico en Londres, …"></textarea>
+      <div class="wbar"><span class="wc" id="wc">0 palabras</span><span class="paras" id="paras"></span><span style="flex:1"></span>
+        <button class="btn" id="undoBtn" type="button" disabled>↶ Deshacer</button><button class="btn" id="copyBtn" type="button">Copiar</button></div>
+    </div>
+
+    <div class="card cn" id="k-cn">
+      <h3>Conectores <small>usa 6 o más</small></h3>
+      <div class="chips">
+        <span class="chip ph" data-ins="Sin embargo, "><b>sin embargo</b><i>however</i></span>
+        <span class="chip ph" data-ins="Además, "><b>además</b><i>moreover</i></span>
+        <span class="chip ph" data-ins="y encima "><b>y encima</b><i>and on top of that</i></span>
+        <span class="chip ph" data-ins="no solo ___, sino también "><b>no solo… sino también</b><i>not only… but also</i></span>
+        <span class="chip ph" data-ins="ya que "><b>ya que</b><i>since</i></span>
+        <span class="chip ph" data-ins="Debido a "><b>debido a</b><i>due to</i></span>
+        <span class="chip ph" data-ins="Por eso, "><b>por eso</b><i>that's why</i></span>
+        <span class="chip ph" data-ins="Por lo tanto, "><b>por lo tanto</b><i>therefore</i></span>
+        <span class="chip ph" data-ins="de modo que "><b>de modo que</b><i>so</i></span>
+        <span class="chip ph" data-ins="mientras que "><b>mientras que</b><i>whereas</i></span>
+        <span class="chip ph" data-ins="Es decir, "><b>es decir</b><i>that is</i></span>
+        <span class="chip ph" data-ins="Al fin y al cabo, "><b>al fin y al cabo</b><i>after all</i></span>
+        <span class="chip ph" data-ins="En definitiva, "><b>en definitiva</b><i>in short</i></span>
+      </div>
+    </div>
+
+    <div class="card" id="k-model">
+      <h3>Un modelo <small id="mWords"></small></h3>
+      <div class="mkey"><span class="st">frase de inicio</span><span class="cx">conector</span><span class="vs">subjuntivo</span><span class="vm">imperativo</span><span class="vi">indicativo (contraste)</span></div>
+      <div class="mt">La guerra que viaja en camión</div>
+      <p class="para p1"><span class="st">Cuando abro el periódico cada mañana en Londres,</span> Irán <span class="vi">parece</span> muy lejos. <span class="cx">Sin embargo,</span> esta guerra ya ha llegado a nuestra vida diaria: está en el precio del gasóleo, en los billetes de avión <span class="cx">y</span> en la factura de cada camión que cruza Europa. <span class="st">No creo que</span> <span class="vs">sea</span> exagerado decirlo: lo que pasa en el estrecho de Ormuz se paga en Londres <span class="cx">y</span> en Estambul.</p>
+      <p class="para p2"><span class="st">Es preocupante que</span> el seguro de un barco en el Golfo <span class="vs">cueste</span> hoy hasta cuarenta veces más que antes de la guerra. <span class="cx">Además,</span> el crudo ha superado los cien dólares, <span class="cx">y</span> <span class="st">cuando</span> <span class="vi">sube</span> el combustible, sube todo. Las empresas de transporte subirán sus tarifas <span class="st">en cuanto</span> <span class="vs">terminen</span> los contratos actuales, <span class="cx">de modo que</span> al final lo pagará el consumidor. <span class="st">A menos que</span> <span class="vs">se reabra</span> Ormuz, este invierno será todavía más caro para todos.</p>
+      <p class="para p3"><span class="cx">Pero</span> no podemos hablar solo de precios. <span class="st">Me parece injusto que</span> los iraníes <span class="vs">paguen</span> dos veces: primero, un régimen que los reprime; después, unas bombas <span class="cx">y</span> unas sanciones que no han elegido. <span class="st">Hace falta que</span> Europa <span class="vs">apoye</span> la diplomacia <span class="st">para que</span> la población civil no <span class="vs">sufra</span> más. Necesitamos líderes que <span class="vs">sepan</span> negociar de verdad, <span class="st">aunque</span> eso no <span class="vs">dé</span> votos.</p>
+      <p class="para p4"><span class="cx">Por eso,</span> <span class="st">pido a quienes deciden:</span> <span class="vm">negocien</span>, <span class="vm">abran</span> el estrecho <span class="cx">y</span> no <span class="vm">utilicen</span> al pueblo iraní como excusa. <span class="cx">Y</span> nosotros, no <span class="vm">miremos</span> hacia otro lado. <span class="st">Ojalá</span> esta guerra <span class="vs">termine</span> <span class="st">antes de que</span> <span class="vs">llegue</span> otro invierno. <span class="st">Si</span> <span class="vs">escucháramos</span> más a los iraníes, entenderíamos que no quieren ni bombas ni ayatolás: quieren vivir.</p>
+    </div>
+
+    <div class="card mold" id="k-mold">
+      <h3>El esqueleto <small>toca una línea, rellena los ___</small></h3>
+      <h4 style="color:var(--in)">1 · Entrada</h4>
+      <div class="ph" data-ins="Cuando abro el periódico en ___, ___ parece muy lejos. Sin embargo, esta guerra ya ha llegado a ___. ">Cuando abro el periódico en <u>___</u>, <u>___</u> parece muy lejos. Sin embargo, esta guerra ya ha llegado a <u>___</u>.</div>
+      <div class="ph" data-ins="No creo que sea exagerado decir que ___. ">No creo que sea exagerado decir que <u>___</u>.</div>
+      <h4 style="color:var(--pr)">2 · Consecuencias</h4>
+      <div class="ph" data-ins="Es preocupante que ___. Además, ___, y cuando ___, ___. ">Es preocupante que <u>___</u>. Además, <u>___</u>, y cuando <u>___</u>, <u>___</u>.</div>
+      <div class="ph" data-ins="En cuanto ___, ___, de modo que ___. A menos que ___, ___. ">En cuanto <u>___</u>, <u>___</u>, de modo que <u>___</u>. A menos que <u>___</u>, <u>___</u>.</div>
+      <h4 style="color:var(--so)">3 · Lo que hace falta</h4>
+      <div class="ph" data-ins="Pero no podemos hablar solo de ___. Me parece injusto que ___. ">Pero no podemos hablar solo de <u>___</u>. Me parece injusto que <u>___</u>.</div>
+      <div class="ph" data-ins="Hace falta que ___ para que ___. Necesitamos ___ que ___, aunque ___. ">Hace falta que <u>___</u> para que <u>___</u>. Necesitamos <u>___</u> que <u>___</u>, aunque <u>___</u>.</div>
+      <h4 style="color:var(--co)">4 · Llamamiento y cierre</h4>
+      <div class="ph" data-ins="Por eso, pido a quienes deciden: ___, ___ y no ___. Y nosotros, no ___. ">Por eso, pido a quienes deciden: <u>___</u>, <u>___</u> y no <u>___</u>. Y nosotros, no <u>___</u>.</div>
+      <div class="ph" data-ins="Ojalá ___ antes de que ___. Si ___, ___. ">Ojalá <u>___</u> antes de que <u>___</u>. Si <u>___</u>, <u>___</u>.</div>
+    </div>
+
+    <div class="card" id="k-err">
+      <h3>Detecta los 6 errores <small>como en el test de King's</small></h3>
+      <p class="errtxt"><sup>1</sup>No creo que la guerra termina pronto. <sup>2</sup>Cuando el petróleo bajará, los envíos serán más baratos. <sup>3</sup>Es importante que Europa apoya la diplomacia. <sup>4</sup>El ministro quería que las empresas bajan los precios. <sup>5</sup>Ojalá los líderes negocian este mes. <sup>6</sup>Señores presidentes: ¡no bombardeáis más ciudades!</p>
+      <details class="sol"><summary>Ver soluciones</summary>
+        <div class="fix">
+          <div>1 · <s>termina</s> → <b>termine</b><span>No creo que = no es una afirmación → subjuntivo. En inglés «I don't think it ends» no cambia el verbo.</span></div>
+          <div>2 · <s>bajará</s> → <b>baje</b><span>Cuando + futuro = subjuntivo. Calco de «when it will…»; el inglés tampoco lo dice así.</span></div>
+          <div>3 · <s>apoya</s> → <b>apoye</b><span>Es + adjetivo + que = valoración → subjuntivo.</span></div>
+          <div>4 · <s>bajan</s> → <b>bajaran</b><span>Quería (pasado) + que → imperfecto de subjuntivo. Inglés: «wanted them to lower».</span></div>
+          <div>5 · <s>negocian</s> → <b>negocien</b><span>Ojalá siempre lleva subjuntivo.</span></div>
+          <div>6 · <s>bombardeáis</s> → <b>bombardeen</b><span>Imperativo negativo = no + subjuntivo. A unos presidentes: ustedes.</span></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ================= RIGHT ================= -->
+  <div class="col" id="c-right">
+    <div class="card so" id="k-so">
+      <div class="sec"><span class="kick">Párrafo 3 · ~70 palabras</span><h2>Lo que hace falta</h2></div>
+      <ul class="ls">
+        <li class="ph" data-ins="Pero no podemos hablar solo de ">Pero no podemos hablar solo de…</li>
+        <li class="ph" data-ins="Me parece injusto que ">Me parece injusto que…</li>
+        <li class="ph" data-ins="Hace falta que ">Hace falta que…</li>
+        <li class="ph" data-ins="Es urgente que ">Es urgente que…</li>
+        <li class="ph" data-ins="para que ">… para que…</li>
+        <li class="ph" data-ins="Necesitamos líderes que ">Necesitamos líderes que…</li>
+        <li class="ph" data-ins="aunque eso no dé votos. ">… aunque eso no dé votos.</li>
+        <li class="ph" data-ins="No se trata de ___, sino de que ">No se trata de…, sino de que…</li>
+      </ul>
+    </div>
+
+    <div class="card" id="k-who">
+      <h3>¿Quién tiene que actuar?</h3>
+      <div class="who">
+        <div>
+          <div class="lvl"><b>Gobiernos</b><span>los que deciden</span></div>
+          <div class="chips">
+            <span class="chip ph" data-ins="negociar un alto el fuego">negociar un alto el fuego</span>
+            <span class="chip ph" data-ins="reabrir el estrecho">reabrir el estrecho</span>
+            <span class="chip ph" data-ins="proteger a la población civil">proteger a los civiles</span>
+            <span class="chip ph" data-ins="dejar fuera de las sanciones las medicinas">medicinas fuera de las sanciones</span>
+            <span class="chip ph" data-ins="escuchar a la sociedad iraní">escuchar a la sociedad iraní</span>
+          </div>
+        </div>
+        <div>
+          <div class="lvl"><b>Empresas</b><span>los que mueven las cosas</span></div>
+          <div class="chips">
+            <span class="chip ph" data-ins="buscar rutas alternativas">buscar rutas alternativas</span>
+            <span class="chip ph" data-ins="repartir los costes">repartir los costes</span>
+            <span class="chip ph" data-ins="explicar los recargos a los clientes">explicar los recargos</span>
+          </div>
+        </div>
+        <div>
+          <div class="lvl"><b>Nosotros</b><span>los que leemos</span></div>
+          <div class="chips">
+            <span class="chip ph" data-ins="informarnos bien">informarnos bien</span>
+            <span class="chip ph" data-ins="no mirar hacia otro lado">no mirar hacia otro lado</span>
+            <span class="chip ph" data-ins="escuchar a los iraníes, no solo a los gobiernos">escuchar a los iraníes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gr" id="k-para">
+      <h3>Para que, aunque, un líder que…</h3>
+      <div class="rule">
+        <div><p class="formula"><span class="p">para</span> + infinitivo <span class="note">(mismo sujeto)</span><br><span class="x">para que</span> + <span class="f">subjuntivo</span> <span class="note">(otro sujeto)</span></p></div>
+        <div><p class="formula"><span class="p">aunque</span> + indicativo <span class="note">(lo sé, es un hecho)</span><br><span class="x">aunque</span> + <span class="f">subjuntivo</span> <span class="note">(no importa / quizás)</span></p></div>
+        <div><p class="formula"><span class="p">Tenemos un líder que</span> + indicativo<br><span class="x">Necesitamos un líder que</span> + <span class="f">subjuntivo</span></p></div>
+        <div><p class="formula"><span class="x">Hace falta · Es urgente · Pido</span> que + <span class="f">subjuntivo</span></p></div>
+      </div>
+      <p class="note">⚠︎ <b>para que la gente no sufra</b>, nunca <s>para la gente no sufrir</s></p>
+    </div>
+
+    <div class="card co" id="k-co">
+      <div class="sec"><span class="kick">Párrafo 4 · ~60 palabras</span><h2>Llamamiento y cierre</h2></div>
+      <ul class="ls">
+        <li class="ph" data-ins="Por eso, pido a quienes deciden: ">Por eso, pido a quienes deciden: …</li>
+        <li class="ph" data-ins="Señores presidentes: ">Señores presidentes: … <i>→ imperativo</i></li>
+        <li class="ph" data-ins="No utilicen ">No utilicen… como excusa.</li>
+        <li class="ph" data-ins="Y nosotros, no miremos hacia otro lado. ">Y nosotros, no miremos hacia otro lado.</li>
+        <li class="ph" data-ins="¡Que ">¡Que + subjuntivo!</li>
+        <li class="ph" data-ins="Ojalá ">Ojalá… antes de que…</li>
+        <li class="ph" data-ins="Si escucháramos más a ">Si escucháramos más a…, entenderíamos…</li>
+        <li class="ph" data-ins="Al fin y al cabo, ">Al fin y al cabo, …</li>
+      </ul>
+    </div>
+
+    <div class="card gr" id="k-imp">
+      <h3>Imperativo <small>= subjuntivo, menos tú y vosotros afirmativos</small></h3>
+      <table class="imp">
+        <thead><tr><th></th><th>sí</th><th>no</th></tr></thead>
+        <tbody>
+          <tr><th>tú</th><td>negocia</td><td class="sj">no negocies</td></tr>
+          <tr><th>vosotros</th><td>negociad</td><td class="sj">no negociéis</td></tr>
+          <tr><th>usted</th><td class="sj">negocie</td><td class="sj">no negocie</td></tr>
+          <tr><th>ustedes</th><td class="sj">negocien</td><td class="sj">no negocien</td></tr>
+          <tr><th>nosotros</th><td class="sj">negociemos</td><td class="sj">no negociemos</td></tr>
+        </tbody>
+      </table>
+      <div class="chips">
+        <span class="chip ph" data-ins="negocien "><b>negocien</b></span>
+        <span class="chip ph" data-ins="abran "><b>abran</b></span>
+        <span class="chip ph" data-ins="escuchen "><b>escuchen</b></span>
+        <span class="chip ph" data-ins="no olviden "><b>no olviden</b></span>
+        <span class="chip ph" data-ins="no bombardeen "><b>no bombardeen</b></span>
+        <span class="chip ph" data-ins="pongan fin a "><b>pongan fin a</b></span>
+        <span class="chip ph" data-ins="hagan "><b>hagan</b></span>
+        <span class="chip ph" data-ins="exijamos "><b>exijamos</b></span>
+        <span class="chip ph" data-ins="no miremos "><b>no miremos</b></span>
+      </div>
+      <p class="formula"><span class="x">¡Que</span> + <span class="f">subjuntivo</span>! <span class="note">¡Que se abra el estrecho! ¡Que vuelvan los vuelos!</span></p>
+      <p class="note">Pronombres: <b>escúchenlos</b> · <b>no los escuchen</b> &nbsp;⚠︎ <s>no bombardeáis</s> → <b>no bombardeéis / no bombardeen</b></p>
+    </div>
+
+    <div class="card gr" id="k-imperf">
+      <h3>Imperfecto de subjuntivo <small>deseos difíciles y pasado</small></h3>
+      <p>3.ª plural del indefinido − <i>ron</i> + <span class="end">ra · ras · ra · ramos · rais · ran</span> <span class="note">· nosotros con tilde: escuch<b>á</b>ramos</span></p>
+      <div class="chips">
+        <span class="chip ph" data-ins="fuera "><b>fuera</b><i>fueron</i></span>
+        <span class="chip ph" data-ins="hubiera "><b>hubiera</b><i>hubieron</i></span>
+        <span class="chip ph" data-ins="pudiera "><b>pudiera</b><i>pudieron</i></span>
+        <span class="chip ph" data-ins="tuviera "><b>tuviera</b><i>tuvieron</i></span>
+        <span class="chip ph" data-ins="escucháramos "><b>escucháramos</b></span>
+        <span class="chip ph" data-ins="bajaran "><b>bajaran</b></span>
+      </div>
+      <div class="rule">
+        <div><p class="formula"><span class="x">Si</span> + <span class="f">imperfecto de subj.</span>, condicional</p></div>
+        <div><p class="formula"><span class="x">Ojalá</span> + <span class="f">imperfecto de subj.</span> <span class="note">(casi imposible)</span></p></div>
+        <div><p class="formula"><span class="p">pidió · quería · era necesario</span> que + <span class="f">imperfecto de subj.</span></p></div>
+      </div>
+    </div>
+
+    <div class="card" id="k-check">
+      <h3>Antes de entregar</h3>
+      <ul class="checks">
+        <li>Título y 4 párrafos</li>
+        <li><b>creo que</b> + ind. y <b>no creo que</b> + subj.</li>
+        <li>2 valoraciones: <b>es preocupante que…</b></li>
+        <li><b>cuando / en cuanto / antes de que</b> + subj.</li>
+        <li><b>para que</b> y <b>aunque</b></li>
+        <li>2 imperativos (ustedes / nosotros)</li>
+        <li>1 imperfecto de subj.: <b>ojalá</b> o <b>si…</b></li>
+        <li>6 conectores distintos · 250–300 palabras</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="nav">
+  <div class="go" id="go">
+    <button type="button" data-go="all">Todo</button>
+    <button type="button" data-go="k-write" data-k="w">Mi texto</button>
+    <button type="button" data-go="info" data-k="pr">Irán</button>
+    <button type="button" data-go="k-in" data-k="in">1 · Entrada</button>
+    <button type="button" data-go="k-pr" data-k="pr">2 · Consecuencias</button>
+    <button type="button" data-go="k-so" data-k="so">3 · Lo que hace falta</button>
+    <button type="button" data-go="k-co" data-k="co">4 · Llamamiento</button>
+    <button type="button" data-go="k-op" data-k="gr">Opinar</button>
+    <button type="button" data-go="k-time" data-k="gr">Cuando…</button>
+    <button type="button" data-go="k-para" data-k="gr">Para que…</button>
+    <button type="button" data-go="k-imp" data-k="gr">Imperativo</button>
+    <button type="button" data-go="k-imperf" data-k="gr">Imperfecto</button>
+    <button type="button" data-go="k-cn" data-k="cn">Conectores</button>
+    <button type="button" data-go="k-model">Modelo</button>
+    <button type="button" data-go="k-err">Errores</button>
+  </div>
+  <div class="zoom"><button class="btn" id="zo" type="button" aria-label="Alejar">−</button><button class="btn" id="zi" type="button" aria-label="Acercar">+</button></div>
+</div>
+
+<div class="help" id="help"><p><b>Dos dedos</b> para mover el mapa y hacer zoom. <b>Un dedo</b> para tocar: una frase va a tu texto.</p><button class="btn" id="helpOk" type="button">Vale</button></div>
+<div class="toast" id="toast"></div>
+<div class="two" id="two" aria-hidden="true"><p><span>✌︎</span>Usa dos dedos para mover el mapa</p></div>
+
+<script>
+(function(){
+const view=document.getElementById('view'), board=document.getElementById('board');
+const MIN=0.1, MAX=2.6, PAGE='mapa-iran', LO=250, HI=300;
+let s=1, x=0, y=0, anim=null, settleT=null;
+
+function apply(){
+  board.style.transform=`translate(${x}px,${y}px) scale(${s})`;
+  board.classList.add('moving');
+  clearTimeout(settleT);
+  settleT=setTimeout(()=>board.classList.remove('moving'),180); // re-rasterise text crisply at rest
+}
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+function zoomAt(f,cx,cy){ const ns=clamp(s*f,MIN,MAX); f=ns/s; x=cx-(cx-x)*f; y=cy-(cy-y)*f; s=ns; apply(); }
+function stopAnim(){ if(anim){cancelAnimationFrame(anim);anim=null;} }
+
+function insets(){
+  const t=document.querySelector('.top').getBoundingClientRect().bottom;
+  const b=document.querySelector('.nav').getBoundingClientRect().height;
+  return {t:t+16,b:b+16,l:16,r:16};
+}
+function worldRect(el){            // layout position, independent of the current zoom
+  let x0=0,y0=0,n=el;
+  while(n && n!==board){ x0+=n.offsetLeft; y0+=n.offsetTop; n=n.offsetParent; }
+  return {x:x0, y:y0, w:el.offsetWidth, h:el.offsetHeight};
+}
+function fitTarget(r,maxS,topW){
+  const vr=view.getBoundingClientRect(), i=insets(), aw=vr.width-i.l-i.r, ah=vr.height-i.t-i.b;
+  const ns=clamp(topW?Math.min(aw/r.w,maxS):Math.min(aw/r.w,ah/r.h,maxS),MIN,MAX);
+  return {s:ns, x:i.l+(aw-r.w*ns)/2-r.x*ns, y:(r.h*ns>ah ? i.t : i.t+(ah-r.h*ns)/2)-r.y*ns};
+}
+function flyTo(t,ms=650){
+  stopAnim();
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) ms=0;
+  const s0=s,x0=x,y0=y,t0=performance.now(), ease=k=>1-Math.pow(1-k,3);
+  (function step(now){
+    const k=ms?Math.min(1,((now||t0)-t0)/ms):1, e=ease(k);
+    s=Math.exp(Math.log(s0)+(Math.log(t.s)-Math.log(s0))*e); x=x0+(t.x-x0)*e; y=y0+(t.y-y0)*e; apply();
+    anim=k<1?requestAnimationFrame(step):null;
+  })();
+}
+function goAll(ms){ flyTo(fitTarget({x:0,y:0,w:board.offsetWidth,h:board.offsetHeight},1),ms); }
+function goEl(id,ms){
+  if(id==='all') return goAll(ms);
+  const el=document.getElementById(id); if(!el) return;
+  const tall=id==='k-write'||id==='info';
+  flyTo(fitTarget(worldRect(el), id==='k-write'?0.85:1.2, tall), ms);
+}
+
+/* ---- gestures ----
+   Touch and pencil: one finger only taps; two fingers pan and pinch (like FigJam, tldraw or a Google Map
+   embedded in a page), so the map never moves by accident. Mouse: drag pans. Trackpad: scroll pans, pinch zooms. */
+const pts=new Map(); let last=null, moved=0, pinch=null, hinted=false;
+const two=document.getElementById('two'); let twoT;
+let twoSeen=false; try{ twoSeen=!!localStorage.getItem(PAGE+'-two'); }catch(_){}
+function hintTwo(){ if(twoSeen) return; twoSeen=true; try{localStorage.setItem(PAGE+'-two','1');}catch(_){} two.classList.add('on'); clearTimeout(twoT); twoT=setTimeout(()=>two.classList.remove('on'),1300); }
+let inField=false;
+view.addEventListener('pointerdown',e=>{
+  if(pts.size>=2) return;                                  // ignore a palm or third finger
+  // a finger on the text or a button still counts for a two-finger pinch, but is not captured,
+  // so a single tap keeps placing the cursor or pressing the button as usual
+  const field=!!e.target.closest('textarea,button,summary');
+  if(field && e.pointerType==='mouse') return;
+  stopAnim();
+  if(!field){ try{ view.setPointerCapture(e.pointerId); }catch(_){} }
+  if(pts.size===0) inField=field;
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY,type:e.pointerType});
+  if(pts.size===1){ last={x:e.clientX,y:e.clientY}; moved=0; hinted=false; }
+  if(pts.size===2){ const [a,b]=[...pts.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y),cx:(a.x+b.x)/2,cy:(a.y+b.y)/2};
+    moved=99; hinted=true; two.classList.remove('on'); }
+  if(e.pointerType==='mouse') view.classList.add('grabbing');
+});
+addEventListener('pointermove',e=>{
+  const p=pts.get(e.pointerId); if(!p) return;
+  p.x=e.clientX; p.y=e.clientY;
+  if(pts.size===2 && pinch){
+    const [a,b]=[...pts.values()], d=Math.hypot(a.x-b.x,a.y-b.y), cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
+    x+=cx-pinch.cx; y+=cy-pinch.cy;
+    const vr=view.getBoundingClientRect(); zoomAt(d/pinch.d,cx-vr.left,cy-vr.top);
+    pinch={d,cx,cy};
+  } else if(pts.size===1 && last){
+    const dx=e.clientX-last.x, dy=e.clientY-last.y;
+    moved+=Math.abs(dx)+Math.abs(dy);
+    last={x:e.clientX,y:e.clientY};
+    if(p.type==='mouse'){ x+=dx; y+=dy; apply(); }
+    else if(moved>14 && !hinted && !inField){ hinted=true; hintTwo(); }
+  }
+});
+function up(e){
+  if(!pts.has(e.pointerId)) return;
+  pts.delete(e.pointerId);
+  if(pts.size===1){                                        // one finger of a pinch lifted: stop, don't pan
+    pinch=null; const q=[...pts.values()][0]; last={x:q.x,y:q.y}; return;
+  }
+  if(pts.size===0){ pinch=null; view.classList.remove('grabbing'); }   // no glide: the map stops where the fingers left it
+}
+addEventListener('pointerup',up); addEventListener('pointercancel',up);
+view.addEventListener('wheel',e=>{
+  e.preventDefault(); stopAnim();
+  const vr=view.getBoundingClientRect();
+  if(e.ctrlKey||e.metaKey) zoomAt(Math.exp(-e.deltaY*0.01),e.clientX-vr.left,e.clientY-vr.top);
+  else { x-=e.deltaX; y-=e.deltaY; apply(); }
+},{passive:false});
+['gesturestart','gesturechange'].forEach(t=>document.addEventListener(t,e=>e.preventDefault()));
+function zoomCenter(f){ const vr=view.getBoundingClientRect(), ns=clamp(s*f,MIN,MAX);
+  flyTo({s:ns, x:vr.width/2-(vr.width/2-x)*ns/s, y:vr.height/2-(vr.height/2-y)*ns/s},300); }
+document.getElementById('zi').onclick=()=>zoomCenter(1.5);
+document.getElementById('zo').onclick=()=>zoomCenter(1/1.5);
+
+// the board moves only by transform; never let the browser scroll the container (hash links, focus)
+const unscroll=()=>{ if(view.scrollTop||view.scrollLeft){ view.scrollTop=0; view.scrollLeft=0; } };
+view.addEventListener('scroll',unscroll);
+
+/* ---- taps ---- */
+view.addEventListener('click',e=>{
+  if(moved>8) return;                                   // that was a drag
+  const ph=e.target.closest('.ph');
+  if(ph){ insert(ph.dataset.ins||ph.textContent.trim()+' '); ph.classList.add('flash'); setTimeout(()=>ph.classList.remove('flash'),400); return; }
+  if(e.target.closest('details')) return;               // opening the solutions is not a zoom
+  const card=e.target.closest('.card');
+  if(card && card.id!=='k-write') flyTo(fitTarget(worldRect(card),1.2));
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.nav [data-go], .top [data-go]'); if(b) goEl(b.dataset.go);
+});
+
+/* ---- the writing page ---- */
+const draft=document.getElementById('draft'), wc=document.getElementById('wc'), paras=document.getElementById('paras'), undoBtn=document.getElementById('undoBtn');
+const KEY=PAGE+'-draft', WORD=/[A-Za-zÀ-ÿ0-9]+(?:['’-][A-Za-zÀ-ÿ]+)*/g;
+try{ draft.value=localStorage.getItem(KEY)||''; }catch(_){}
+function grow(){ draft.style.height='auto'; draft.style.height=Math.max(1100,draft.scrollHeight+40)+'px'; }
+function refresh(){
+  const n=(draft.value.match(WORD)||[]).length;
+  wc.textContent=n+' palabras'+(n<LO?' · faltan '+(LO-n):n>HI?' · sobran '+(n-HI):' ✓');
+  wc.className='wc'+(n>=LO&&n<=HI?' ok':n>HI?' over':'');
+  const p=draft.value.split(/\n\s*\n/).filter(t=>t.trim()).length;
+  paras.textContent=p?p+(p===1?' párrafo':' párrafos'):'';
+  grow();
+  try{localStorage.setItem(KEY,draft.value);}catch(_){}
+}
+draft.addEventListener('input',refresh);
+let caret=null; const undo=[];
+draft.addEventListener('blur',()=>{ caret=[draft.selectionStart,draft.selectionEnd]; });
+function insert(txt){
+  const v=draft.value;
+  const [a,b]=document.activeElement===draft?[draft.selectionStart,draft.selectionEnd]:(caret||[v.length,v.length]);
+  const before=v.slice(0,a), after=v.slice(b);
+  if(before && !/\s$/.test(before)) txt=' '+txt;
+  undo.push(v); if(undo.length>30) undo.shift(); undoBtn.disabled=false;
+  draft.value=before+txt+after;
+  const pos=(before+txt).length; caret=[pos,pos];
+  if(document.activeElement===draft) draft.setSelectionRange(pos,pos);
+  refresh(); toast('→ '+txt.trim());
+}
+undoBtn.onclick=()=>{ if(!undo.length) return; draft.value=undo.pop(); caret=null; refresh(); undoBtn.disabled=!undo.length; toast('Deshecho'); };
+document.getElementById('copyBtn').onclick=async()=>{
+  try{ await navigator.clipboard.writeText(draft.value); toast('Texto copiado'); }
+  catch(_){ draft.focus(); draft.select(); toast('Selecciona y copia'); }
+};
+let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),1400); }
+
+/* model word count */
+(function(){ const txt=[...document.querySelectorAll('#k-model .mt, #k-model .para')].map(e=>e.textContent).join(' ');
+  document.getElementById('mWords').textContent=(txt.match(WORD)||[]).length+' palabras'; })();
+
+/* help */
+const help=document.getElementById('help');
+try{ if(localStorage.getItem(PAGE+'-help')) help.hidden=true; }catch(_){}
+document.getElementById('helpOk').onclick=()=>{ help.hidden=true; try{localStorage.setItem(PAGE+'-help','1');}catch(_){} };
+
+/* start on the whole map; re-fit once fonts load unless she has already moved */
+function start(){ unscroll(); refresh(); const id=location.hash.slice(1); if(id&&document.getElementById(id)) goEl(id,0); else goAll(0); }
+let touched=false; view.addEventListener('pointerdown',()=>touched=true,{once:true});
+const again=()=>{ if(!touched) start(); };
+start(); addEventListener('load',again);
+if(document.fonts){ document.fonts.ready.then(again); document.fonts.addEventListener('loadingdone',again); }
+let rz; addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(!pts.size && !touched) goAll(300); },250); });
+})();
+</script>
+</body></html>
