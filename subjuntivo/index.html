@@ -270,39 +270,15 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
 .fix i{font-style:italic}
 
 /* bottom band: images to talk */
-#talk{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:40px;align-items:start}
+#talk{grid-column:1/-1;display:grid;grid-template-columns:780px 1040px 780px;gap:40px 110px;align-items:start;margin-top:40px}
+#talk .band-h{grid-column:1/-1}
+#talk .band-sub{margin-top:30px}
+#talk .band-sub h3{font-size:38px}
+#talk .band-sub small{font-size:19px}
 .img{border-top:8px solid var(--so)}
 .img h3{color:var(--so)}
 .sit{font-size:19px;line-height:1.45}
 .prm .ph{color:var(--so)}
-.scn{position:relative;height:270px;border-radius:16px;overflow:hidden}
-.scn span{position:absolute;line-height:1}
-.scn .tag{position:absolute;right:16px;top:14px;font:800 22px/1 var(--display);background:var(--surface);color:var(--pr);border-radius:999px;padding:6px 12px}
-.q1{background:linear-gradient(160deg,#2c3e66,#d9826b)}
-.q1 .e1{font-size:150px;left:36%;top:18px;transform:rotate(-9deg)}
-.q1 .e2{font-size:70px;left:14%;bottom:20px;transform:rotate(28deg)}
-.q1 .e3{font-size:76px;right:14%;bottom:18px;transform:rotate(-14deg)}
-.q1 .crk{left:0;right:0;bottom:0;height:24px;background:repeating-linear-gradient(115deg,#1b2440 0 14px,transparent 14px 30px);opacity:.6}
-.q2{background:linear-gradient(160deg,#fbe0db,#f5c3d2)}
-.q2 .e1{font-size:170px;left:30%;top:40px;transform:rotate(6deg)}
-.q2 .e2{font-size:80px;right:12%;top:22px;transform:rotate(-20deg)}
-.q2 .rip{font:800 46px/1 var(--display);color:var(--pr);left:12%;bottom:26px;transform:rotate(-12deg);letter-spacing:.04em}
-.q3{background:linear-gradient(160deg,#e7e0f9,#cfe6f7)}
-.q3 .e1{font-size:150px;left:12%;top:56px}
-.q3 .e2{font-size:110px;right:16%;top:30px;transform:rotate(10deg)}
-.q3 .e3{font-size:60px;right:8%;bottom:20px;transform:rotate(-20deg)}
-.q4{background:linear-gradient(160deg,#fde3cf,#fbf0cb)}
-.q4 .e1{font-size:120px;left:12%;top:40px;transform:rotate(-12deg)}
-.q4 .e2{font-size:130px;right:14%;top:30px}
-.q4 .e3{font-size:70px;left:42%;bottom:16px}
-.q5{background:linear-gradient(160deg,#fbf0cb,#f6c99b)}
-.q5 .e1{font-size:150px;left:10%;top:56px;transform:rotate(-8deg)}
-.q5 .e2{font-size:110px;right:14%;top:24px}
-.q5 .e3{font-size:72px;right:30%;bottom:16px;transform:rotate(14deg)}
-.q6{background:linear-gradient(160deg,#d8efe1,#f5d0d0)}
-.q6 .e1{font-size:120px;left:12%;top:30px}
-.q6 .e2{font-size:100px;right:14%;bottom:24px}
-.q6 .e3{font-size:90px;left:42%;top:110px}
 
 /* past hypotheses */
 .band-sub{grid-column:1/-1;margin-top:20px}
@@ -310,12 +286,6 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
 .band-sub small{font:400 22px/1.35 var(--body);color:var(--muted)}
 .band-sub small b{color:var(--co)}
 .img.past{border-top-color:var(--co)} .img.past h3{color:var(--co)} .past .prm .ph{color:var(--co)}
-.q7{background:linear-gradient(160deg,#fde3cf,#f2b8a0)}
-.q7 .e1{font-size:150px;left:12%;top:50px} .q7 .e2{font-size:90px;right:14%;bottom:20px} .q7 .e3{font-size:80px;right:22%;top:18px}
-.q8{background:linear-gradient(160deg,#d8efe1,#fbe0db)}
-.q8 .e1{font-size:130px;left:12%;top:60px} .q8 .e2{font-size:120px;right:12%;top:40px} .q8 .e3{font-size:70px;left:46%;bottom:18px;transform:rotate(12deg)}
-.q9{background:linear-gradient(160deg,#e7e0f9,#c9d1d9)}
-.q9 .e1{font-size:120px;left:12%;top:40px;filter:grayscale(.4)} .q9 .e2{font-size:130px;right:14%;top:50px} .q9 .e3{font-size:70px;left:44%;bottom:16px}
 
 /* the writing page: smaller box, recorder, corrector */
 #draft{min-height:460px}
@@ -342,6 +312,17 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
 .fixl s{color:var(--pr)}
 .fixl .ok{color:var(--so);font-weight:700}
 .fixl small{display:block;color:var(--muted);font-size:16px;line-height:1.35}
+
+/* real photos on the situation cards (Wikimedia Commons, credited) */
+.pic{position:relative;margin:0;border-radius:16px;overflow:hidden;background:var(--board)}
+.pic img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.pic .tag{position:absolute;right:14px;top:12px;font:800 22px/1 var(--display);background:var(--surface);color:var(--pr);border-radius:999px;padding:6px 12px}
+.pic figcaption{position:absolute;left:0;right:0;bottom:0;padding:16px 12px 6px;font-size:12px;line-height:1.3;background:linear-gradient(transparent,rgba(0,0,0,.55))}
+.pic figcaption a{color:#fff;text-decoration:none;opacity:.9}
+.img .kick{color:var(--so)} .img.past .kick{color:var(--co)}
+.prm .ph u{text-decoration:none;color:var(--ink);letter-spacing:-.04em}
+.prm .ph i{font-style:italic}
+.fr{color:var(--in);font-style:normal}
 
 /* ---------- dictionary in the top bar (study-map skill, assets/dictionary.html) ---------- */.dict{position:relative;flex:0 1 330px;min-width:0}
 .dict input{width:100%;font:inherit;font-size:16px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);
@@ -501,13 +482,14 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
     <div class="card in use" id="p-cuando">
       <span class="kick">Presente · 4</span><h3>El futuro con «cuando»</h3>
       <div class="mkr">
-        <span class="ph" data-ins="Cuando ">cuando <i>when</i></span>
-        <span class="ph" data-ins="En cuanto ">en cuanto <i>as soon as</i></span>
-        <span class="ph" data-ins="Hasta que ">hasta que <i>until</i></span>
-        <span class="ph" data-ins="Antes de que ">antes de que <i>before</i></span>
-        <span class="ph" data-ins="Después de que ">después de que <i>after</i></span>
+        <span class="ph" data-ins="Cuando ">cuando <i>when · <span class="fr">quand</span></i></span>
+        <span class="ph" data-ins="En cuanto ">en cuanto <i>as soon as · <span class="fr">dès que</span></i></span>
+        <span class="ph" data-ins="Hasta que ">hasta que <i>until · <span class="fr">jusqu’à ce que</span></i></span>
+        <span class="ph" data-ins="Antes de que ">antes de que <i>before · <span class="fr">avant que</span></i></span>
+        <span class="ph" data-ins="Después de que ">después de que <i>after · <span class="fr">après que</span></i></span>
       </div>
       <p class="por">¿Por qué? Hablo de un momento que <b>todavía no ha llegado</b>.</p>
+      <p class="note">🇫🇷 Como en francés: <b>avant que</b> y <b>jusqu’à ce que</b> + subjonctif. Pero <b>quand</b> + futur («quand je déménagerai») y en español <b>cuando + pres. subj.</b> («cuando me mude»).</p>
       <ul class="exs">
         <li class="ph" data-ins="Cuando me mude a Madrid, viviré en el barrio de Salamanca. ">Cuando me <u>mude</u> a Madrid, viviré en el barrio de Salamanca.</li>
         <li class="ph" data-ins="No pienso hablarle hasta que me pida perdón. ">No pienso hablarle hasta que me <u>pida</u> perdón.</li>
@@ -567,29 +549,6 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
 
   <!-- ================= CENTRE ================= -->
   <div class="col" id="c-mid">
-    <div class="card" id="k-write">
-      <span class="kick">Mi espacio</span>
-      <h2>Habla, escribe, corrige</h2>
-      <div class="parts"><span class="pa">3 frases en pres. subj.</span><span class="pd">3 frases en imp. subj.</span><span class="pb">Elige una imagen: ¿qué harías si…?</span><span class="pc">Tus apuntes</span></div>
-      <div class="rec">
-        <button class="recb" id="recBtn" type="button">🎤 Grabar</button>
-        <div class="clk"><span id="clock">0:00</span></div>
-        <p class="note" id="recSt">Pulsa 🎤 y habla: lo que dices se escribe abajo. También puedes escribir o tocar frases del mapa.</p>
-      </div>
-      <p class="live" id="live" aria-live="polite"></p>
-      <audio id="play" controls hidden></audio>
-      <textarea id="draft" lang="es" spellcheck="false" placeholder="Aquí aparece lo que dices (o escribe).&#10;&#10;Quiero que…&#10;Si yo fuera…"></textarea>
-      <div class="wbar"><span class="wc" id="wc">0 palabras</span><span class="paras" id="paras"></span><span style="flex:1"></span>
-        <button class="btn" id="undoBtn" type="button" disabled>↶ Deshacer</button><button class="btn" id="clearBtn" type="button">Borrar</button><button class="btn" id="copyBtn" type="button">Copiar</button></div>
-      <button class="fixb" id="fixBtn" type="button">✓ Corregir lo que he dicho</button>
-      <div class="fixbox" id="fixBox" hidden>
-        <h4 class="dhx">Corrección <small id="fixSum"></small></h4>
-        <div class="fixtext" id="fixText"></div>
-        <ul class="fixl" id="fixList"></ul>
-        <div class="wbar"><button class="btn main" id="fixApply" type="button">Aplicar las correcciones</button><button class="btn" id="fixClose" type="button">Cerrar</button></div>
-      </div>
-    </div>
-
     <div class="card cn" id="k-pairs">
       <h3>Mismo marcador, dos tiempos <small>el uso es el mismo; cambia la distancia</small></h3>
       <div class="tbx"><table class="all pairs">
@@ -686,21 +645,6 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
     </div>
 
-    <div class="card" id="k-err">
-      <h3>Detecta los 6 errores <small>como en el test de King's</small></h3>
-      <p class="errtxt"><sup>1</sup>Quiero que mi novio cocina más. <sup>2</sup>Si tendría dinero, me operaría la nariz. <sup>3</sup>Mi madre quería que me case antes de los treinta. <sup>4</sup>Cuando me mudaré a Madrid, viviré en Salamanca. <sup>5</sup>Me miró como si estoy loca. <sup>6</sup>Como vuelves a llegar tarde, ceno sola. <sup>✓</sup>Creo que tiene razón.</p>
-      <details class="sol"><summary>Ver soluciones</summary>
-        <div class="fix">
-          <div>1 · <s>cocina</s> → <b>cocine</b><span>Querer que + otra persona → subjuntivo. En inglés «I want him to cook» no cambia el verbo.</span></div>
-          <div>2 · <s>tendría</s> → <b>tuviera</b><span>Si + imp. subj., condicional. Nunca condicional después de si: calco de «if I would have».</span></div>
-          <div>3 · <s>case</s> → <b>casara</b><span>«Quería» es pasado → imp. subj.</span></div>
-          <div>4 · <s>mudaré</s> → <b>mude</b><span>Cuando + futuro → presente de subjuntivo. Calco de «when I will move».</span></div>
-          <div>5 · <s>estoy</s> → <b>estuviera</b><span>Como si → siempre imp. subj. (o pluscuamperfecto de subj.).</span></div>
-          <div>6 · <s>vuelves</s> → <b>vuelvas</b><span>Como de amenaza = condición → subjuntivo. Con indicativo significaría «because».</span></div>
-          <div>✓ · <b>tiene</b><span>Correcta: «creo que» afirma → indicativo. Es la trampa.</span></div>
-        </div>
-      </details>
-    </div>
   </div>
 
   <!-- ================= RIGHT · IMPERFECTO ================= -->
@@ -817,119 +761,176 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
         <span class="chip ph" data-ins="habría llegado "><b>habría llegado</b></span>
       </div>
     </div>
+
+    <div class="card" id="k-err">
+      <h3>Detecta los 6 errores <small>como en el test de King's</small></h3>
+      <p class="errtxt"><sup>1</sup>Quiero que mi novio cocina más. <sup>2</sup>Si tendría dinero, me operaría la nariz. <sup>3</sup>Mi madre quería que me case antes de los treinta. <sup>4</sup>Cuando me mudaré a Madrid, viviré en Salamanca. <sup>5</sup>Me miró como si estoy loca. <sup>6</sup>Como vuelves a llegar tarde, ceno sola. <sup>✓</sup>Creo que tiene razón.</p>
+      <details class="sol"><summary>Ver soluciones</summary>
+        <div class="fix">
+          <div>1 · <s>cocina</s> → <b>cocine</b><span>Querer que + otra persona → subjuntivo. En inglés «I want him to cook» no cambia el verbo.</span></div>
+          <div>2 · <s>tendría</s> → <b>tuviera</b><span>Si + imp. subj., condicional. Nunca condicional después de si: calco de «if I would have».</span></div>
+          <div>3 · <s>case</s> → <b>casara</b><span>«Quería» es pasado → imp. subj.</span></div>
+          <div>4 · <s>mudaré</s> → <b>mude</b><span>Cuando + futuro → presente de subjuntivo. Calco de «when I will move».</span></div>
+          <div>5 · <s>estoy</s> → <b>estuviera</b><span>Como si → siempre imp. subj. (o pluscuamperfecto de subj.).</span></div>
+          <div>6 · <s>vuelves</s> → <b>vuelvas</b><span>Como de amenaza = condición → subjuntivo. Con indicativo significaría «because».</span></div>
+          <div>✓ · <b>tiene</b><span>Correcta: «creo que» afirma → indicativo. Es la trampa.</span></div>
+        </div>
+      </details>
+    </div>
   </div>
 
-  <!-- ================= BOTTOM BAND · images to talk about ================= -->
+  <!-- ================= BOTTOM BAND · speak about situations, Mi espacio in the middle ================= -->
   <div id="talk">
-    <div class="band-h"><h2>¿Y si…? Imágenes para hablar</h2><p>Describe la escena, imagina qué pasaría y qué harías tú: primero pres. subj. (puede pasar), luego imp. subj. (lo imaginas).</p></div>
+    <div class="band-h"><h2>¿Y si…? Habla de estas situaciones</h2><p>Elige una, graba lo que dirías y pulsa ✓ Corregir. Cada frase se queda abierta: el verbo lo pones tú (la pista va entre paréntesis).</p></div>
+    <div class="col" id="talk-l">
     <div class="card img" id="t-quake">
-      <div class="scn q1" aria-hidden="true"><span class="e1">🏢</span><span class="e2">🍷</span><span class="e3">🍽️</span><span class="crk"></span><b class="tag">6,1</b></div>
+      <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/DFC_0758_Seaside_dinner_at_dusk_-_candlelit_tables_line_the_shoreline_as_gentle_waves_lap_the_beach_and_city_lights_shimmer_on_the_horizon.jpg/960px-DFC_0758_Seaside_dinner_at_dusk_-_candlelit_tables_line_the_shoreline_as_gentle_waves_lap_the_beach_and_city_lights_shimmer_on_the_horizon.jpg" alt="" loading="lazy"><b class="tag">6,1</b><figcaption><a href="https://commons.wikimedia.org/wiki/File:DFC_0758_Seaside_dinner_at_dusk_-_candlelit_tables_line_the_shoreline_as_gentle_waves_lap_the_beach_and_city_lights_shimmer_on_the_horizon.jpg" target="_blank" rel="noopener">Foto: PattayaPatrol · CC BY-SA 4.0 · Wikimedia Commons</a></figcaption></figure>
+      <span class="kick">Ahora · pres. subj. / imp. subj.</span>
       <h3>Terremoto en mitad de una cita</h3>
-      <p class="sit">Primera cena con un chico en Bebek. Postre, velas… y de repente la mesa empieza a temblar.</p>
+      <p class="sit">Sábado, 21:30. Primera cita con un chico de Hinge en una terraza junto al Bósforo, en Bebek. Llega el postre… y la mesa empieza a temblar.</p>
       <ul class="ls prm">
         <li class="ph" data-ins="Si hay un terremoto, lo primero que hago es ">Si hay un terremoto, lo primero que hago es…</li>
-        <li class="ph" data-ins="Si ahora mismo hubiera un terremoto, yo ">Si ahora mismo hubiera un terremoto, yo…</li>
-        <li class="ph" data-ins="Me daría miedo que ">Me daría miedo que…</li>
-        <li class="ph" data-ins="Ojalá él no saliera corriendo sin ">Ojalá él no saliera corriendo sin…</li>
+        <li class="ph" data-ins="Si ahora mismo ___ un terremoto, yo ">Si ahora mismo <u>___</u> <i>(haber)</i> un terremoto, yo…</li>
+        <li class="ph" data-ins="Me daría miedo que él ___ corriendo ">Me daría miedo que él <u>___</u> <i>(salir)</i> corriendo</li>
+        <li class="ph" data-ins="Ojalá ">Ojalá…</li>
       </ul>
     </div>
-
     <div class="card img" id="t-dress">
-      <div class="scn q2" aria-hidden="true"><span class="e1">👗</span><span class="e2">💐</span><span class="rip">rasss</span></div>
+      <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Bouquet_toss_3_%2823280988381%29.jpg/960px-Bouquet_toss_3_%2823280988381%29.jpg" alt="" loading="lazy"><figcaption><a href="https://commons.wikimedia.org/wiki/File:Bouquet_toss_3_(23280988381).jpg" target="_blank" rel="noopener">Foto: Big Ben in Japan · CC BY-SA 2.0 · Wikimedia Commons</a></figcaption></figure>
+      <span class="kick">Ahora · pres. subj. / imp. subj.</span>
       <h3>El vestido se rompe en la boda</h3>
-      <p class="sit">Boda de tu mejor amiga. Te agachas para coger el ramo y… el vestido se rompe por detrás.</p>
+      <p class="sit">Boda de tu prima en el Çırağan, 200 invitados. Te agachas para coger el ramo y oyes «rasss»: el vestido se ha roto por detrás.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Si se me rompiera el vestido en una boda, ">Si se me rompiera el vestido en una boda…</li>
-        <li class="ph" data-ins="Haría como si no ">Haría como si no…</li>
-        <li class="ph" data-ins="Le pediría a alguien que ">Le pediría a alguien que…</li>
-        <li class="ph" data-ins="No me importa que ">No me importa que…</li>
+        <li class="ph" data-ins="Si se me ___ el vestido en una boda, yo ">Si se me <u>___</u> <i>(romper)</i> el vestido en una boda, yo…</li>
+        <li class="ph" data-ins="Antes de que nadie lo ___, yo ">Antes de que nadie lo <u>___</u> <i>(ver)</i>, yo…</li>
+        <li class="ph" data-ins="Haría como si ">Haría como si…</li>
+        <li class="ph" data-ins="Le pediría a mi prima que ">Le pediría a mi prima que…</li>
       </ul>
     </div>
-
-    <div class="card img" id="t-nose">
-      <div class="scn q3" aria-hidden="true"><span class="e1">👃</span><span class="e2">📱</span><span class="e3">✈️</span></div>
-      <h3>Tu novio quiere operarse</h3>
-      <p class="sit">Te enseña fotos de narices en Instagram: quiere operarse en Estambul el mes que viene.</p>
+    <div class="card img" id="t-kilos">
+      <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Feet_on_scale.jpg/960px-Feet_on_scale.jpg" alt="" loading="lazy"><b class="tag">+12 kg</b><figcaption><a href="https://commons.wikimedia.org/wiki/File:Feet_on_scale.jpg" target="_blank" rel="noopener">Foto: Bill Branson, National Cancer Institute · Public domain · Wikimedia Commons</a></figcaption></figure>
+      <span class="kick">Ahora · pres. subj. / imp. subj.</span>
+      <h3>Si subieras 12 kilos</h3>
+      <p class="sit">Imagina: en seis meses subes 12 kilos. La boda de tu mejor amiga es en junio y el vestido que ya compraste no cierra.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="No creo que necesite ">No creo que necesite…</li>
-        <li class="ph" data-ins="Si yo me operara algo, sería ">Si yo me operara algo, sería…</li>
-        <li class="ph" data-ins="Me molestaría que ">Me molestaría que…</li>
-        <li class="ph" data-ins="Le apoyo siempre que ">Le apoyo siempre que…</li>
+        <li class="ph" data-ins="Si ___ 12 kilos, ">Si <u>___</u> <i>(subir)</i> 12 kilos, …</li>
+        <li class="ph" data-ins="Me molestaría que mi madre ">Me molestaría que mi madre…</li>
+        <li class="ph" data-ins="Me compraría otro vestido para que ">Me compraría otro vestido para que…</li>
+        <li class="ph" data-ins="No dejaría el gimnasio a menos que ">No dejaría el gimnasio a menos que…</li>
       </ul>
     </div>
-
+    <div class="band-sub"><h3>Hace un año… <small>si + <b>hubiera</b> + participio → habría + participio · o → condicional (ahora estaría…)</small></h3></div>
+    <div class="card img past" id="t-london">
+      <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/King%27s_College_London%2C_the_old_quad_at_Strand_Campus.jpg/960px-King%27s_College_London%2C_the_old_quad_at_Strand_Campus.jpg" alt="" loading="lazy"><figcaption><a href="https://commons.wikimedia.org/wiki/File:King%27s_College_London,_the_old_quad_at_Strand_Campus.jpg" target="_blank" rel="noopener">Foto: KiloCharlieLima · CC BY-SA 4.0 · Wikimedia Commons</a></figcaption></figure>
+      <span class="kick">Hace un año · si + pluscuamp. subj.</span>
+      <h3>Si no hubieras venido a Londres a estudiar</h3>
+      <p class="sit">Elegiste estudiar en King&#x27;s College London. ¿Y si te hubieras quedado en Estambul?</p>
+      <ul class="ls prm">
+        <li class="ph" data-ins="Si no ___ a Londres a estudiar, ">Si no <u>___</u> <i>(venir)</i> a Londres a estudiar, …</li>
+        <li class="ph" data-ins="No habría conocido a ">No habría conocido a…</li>
+        <li class="ph" data-ins="Ahora estaría ">Ahora estaría…</li>
+        <li class="ph" data-ins="Mis padres habrían preferido que ">Mis padres habrían preferido que…</li>
+      </ul>
+    </div>
+    <div class="card img past" id="t-madrid">
+      <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Gran_V%C3%ADa_%28Madrid%29_1.jpg/960px-Gran_V%C3%ADa_%28Madrid%29_1.jpg" alt="" loading="lazy"><b class="tag">2025</b><figcaption><a href="https://commons.wikimedia.org/wiki/File:Gran_V%C3%ADa_(Madrid)_1.jpg" target="_blank" rel="noopener">Foto: Felipe Gabaldón · CC BY 2.0 · Wikimedia Commons</a></figcaption></figure>
+      <span class="kick">Hace un año · si + pluscuamp. subj.</span>
+      <h3>Si hace un año te hubieras mudado a Madrid</h3>
+      <p class="sit">Hace un año tenías una oferta para irte a Madrid y te quedaste en Londres. ¿Cómo sería tu vida hoy?</p>
+      <ul class="ls prm">
+        <li class="ph" data-ins="Si hace un año ___ a Madrid, ">Si hace un año <u>___</u> <i>(mudarse)</i> a Madrid, …</li>
+        <li class="ph" data-ins="Ahora viviría en ">Ahora viviría en…</li>
+        <li class="ph" data-ins="Si no ___ en Londres, no habría ">Si no <u>___</u> <i>(estar)</i> en Londres, no habría…</li>
+        <li class="ph" data-ins="Ojalá ">Ojalá…</li>
+      </ul>
+    </div>
+    </div>
+    <div class="col" id="talk-c">
+    <div class="card" id="k-write">
+      <span class="kick">Mi espacio</span>
+      <h2>Habla, escribe, corrige</h2>
+      <div class="parts"><span class="pa">3 frases en pres. subj.</span><span class="pd">3 frases en imp. subj.</span><span class="pb">Elige una imagen: ¿qué harías si…?</span><span class="pc">Tus apuntes</span></div>
+      <div class="rec">
+        <button class="recb" id="recBtn" type="button">🎤 Grabar</button>
+        <div class="clk"><span id="clock">0:00</span></div>
+        <p class="note" id="recSt">Pulsa 🎤 y habla: lo que dices se escribe abajo. También puedes escribir o tocar frases del mapa.</p>
+      </div>
+      <p class="live" id="live" aria-live="polite"></p>
+      <audio id="play" controls hidden></audio>
+      <textarea id="draft" lang="es" spellcheck="false" placeholder="Aquí aparece lo que dices (o escribe).&#10;&#10;Quiero que…&#10;Si yo fuera…"></textarea>
+      <div class="wbar"><span class="wc" id="wc">0 palabras</span><span class="paras" id="paras"></span><span style="flex:1"></span>
+        <button class="btn" id="undoBtn" type="button" disabled>↶ Deshacer</button><button class="btn" id="clearBtn" type="button">Borrar</button><button class="btn" id="copyBtn" type="button">Copiar</button></div>
+      <button class="fixb" id="fixBtn" type="button">✓ Corregir lo que he dicho</button>
+      <div class="fixbox" id="fixBox" hidden>
+        <h4 class="dhx">Corrección <small id="fixSum"></small></h4>
+        <div class="fixtext" id="fixText"></div>
+        <ul class="fixl" id="fixList"></ul>
+        <div class="wbar"><button class="btn main" id="fixApply" type="button">Aplicar las correcciones</button><button class="btn" id="fixClose" type="button">Cerrar</button></div>
+      </div>
+    </div>
+    </div>
+    <div class="col" id="talk-r">
     <div class="card img" id="t-phone">
-      <div class="scn q4" aria-hidden="true"><span class="e1">📱</span><span class="e2">😤</span><span class="e3">🍝</span></div>
+      <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/G%C3%A9n%C3%A9ration_Z.jpg/960px-G%C3%A9n%C3%A9ration_Z.jpg" alt="" loading="lazy"><figcaption><a href="https://commons.wikimedia.org/wiki/File:G%C3%A9n%C3%A9ration_Z.jpg" target="_blank" rel="noopener">Foto: Nben54 · CC BY-SA 4.0 · Wikimedia Commons</a></figcaption></figure>
+      <span class="kick">Ahora · pres. subj. / imp. subj.</span>
       <h3>La pelea del móvil</h3>
-      <p class="sit">Llevas veinte minutos contando tu día y él sigue mirando el móvil. Otra vez.</p>
+      <p class="sit">Domingo, brunch en Notting Hill. Llevas veinte minutos contándole tu semana y él sigue mirando el móvil.</p>
       <ul class="ls prm">
         <li class="ph" data-ins="No soporto que ">No soporto que…</li>
-        <li class="ph" data-ins="Como vuelvas a ">Como vuelvas a…</li>
+        <li class="ph" data-ins="Como ___ a mirar el móvil, ">Como <u>___</u> <i>(volver)</i> a mirar el móvil, …</li>
         <li class="ph" data-ins="Ayer le pedí que ">Ayer le pedí que…</li>
         <li class="ph" data-ins="Me miró como si ">Me miró como si…</li>
       </ul>
     </div>
-
-    <div class="card img" id="t-jeans">
-      <div class="scn q5" aria-hidden="true"><span class="e1">👖</span><span class="e2">🥘</span><span class="e3">🍷</span></div>
-      <h3>Un mes de tapas en Madrid</h3>
-      <p class="sit">Croquetas, jamón, churros a las cuatro de la mañana… y tus vaqueros favoritos ya no cierran.</p>
+    <div class="card img" id="t-intern">
+      <figure class="pic"><img src="https://upload.wikimedia.org/wikipedia/commons/3/31/AZCA_%28Madrid%29_08a.JPG" alt="" loading="lazy"><b class="tag">Madrid</b><figcaption><a href="https://commons.wikimedia.org/wiki/File:AZCA_(Madrid)_08a.JPG" target="_blank" rel="noopener">Foto: Dimo Dimov from Bulgaria · CC BY 2.0 · Wikimedia Commons</a></figcaption></figure>
+      <span class="kick">Ahora · pres. subj. / imp. subj.</span>
+      <h3>Prácticas en Madrid… y tu novio dice que no</h3>
+      <p class="sit">Te ofrecen seis meses de prácticas en una empresa de la Castellana. Empiezas en enero. Tu novio no quiere que te vayas.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Cuando vuelva a Londres, ">Cuando vuelva a Londres…</li>
-        <li class="ph" data-ins="Si viviera en Madrid todo el año, ">Si viviera en Madrid todo el año…</li>
-        <li class="ph" data-ins="Seguiré comiendo croquetas a menos que ">Seguiré comiendo croquetas a menos que…</li>
-        <li class="ph" data-ins="Mi entrenador quería que ">Mi entrenador quería que…</li>
+        <li class="ph" data-ins="Mi novio no quiere que ">Mi novio no quiere que…</li>
+        <li class="ph" data-ins="Me iría siempre y cuando ">Me iría siempre y cuando…</li>
+        <li class="ph" data-ins="Si ___ las prácticas, ">Si <u>___</u> <i>(aceptar)</i> las prácticas, …</li>
+        <li class="ph" data-ins="No me voy a menos que ">No me voy a menos que…</li>
       </ul>
     </div>
-
     <div class="card img" id="t-ex">
-      <div class="scn q6" aria-hidden="true"><span class="e1">💔</span><span class="e2">🍣</span><span class="e3">👀</span></div>
+      <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/HK_Central_MTR_Station_shop_%E6%9D%BF%E9%95%B7%E5%A3%BD%E5%8F%B8_Itacho_Sushi_restaurant_interior_visitors_Jan-2012.jpg/960px-HK_Central_MTR_Station_shop_%E6%9D%BF%E9%95%B7%E5%A3%BD%E5%8F%B8_Itacho_Sushi_restaurant_interior_visitors_Jan-2012.jpg" alt="" loading="lazy"><figcaption><a href="https://commons.wikimedia.org/wiki/File:HK_Central_MTR_Station_shop_%E6%9D%BF%E9%95%B7%E5%A3%BD%E5%8F%B8_Itacho_Sushi_restaurant_interior_visitors_Jan-2012.jpg" target="_blank" rel="noopener">Foto: Hui Kenneth Kong · CC BY-SA 3.0 · Wikimedia Commons</a></figcaption></figure>
+      <span class="kick">Ahora · pres. subj. / imp. subj.</span>
       <h3>Tu ex, en tu restaurante favorito</h3>
-      <p class="sit">Entras en tu restaurante de siempre y ahí está tu ex… con su nueva novia, en tu mesa.</p>
+      <p class="sit">Viernes, 20:00. Entras en tu japonés favorito de Chelsea y ahí está tu ex… con su nueva novia, en tu mesa de siempre.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Ojalá no me vea. ">Ojalá no me vea.</li>
-        <li class="ph" data-ins="Si me saludara, yo ">Si me saludara, yo…</li>
-        <li class="ph" data-ins="Actuaría como si ">Actuaría como si…</li>
-        <li class="ph" data-ins="Me sorprende que ">Me sorprende que…</li>
+        <li class="ph" data-ins="Ojalá ">Ojalá…</li>
+        <li class="ph" data-ins="Antes de que me ___, yo ">Antes de que me <u>___</u> <i>(ver)</i>, yo…</li>
+        <li class="ph" data-ins="Si me ___, yo ">Si me <u>___</u> <i>(saludar)</i>, yo…</li>
+        <li class="ph" data-ins="Yo actuaría como si ">Yo actuaría como si…</li>
       </ul>
     </div>
-
-    <div class="band-sub"><h3>Hace un año… <small>hipótesis del pasado: si + <b>hubiera</b> + participio → habría + participio · y si hoy sería distinto: → condicional</small></h3></div>
-
-    <div class="card img past" id="t-madrid">
-      <div class="scn q7" aria-hidden="true"><span class="e1">🏙️</span><span class="e2">🥘</span><span class="e3">☀️</span><b class="tag">2025</b></div>
-      <h3>Si hace un año te hubieras mudado a Madrid</h3>
-      <p class="sit">Hace un año tenías una oferta para irte a Madrid. Te quedaste en Londres. ¿Cómo sería tu vida hoy?</p>
-      <ul class="ls prm">
-        <li class="ph" data-ins="Si hace un año me hubiera mudado a Madrid, ">Si hace un año me hubiera mudado a Madrid…</li>
-        <li class="ph" data-ins="Si no hubiera estado en Londres, no habría conocido a ">Si no hubiera estado en Londres, no habría conocido a…</li>
-        <li class="ph" data-ins="Ahora viviría en el barrio de Salamanca y ">Ahora viviría en el barrio de Salamanca y…</li>
-        <li class="ph" data-ins="Ojalá me hubiera atrevido a ">Ojalá me hubiera atrevido a…</li>
-      </ul>
-    </div>
-
+    <div class="band-sub"><h3>…y en el pasado <small>si + <b>hubiera</b> + participio → habría + participio · o → condicional (ahora estaría…)</small></h3></div>
     <div class="card img past" id="t-italia">
-      <div class="scn q8" aria-hidden="true"><span class="e1">🍝</span><span class="e2">🛵</span><span class="e3">🍷</span><b class="tag">Roma</b></div>
-      <h3>Un año en Italia</h3>
-      <p class="sit">Imagina que el año pasado hubieras pasado un año en Italia: pasta todos los días, un novio italiano, una Vespa…</p>
+      <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Trastevere-Great-Italy_%2831658105581%29.jpg/960px-Trastevere-Great-Italy_%2831658105581%29.jpg" alt="" loading="lazy"><b class="tag">Roma</b><figcaption><a href="https://commons.wikimedia.org/wiki/File:Trastevere-Great-Italy_(31658105581).jpg" target="_blank" rel="noopener">Foto: Larry Koester · CC BY 2.0 · Wikimedia Commons</a></figcaption></figure>
+      <span class="kick">Hace un año · si + pluscuamp. subj.</span>
+      <h3>Un máster en Roma</h3>
+      <p class="sit">El año pasado te ofrecieron un máster en Roma y dijiste que no.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Si hubiera pasado un año en Italia, ">Si hubiera pasado un año en Italia…</li>
+        <li class="ph" data-ins="Si ___ el máster en Roma, ">Si <u>___</u> <i>(aceptar)</i> el máster en Roma, …</li>
+        <li class="ph" data-ins="Si ___ en Italia, ahora hablaría ">Si <u>___</u> <i>(estar)</i> en Italia, ahora hablaría…</li>
         <li class="ph" data-ins="Habría comido tanta pasta que ">Habría comido tanta pasta que…</li>
         <li class="ph" data-ins="Mi madre no habría permitido que ">Mi madre no habría permitido que…</li>
-        <li class="ph" data-ins="Si hubiera estado en Italia, ahora hablaría ">Si hubiera estado en Italia, ahora hablaría…</li>
       </ul>
     </div>
-
     <div class="card img past" id="t-seguir">
-      <div class="scn q9" aria-hidden="true"><span class="e1">💍</span><span class="e2">🤔</span><span class="e3">🕰️</span></div>
+      <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Wedding_and_Engagement_Rings_2151px.jpg/960px-Wedding_and_Engagement_Rings_2151px.jpg" alt="" loading="lazy"><figcaption><a href="https://commons.wikimedia.org/wiki/File:Wedding_and_Engagement_Rings_2151px.jpg" target="_blank" rel="noopener">Foto: Photo by Derek Ramsey (Ram-Man) · CC BY-SA 2.5 · Wikimedia Commons</a></figcaption></figure>
+      <span class="kick">Hace un año · si + pluscuamp. subj.</span>
       <h3>Si hubieras seguido con tu ex</h3>
-      <p class="sit">Hace un año lo dejaste. Hoy ves en Instagram que se ha comprometido. ¿Y si hubieras seguido con él?</p>
+      <p class="sit">Hace un año lo dejaste. Hoy ves en Instagram que se ha comprometido.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Si hubiera seguido con él, ">Si hubiera seguido con él…</li>
+        <li class="ph" data-ins="Si ___ con él, ">Si <u>___</u> <i>(seguir)</i> con él, …</li>
         <li class="ph" data-ins="Ahora estaría ">Ahora estaría…</li>
-        <li class="ph" data-ins="No me arrepiento de que ">No me arrepiento de que…</li>
         <li class="ph" data-ins="Me habría molestado que ">Me habría molestado que…</li>
+        <li class="ph" data-ins="No me arrepiento de que ">No me arrepiento de que…</li>
       </ul>
+    </div>
     </div>
   </div>
 
@@ -948,8 +949,8 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
     <button type="button" data-go="k-pairs" data-k="cn">Dos tiempos</button>
     <button type="button" data-go="k-ex" data-k="pr">Frases de clase</button>
     <button type="button" data-go="k-err">Errores</button>
-    <button type="button" data-go="talk" data-k="so">Imágenes</button>
-    <button type="button" data-go="t-madrid" data-k="so">Hace un año…</button>
+    <button type="button" data-go="talk" data-k="so">Situaciones</button>
+    <button type="button" data-go="t-london" data-k="co">Hace un año…</button>
   </div>
   <div class="zoom"><button class="btn" id="zo" type="button" aria-label="Alejar">−</button><button class="btn" id="zi" type="button" aria-label="Acercar">+</button></div>
 </div>
@@ -959,7 +960,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
 <script>
 (function(){
 const view=document.getElementById('view'), board=document.getElementById('board');
-const MIN=0.1, MAX=2.6, PAGE='mapa-subj', LO=0, HI=1e9;
+const MIN=0.05, MAX=2.6, PAGE='mapa-subj', LO=0, HI=1e9;
 let s=1, x=0, y=0, anim=null, settleT=null;
 
 function apply(){
