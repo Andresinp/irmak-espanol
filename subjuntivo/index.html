@@ -356,6 +356,18 @@ b.mk{color:var(--cn);font-weight:800}
 .ring .prm .ph::before{left:8px}
 .ring .uc{font-size:12px}
 
+/* English prompts to translate in her head, Spanish model behind a second tap */
+details.enx{border-radius:12px;background:var(--board);padding:8px 12px}
+details.enx > summary{cursor:pointer;font:700 16px/1.3 var(--display);color:var(--ink)}
+.enl{list-style:decimal;padding-left:22px;display:grid;gap:8px;margin-top:8px}
+.enl li{font-size:17px;line-height:1.35}
+.enl .en{font-style:italic}
+details.sol2{margin-top:2px}
+details.sol2 > summary{cursor:pointer;font-size:14px;color:var(--muted)}
+details.sol2 .ph{font-weight:700;color:var(--so);cursor:pointer;border-radius:8px;padding:2px 6px}
+.past details.sol2 .ph{color:var(--co)}
+.ring > .card:has(details[open]){z-index:6;box-shadow:0 24px 60px -20px rgba(20,33,43,.5)}
+
 /* ---------- dictionary in the top bar (study-map skill, assets/dictionary.html) ---------- */.dict{position:relative;flex:0 1 330px;min-width:0}
 .dict input{width:100%;font:inherit;font-size:16px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);
   border-radius:999px;padding:9px 16px 9px 40px;min-height:40px;outline:none;-webkit-appearance:none;appearance:none}
@@ -822,32 +834,44 @@ b.mk{color:var(--cn);font-weight:800}
   <!-- ================= BOTTOM BAND · Mi espacio in the middle, the situations in a circle around it ================= -->
   <div id="talk">
     <div class="band-h"><h2>¿Y si…? Habla de estas situaciones</h2><p>Elige una, graba lo que dirías y pulsa ✓ Corregir. El verbo lo pones tú (la pista va entre paréntesis). <b class="ahora">Verde</b> = ahora · <b class="antes">lila</b> = en el pasado (quería que, me pidió que… + imp. subj.). La etiqueta de cada frase dice qué uso de arriba practicas: <b class="up">azul</b> pres. subj., <b class="ui">lila</b> imp. subj.</p></div>
-    <div class="ring" style="height:3020px">
-    <div style="left:691px;top:502px" class="card img" id="t-quake">
+    <div class="ring" style="height:2710px">
+    <div style="left:691px;top:453px" class="card img" id="t-quake">
       <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/DFC_0758_Seaside_dinner_at_dusk_-_candlelit_tables_line_the_shoreline_as_gentle_waves_lap_the_beach_and_city_lights_shimmer_on_the_horizon.jpg/960px-DFC_0758_Seaside_dinner_at_dusk_-_candlelit_tables_line_the_shoreline_as_gentle_waves_lap_the_beach_and_city_lights_shimmer_on_the_horizon.jpg" alt="" loading="lazy"><b class="tag">6,1</b><figcaption><a href="https://commons.wikimedia.org/wiki/File:DFC_0758_Seaside_dinner_at_dusk_-_candlelit_tables_line_the_shoreline_as_gentle_waves_lap_the_beach_and_city_lights_shimmer_on_the_horizon.jpg" target="_blank" rel="noopener">Foto: PattayaPatrol · CC BY-SA 4.0 · Wikimedia Commons</a></figcaption></figure>
       <span class="kick">Ahora · pres. subj. / imp. subj.</span>
       <h3>Terremoto en mitad de una cita</h3>
-      <p class="sit">Sábado, 21:30. Primera cita con un chico de Hinge en una terraza junto al Bósforo, en Bebek. Llega el postre… y la mesa empieza a temblar.</p>
+      <p class="sit">Sábado, 21:30. Primera cita con un chico de Hinge en una terraza junto al Bósforo, en Bebek. Llega el postre… y la mesa empieza a temblar. ¿Qué harías?</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Espero que él no ___ corriendo "><b class="mk">Espero que</b> él no <u>___</u> <i>(salir)</i> corriendo <small class="uc up">querer que</small></li>
-        <li class="ph" data-ins="Antes de que se ___ algo, nos metemos debajo de la mesa "><b class="mk">Antes de que</b> se <u>___</u> <i>(caer)</i> algo, nos metemos debajo de la mesa <small class="uc up">cuando / antes de que</small></li>
-        <li class="ph" data-ins="Si ahora mismo ___ otro temblor, yo "><b class="mk">Si</b> ahora mismo <u>___</u> <i>(haber)</i> otro temblor, yo… <small class="uc ui">si…</small></li>
-        <li class="ph" data-ins="Él come como si no ___ nada ">Él come <b class="mk">como si</b> no <u>___</u> <i>(pasar)</i> nada <small class="uc ui">como si</small></li>
+        <li class="ph" data-ins="Si ahora mismo ___ un terremoto, yo "><b class="mk">Si</b> ahora mismo <u>___</u> <i>(haber)</i> un terremoto, yo… <small class="uc ui">si…</small></li>
+        <li class="ph" data-ins="Me metería debajo de la mesa antes de que se ___ algo ">Me metería debajo de la mesa <b class="mk">antes de que</b> se <u>___</u> <i>(caer)</i> algo <small class="uc ui">antes de que / para que</small></li>
       </ul>
+      <details class="enx"><summary>🇬🇧 Imagina en inglés y tradúcelo en tu cabeza</summary>
+        <ol class="enl">
+          <li><span class="en">If there were an earthquake right now, I&#x27;d get under the table.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Si ahora mismo hubiera un terremoto, me metería debajo de la mesa. "><b class="mk">Si</b> ahora mismo hubiera un terremoto, me metería debajo de la mesa.</p></details></li>
+          <li><span class="en">I&#x27;d hold his hand so he wouldn&#x27;t get scared.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Le daría la mano para que no se asustara. ">Le daría la mano <b class="mk">para que</b> no se asustara.</p></details></li>
+          <li><span class="en">I&#x27;d act as if nothing were happening.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Actuaría como si no pasara nada. ">Actuaría <b class="mk">como si</b> no pasara nada.</p></details></li>
+          <li><span class="en">I hope he doesn&#x27;t run off and leave me there.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Espero que no salga corriendo y me deje allí. "><b class="mk">Espero que</b> no salga corriendo y me deje allí.</p></details></li>
+        </ol>
+      </details>
     </div>
-    <div style="left:1296px;top:77px" class="card img" id="t-dress">
+    <div style="left:1296px;top:71px" class="card img" id="t-dress">
       <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Bouquet_toss_3_%2823280988381%29.jpg/960px-Bouquet_toss_3_%2823280988381%29.jpg" alt="" loading="lazy"><figcaption><a href="https://commons.wikimedia.org/wiki/File:Bouquet_toss_3_(23280988381).jpg" target="_blank" rel="noopener">Foto: Big Ben in Japan · CC BY-SA 2.0 · Wikimedia Commons</a></figcaption></figure>
       <span class="kick">Ahora · pres. subj. / imp. subj.</span>
       <h3>El vestido se rompe en la boda</h3>
-      <p class="sit">Boda de tu prima en el Çırağan, 200 invitados. Te agachas para coger el ramo y oyes «rasss»: el vestido se ha roto por detrás.</p>
+      <p class="sit">Boda de tu prima en el Çırağan, 200 invitados. Te agachas para coger el ramo y oyes «rasss»: el vestido se ha roto por detrás. ¿Qué harías?</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Necesito que alguien me ___ una chaqueta "><b class="mk">Necesito que</b> alguien me <u>___</u> <i>(dar)</i> una chaqueta <small class="uc up">querer que</small></li>
-        <li class="ph" data-ins="Es normal que la gente se ___, pero "><b class="mk">Es normal que</b> la gente se <u>___</u> <i>(reír)</i>, pero… <small class="uc up">reacción</small></li>
-        <li class="ph" data-ins="Me pongo la chaqueta de mi primo para que nadie ___ el roto ">Me pongo la chaqueta de mi primo <b class="mk">para que</b> nadie <u>___</u> <i>(ver)</i> el roto <small class="uc up">para que</small></li>
-        <li class="ph" data-ins="No me voy de la boda a menos que el vestido se ___ más ">No me voy de la boda <b class="mk">a menos que</b> el vestido se <u>___</u> <i>(romper)</i> más <small class="uc up">condición</small></li>
+        <li class="ph" data-ins="Me iría al baño antes de que la gente se ___ cuenta ">Me iría al baño <b class="mk">antes de que</b> la gente se <u>___</u> <i>(dar)</i> cuenta <small class="uc ui">antes de que / para que</small></li>
+        <li class="ph" data-ins="Actuaría como si no ___ nada ">Actuaría <b class="mk">como si</b> no <u>___</u> <i>(pasar)</i> nada <small class="uc ui">como si</small></li>
       </ul>
+      <details class="enx"><summary>🇬🇧 Imagina en inglés y tradúcelo en tu cabeza</summary>
+        <ol class="enl">
+          <li><span class="en">If my dress ripped at a wedding, I&#x27;d laugh it off.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Si se me rompiera el vestido en una boda, me reiría. "><b class="mk">Si</b> se me rompiera el vestido en una boda, me reiría.</p></details></li>
+          <li><span class="en">I&#x27;d ask my cousin to lend me her jacket.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Le pediría a mi prima que me prestara su chaqueta. "><b class="mk">Le pediría a mi prima que</b> me prestara su chaqueta.</p></details></li>
+          <li><span class="en">I&#x27;d stay sitting down so that nobody saw it.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Me quedaría sentada para que nadie lo viera. ">Me quedaría sentada <b class="mk">para que</b> nadie lo viera.</p></details></li>
+          <li><span class="en">It&#x27;s normal for people to laugh.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Es normal que la gente se ría. "><b class="mk">Es normal que</b> la gente se ría.</p></details></li>
+        </ol>
+      </details>
     </div>
-    <div style="left:2044px;top:77px" class="card img" id="t-kilos">
+    <div style="left:2044px;top:71px" class="card img" id="t-kilos">
       <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Feet_on_scale.jpg/960px-Feet_on_scale.jpg" alt="" loading="lazy"><b class="tag">+12 kg</b><figcaption><a href="https://commons.wikimedia.org/wiki/File:Feet_on_scale.jpg" target="_blank" rel="noopener">Foto: Bill Branson, National Cancer Institute · Public domain · Wikimedia Commons</a></figcaption></figure>
       <span class="kick">Ahora · pres. subj. / imp. subj.</span>
       <h3>Si subieras 12 kilos</h3>
@@ -855,83 +879,125 @@ b.mk{color:var(--cn);font-weight:800}
       <ul class="ls prm">
         <li class="ph" data-ins="Si ___ 12 kilos, "><b class="mk">Si</b> <u>___</u> <i>(subir)</i> 12 kilos, … <small class="uc ui">si…</small></li>
         <li class="ph" data-ins="Me molestaría que mi madre me ___ algo delante de todos "><b class="mk">Me molestaría que</b> mi madre me <u>___</u> <i>(decir)</i> algo delante de todos <small class="uc ui">ojalá / me gustaría</small></li>
-        <li class="ph" data-ins="Me gustaría que mi novio me ___ igual de guapa "><b class="mk">Me gustaría que</b> mi novio me <u>___</u> <i>(ver)</i> igual de guapa <small class="uc ui">ojalá / me gustaría</small></li>
-        <li class="ph" data-ins="Ojalá el vestido me ___ en junio "><b class="mk">Ojalá</b> el vestido me <u>___</u> <i>(cerrar)</i> en junio <small class="uc up">querer que</small></li>
       </ul>
+      <details class="enx"><summary>🇬🇧 Imagina en inglés y tradúcelo en tu cabeza</summary>
+        <ol class="enl">
+          <li><span class="en">If I put on 12 kilos, I&#x27;d buy a new dress.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Si subiera 12 kilos, me compraría un vestido nuevo. "><b class="mk">Si</b> subiera 12 kilos, me compraría un vestido nuevo.</p></details></li>
+          <li><span class="en">I&#x27;d want my boyfriend to love me just the same.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Querría que mi novio me quisiera igual. ">Querría que mi novio me quisiera igual.</p></details></li>
+          <li><span class="en">I&#x27;d go to the gym as if my life depended on it.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Iría al gimnasio como si me fuera la vida en ello. ">Iría al gimnasio <b class="mk">como si</b> me fuera la vida en ello.</p></details></li>
+          <li><span class="en">I wouldn&#x27;t let anyone comment on my body.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="No dejaría que nadie opinara sobre mi cuerpo. ">No dejaría que nadie opinara sobre mi cuerpo.</p></details></li>
+        </ol>
+      </details>
     </div>
-    <div style="left:2649px;top:502px" class="card img" id="t-phone">
+    <div style="left:2649px;top:453px" class="card img" id="t-phone">
       <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/G%C3%A9n%C3%A9ration_Z.jpg/960px-G%C3%A9n%C3%A9ration_Z.jpg" alt="" loading="lazy"><figcaption><a href="https://commons.wikimedia.org/wiki/File:G%C3%A9n%C3%A9ration_Z.jpg" target="_blank" rel="noopener">Foto: Nben54 · CC BY-SA 4.0 · Wikimedia Commons</a></figcaption></figure>
       <span class="kick">Ahora · pres. subj. / imp. subj.</span>
       <h3>La pelea del móvil</h3>
       <p class="sit">Domingo, brunch en Notting Hill. Llevas veinte minutos contándole tu semana y él sigue mirando el móvil.</p>
       <ul class="ls prm">
         <li class="ph" data-ins="No soporto que ___ el móvil mientras te hablo "><b class="mk">No soporto que</b> <u>___</u> <i>(mirar)</i> el móvil <b class="mk">mientras</b> te hablo <small class="uc up">reacción</small></li>
-        <li class="ph" data-ins="No creo que ese mensaje ___ tan importante "><b class="mk">No creo que</b> ese mensaje <u>___</u> <i>(ser)</i> tan importante <small class="uc up">duda</small></li>
-        <li class="ph" data-ins="Como ___ a mirar el móvil, "><b class="mk">Como</b> <u>___</u> <i>(volver)</i> a mirar el móvil, … <small class="uc up">condición</small></li>
         <li class="ph" data-ins="Me escucha como si yo no ___ aquí ">Me escucha <b class="mk">como si</b> yo no <u>___</u> <i>(estar)</i> aquí <small class="uc ui">como si</small></li>
       </ul>
+      <details class="enx"><summary>🇬🇧 Imagina en inglés y tradúcelo en tu cabeza</summary>
+        <ol class="enl">
+          <li><span class="en">If he looked at his phone one more time, I&#x27;d leave.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Si volviera a mirar el móvil, me iría. "><b class="mk">Si</b> volviera a mirar el móvil, me iría.</p></details></li>
+          <li><span class="en">I&#x27;d ask him to put it away.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Le pediría que lo guardara. ">Le pediría que lo guardara.</p></details></li>
+          <li><span class="en">If you look at your phone again, I&#x27;m leaving.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Como vuelvas a mirar el móvil, me voy. "><b class="mk">Como</b> vuelvas a mirar el móvil, me voy.</p></details></li>
+          <li><span class="en">I don&#x27;t think that message is so important.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="No creo que ese mensaje sea tan importante. "><b class="mk">No creo que</b> ese mensaje sea tan importante.</p></details></li>
+        </ol>
+      </details>
     </div>
-    <div style="left:460px;top:1190px" class="card img" id="t-intern">
+    <div style="left:460px;top:1070px" class="card img" id="t-intern">
       <figure class="pic"><img src="https://upload.wikimedia.org/wikipedia/commons/3/31/AZCA_%28Madrid%29_08a.JPG" alt="" loading="lazy"><b class="tag">Madrid</b><figcaption><a href="https://commons.wikimedia.org/wiki/File:AZCA_(Madrid)_08a.JPG" target="_blank" rel="noopener">Foto: Dimo Dimov from Bulgaria · CC BY 2.0 · Wikimedia Commons</a></figcaption></figure>
       <span class="kick">Ahora · pres. subj. / imp. subj.</span>
       <h3>Prácticas en Madrid… y tu novio dice que no</h3>
       <p class="sit">Te ofrecen seis meses de prácticas en una empresa de la Castellana. Empiezas en enero. Tu novio no quiere que te vayas.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Mi novio no quiere que me ___ ">Mi novio <b class="mk">no quiere que</b> me <u>___</u> <i>(ir)</i>… <small class="uc up">querer que</small></li>
-        <li class="ph" data-ins="Me voy siempre y cuando la empresa me ___ el piso ">Me voy <b class="mk">siempre y cuando</b> la empresa me <u>___</u> <i>(pagar)</i> el piso <small class="uc up">condición</small></li>
-        <li class="ph" data-ins="Cuando ___ a Madrid, "><b class="mk">Cuando</b> <u>___</u> <i>(llegar)</i> a Madrid, … <small class="uc up">cuando / antes de que</small></li>
-        <li class="ph" data-ins="Busco un piso que ___ cerca de "><b class="mk">Busco un piso que</b> <u>___</u> <i>(estar)</i> cerca de… <small class="uc up">busco… que</small></li>
+        <li class="ph" data-ins="Mi novio no quiere que me ___ ">Mi novio <b class="mk">no quiere que</b> me <u>___</u> <i>(ir)</i> <small class="uc up">querer que</small></li>
+        <li class="ph" data-ins="Si ___ las prácticas, "><b class="mk">Si</b> <u>___</u> <i>(aceptar)</i> las prácticas, … <small class="uc ui">si…</small></li>
       </ul>
+      <details class="enx"><summary>🇬🇧 Imagina en inglés y tradúcelo en tu cabeza</summary>
+        <ol class="enl">
+          <li><span class="en">If I accepted the internship, I&#x27;d look for a flat in the Salamanca district.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Si aceptara las prácticas, buscaría un piso en el barrio de Salamanca. "><b class="mk">Si</b> aceptara las prácticas, buscaría un piso en el barrio de Salamanca.</p></details></li>
+          <li><span class="en">I&#x27;d go as long as the company paid for my flat.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Me iría siempre que la empresa me pagara el piso. ">Me iría <b class="mk">siempre que</b> la empresa me pagara el piso.</p></details></li>
+          <li><span class="en">I&#x27;d like him to come and see me every month.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Me gustaría que viniera a verme cada mes. "><b class="mk">Me gustaría que</b> viniera a verme cada mes.</p></details></li>
+          <li><span class="en">When I get to Madrid, I&#x27;ll call you.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Cuando llegue a Madrid, te llamaré. "><b class="mk">Cuando</b> llegue a Madrid, te llamaré.</p></details></li>
+        </ol>
+      </details>
     </div>
-    <div style="left:2880px;top:1190px" class="card img" id="t-ex">
+    <div style="left:2880px;top:1070px" class="card img" id="t-ex">
       <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/HK_Central_MTR_Station_shop_%E6%9D%BF%E9%95%B7%E5%A3%BD%E5%8F%B8_Itacho_Sushi_restaurant_interior_visitors_Jan-2012.jpg/960px-HK_Central_MTR_Station_shop_%E6%9D%BF%E9%95%B7%E5%A3%BD%E5%8F%B8_Itacho_Sushi_restaurant_interior_visitors_Jan-2012.jpg" alt="" loading="lazy"><figcaption><a href="https://commons.wikimedia.org/wiki/File:HK_Central_MTR_Station_shop_%E6%9D%BF%E9%95%B7%E5%A3%BD%E5%8F%B8_Itacho_Sushi_restaurant_interior_visitors_Jan-2012.jpg" target="_blank" rel="noopener">Foto: Hui Kenneth Kong · CC BY-SA 3.0 · Wikimedia Commons</a></figcaption></figure>
       <span class="kick">Ahora · pres. subj. / imp. subj.</span>
       <h3>Tu ex, en tu restaurante favorito</h3>
       <p class="sit">Viernes, 20:00. Entras en tu japonés favorito de Chelsea y ahí está tu ex… con su nueva novia, en vuestra mesa de siempre. ¿Qué harías si te viera?</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Ojalá no me ___ "><b class="mk">Ojalá</b> no me <u>___</u> <i>(ver)</i>… <small class="uc up">querer que</small></li>
-        <li class="ph" data-ins="Me molesta que ___ en nuestra mesa de siempre "><b class="mk">Me molesta que</b> <u>___</u> <i>(estar)</i> en nuestra mesa de siempre <small class="uc up">reacción</small></li>
-        <li class="ph" data-ins="Si me ___, yo "><b class="mk">Si</b> me <u>___</u> <i>(saludar)</i>, yo… <small class="uc ui">si…</small></li>
+        <li class="ph" data-ins="Ojalá no me ___ "><b class="mk">Ojalá</b> no me <u>___</u> <i>(ver)</i> <small class="uc up">querer que</small></li>
         <li class="ph" data-ins="Haría como si no lo ___ ">Haría <b class="mk">como si</b> no lo <u>___</u> <i>(conocer)</i> <small class="uc ui">como si</small></li>
       </ul>
+      <details class="enx"><summary>🇬🇧 Imagina en inglés y tradúcelo en tu cabeza</summary>
+        <ol class="enl">
+          <li><span class="en">If he said hello, I&#x27;d smile and keep walking.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Si me saludara, sonreiría y seguiría andando. "><b class="mk">Si</b> me saludara, sonreiría y seguiría andando.</p></details></li>
+          <li><span class="en">I&#x27;d leave before he saw me.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Me iría antes de que me viera. ">Me iría <b class="mk">antes de que</b> me viera.</p></details></li>
+          <li><span class="en">I&#x27;d act as if I didn&#x27;t care at all.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Actuaría como si no me importara nada. ">Actuaría <b class="mk">como si</b> no me importara nada.</p></details></li>
+          <li><span class="en">It bothers me that they&#x27;re sitting at our table.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Me molesta que estén sentados en nuestra mesa. "><b class="mk">Me molesta que</b> estén sentados en nuestra mesa.</p></details></li>
+        </ol>
+      </details>
     </div>
-    <div style="left:691px;top:1878px" class="card img past" id="t-london">
+    <div style="left:691px;top:1687px" class="card img past" id="t-london">
       <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/King%27s_College_London%2C_the_old_quad_at_Strand_Campus.jpg/960px-King%27s_College_London%2C_the_old_quad_at_Strand_Campus.jpg" alt="" loading="lazy"><figcaption><a href="https://commons.wikimedia.org/wiki/File:King%27s_College_London,_the_old_quad_at_Strand_Campus.jpg" target="_blank" rel="noopener">Foto: KiloCharlieLima · CC BY-SA 4.0 · Wikimedia Commons</a></figcaption></figure>
       <span class="kick">En el pasado · imp. subj. (el primer verbo manda)</span>
       <h3>Cuando llegaste a Londres a estudiar</h3>
       <p class="sit">Hace unos años llegaste a Londres para estudiar en King&#x27;s. Todo era nuevo: el piso, la comida, la gente.</p>
       <ul class="ls prm">
         <li class="ph" data-ins="Mis padres querían que ___ ">Mis padres <b class="mk">querían que</b> <u>___</u> <i>(estudiar)</i>… <small class="uc ui">primer verbo en pasado</small></li>
-        <li class="ph" data-ins="Me sorprendió que los ingleses ___ a las seis "><b class="mk">Me sorprendió que</b> los ingleses <u>___</u> <i>(cenar)</i> a las seis <small class="uc ui">primer verbo en pasado</small></li>
         <li class="ph" data-ins="Buscaba un piso que ___ cerca de "><b class="mk">Buscaba un piso que</b> <u>___</u> <i>(estar)</i> cerca de… <small class="uc ui">primer verbo en pasado</small></li>
-        <li class="ph" data-ins="No creía que ___ "><b class="mk">No creía que</b> <u>___</u> <i>(poder)</i>… <small class="uc ui">primer verbo en pasado</small></li>
       </ul>
+      <details class="enx"><summary>🇬🇧 Imagina en inglés y tradúcelo en tu cabeza</summary>
+        <ol class="enl">
+          <li><span class="en">My parents wanted me to study law.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Mis padres querían que estudiara Derecho. ">Mis padres <b class="mk">querían que</b> estudiara Derecho.</p></details></li>
+          <li><span class="en">It surprised me that English people had dinner at six.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Me sorprendió que los ingleses cenaran a las seis. "><b class="mk">Me sorprendió que</b> los ingleses cenaran a las seis.</p></details></li>
+          <li><span class="en">I didn&#x27;t think I could live so far from my family.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="No creía que pudiera vivir tan lejos de mi familia. "><b class="mk">No creía que</b> pudiera vivir tan lejos de mi familia.</p></details></li>
+          <li><span class="en">My mum called me every day as if I were a child.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Mi madre me llamaba todos los días como si fuera una niña. ">Mi madre me llamaba todos los días <b class="mk">como si</b> fuera una niña.</p></details></li>
+        </ol>
+      </details>
     </div>
-    <div style="left:2649px;top:1878px" class="card img past" id="t-madrid">
+    <div style="left:2649px;top:1687px" class="card img past" id="t-madrid">
       <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Gran_V%C3%ADa_%28Madrid%29_1.jpg/960px-Gran_V%C3%ADa_%28Madrid%29_1.jpg" alt="" loading="lazy"><b class="tag">2025</b><figcaption><a href="https://commons.wikimedia.org/wiki/File:Gran_V%C3%ADa_(Madrid)_1.jpg" target="_blank" rel="noopener">Foto: Felipe Gabaldón · CC BY 2.0 · Wikimedia Commons</a></figcaption></figure>
       <span class="kick">En el pasado · imp. subj. (el primer verbo manda)</span>
       <h3>La oferta de Madrid, hace un año</h3>
       <p class="sit">Hace un año te ofrecieron un trabajo en Madrid. Al final te quedaste en Londres.</p>
       <ul class="ls prm">
         <li class="ph" data-ins="Mi jefe me pidió que me ___ ">Mi jefe <b class="mk">me pidió que</b> me <u>___</u> <i>(quedar)</i>… <small class="uc ui">primer verbo en pasado</small></li>
-        <li class="ph" data-ins="Mi novio no quería que me ___ ">Mi novio <b class="mk">no quería que</b> me <u>___</u> <i>(ir)</i>… <small class="uc ui">primer verbo en pasado</small></li>
-        <li class="ph" data-ins="Era normal que ___ miedo, porque "><b class="mk">Era normal que</b> <u>___</u> <i>(tener)</i> miedo, porque… <small class="uc ui">primer verbo en pasado</small></li>
         <li class="ph" data-ins="Me iba a ir siempre que me ___ bien ">Me iba a ir <b class="mk">siempre que</b> me <u>___</u> <i>(pagar)</i> bien <small class="uc ui">condición en pasado</small></li>
       </ul>
+      <details class="enx"><summary>🇬🇧 Imagina en inglés y tradúcelo en tu cabeza</summary>
+        <ol class="enl">
+          <li><span class="en">My boyfriend didn&#x27;t want me to leave.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Mi novio no quería que me fuera. ">Mi novio <b class="mk">no quería que</b> me fuera.</p></details></li>
+          <li><span class="en">It was normal for me to be scared.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Era normal que tuviera miedo. "><b class="mk">Era normal que</b> tuviera miedo.</p></details></li>
+          <li><span class="en">My friends told me to think it over.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Mis amigas me dijeron que lo pensara. ">Mis amigas me dijeron que lo pensara.</p></details></li>
+          <li><span class="en">If they offered it to me today, I&#x27;d say yes.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Si me lo ofrecieran hoy, diría que sí. "><b class="mk">Si</b> me lo ofrecieran hoy, diría que sí.</p></details></li>
+        </ol>
+      </details>
     </div>
-    <div style="left:1296px;top:2303px" class="card img past" id="t-italia">
+    <div style="left:1296px;top:2069px" class="card img past" id="t-italia">
       <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Trastevere-Great-Italy_%2831658105581%29.jpg/960px-Trastevere-Great-Italy_%2831658105581%29.jpg" alt="" loading="lazy"><b class="tag">Roma</b><figcaption><a href="https://commons.wikimedia.org/wiki/File:Trastevere-Great-Italy_(31658105581).jpg" target="_blank" rel="noopener">Foto: Larry Koester · CC BY 2.0 · Wikimedia Commons</a></figcaption></figure>
       <span class="kick">En el pasado · imp. subj. (el primer verbo manda)</span>
       <h3>El máster en Roma</h3>
       <p class="sit">El año pasado te ofrecieron un máster en Roma y dijiste que no.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Mi madre me aconsejó que no ___ ">Mi madre <b class="mk">me aconsejó que</b> no <u>___</u> <i>(ir)</i>… <small class="uc ui">primer verbo en pasado</small></li>
-        <li class="ph" data-ins="Me daba miedo que ___ demasiado caro "><b class="mk">Me daba miedo que</b> <u>___</u> <i>(ser)</i> demasiado caro <small class="uc ui">primer verbo en pasado</small></li>
+        <li class="ph" data-ins="Mi madre me aconsejó que no ___ ">Mi madre <b class="mk">me aconsejó que</b> no <u>___</u> <i>(ir)</i> <small class="uc ui">primer verbo en pasado</small></li>
         <li class="ph" data-ins="Si hoy me lo ___ otra vez, "><b class="mk">Si</b> hoy me lo <u>___</u> <i>(ofrecer)</i> otra vez, … <small class="uc ui">si…</small></li>
-        <li class="ph" data-ins="Ojalá me lo ___ a ofrecer "><b class="mk">Ojalá</b> me lo <u>___</u> <i>(volver)</i> a ofrecer <small class="uc ui">ojalá / me gustaría</small></li>
       </ul>
+      <details class="enx"><summary>🇬🇧 Imagina en inglés y tradúcelo en tu cabeza</summary>
+        <ol class="enl">
+          <li><span class="en">I was afraid it would be too expensive.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Me daba miedo que fuera demasiado caro. "><b class="mk">Me daba miedo que</b> fuera demasiado caro.</p></details></li>
+          <li><span class="en">My teacher told me to apply anyway.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Mi profesora me dijo que lo solicitara de todas formas. ">Mi profesora me dijo que lo solicitara de todas formas.</p></details></li>
+          <li><span class="en">I wish they&#x27;d offer it to me again.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Ojalá me lo volvieran a ofrecer. "><b class="mk">Ojalá</b> me lo volvieran a ofrecer.</p></details></li>
+          <li><span class="en">If I lived in Rome, I&#x27;d eat pasta every day.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Si viviera en Roma, comería pasta todos los días. "><b class="mk">Si</b> viviera en Roma, comería pasta todos los días.</p></details></li>
+        </ol>
+      </details>
     </div>
-    <div style="left:2044px;top:2303px" class="card img past" id="t-seguir">
+    <div style="left:2044px;top:2069px" class="card img past" id="t-seguir">
       <figure class="pic"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Wedding_and_Engagement_Rings_2151px.jpg/960px-Wedding_and_Engagement_Rings_2151px.jpg" alt="" loading="lazy"><figcaption><a href="https://commons.wikimedia.org/wiki/File:Wedding_and_Engagement_Rings_2151px.jpg" target="_blank" rel="noopener">Foto: Photo by Derek Ramsey (Ram-Man) · CC BY-SA 2.5 · Wikimedia Commons</a></figcaption></figure>
       <span class="kick">En el pasado · imp. subj. (el primer verbo manda)</span>
       <h3>Tu ex se ha comprometido</h3>
@@ -939,11 +1005,17 @@ b.mk{color:var(--cn);font-weight:800}
       <ul class="ls prm">
         <li class="ph" data-ins="Le molestaba que yo ___ con mis amigas "><b class="mk">Le molestaba que</b> yo <u>___</u> <i>(salir)</i> con mis amigas <small class="uc ui">primer verbo en pasado</small></li>
         <li class="ph" data-ins="Siempre me hablaba como si yo ___ su madre ">Siempre me hablaba <b class="mk">como si</b> yo <u>___</u> <i>(ser)</i> su madre <small class="uc ui">como si</small></li>
-        <li class="ph" data-ins="Le dije que no volvería a menos que ___ ">Le dije que no volvería <b class="mk">a menos que</b> <u>___</u> <i>(cambiar)</i> <small class="uc ui">condición en pasado</small></li>
-        <li class="ph" data-ins="Ojalá ___ feliz "><b class="mk">Ojalá</b> <u>___</u> <i>(ser)</i> feliz <small class="uc up">querer que</small></li>
       </ul>
+      <details class="enx"><summary>🇬🇧 Imagina en inglés y tradúcelo en tu cabeza</summary>
+        <ol class="enl">
+          <li><span class="en">He wanted me to spend every weekend with his family.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Quería que pasara todos los fines de semana con su familia. "><b class="mk">Quería que</b> pasara todos los fines de semana con su familia.</p></details></li>
+          <li><span class="en">I told him I wouldn&#x27;t go back to him unless he changed.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Le dije que no volvería con él a menos que cambiara. ">Le dije que no volvería con él <b class="mk">a menos que</b> cambiara.</p></details></li>
+          <li><span class="en">I hope she&#x27;s happy with him.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Espero que ella sea feliz con él. "><b class="mk">Espero que</b> ella sea feliz con él.</p></details></li>
+          <li><span class="en">If he called me now, I wouldn&#x27;t answer.</span><details class="sol2"><summary>Ver en español</summary><p class="ph" data-ins="Si me llamara ahora, no contestaría. "><b class="mk">Si</b> me llamara ahora, no contestaría.</p></details></li>
+        </ol>
+      </details>
     </div>
-    <div class="card" id="k-write" style="left:1390px;top:1040px">
+    <div class="card" id="k-write" style="left:1390px;top:885px">
       <span class="kick">Mi espacio</span>
       <h2>Habla, escribe, corrige</h2>
       <div class="parts"><span class="pa">3 frases en pres. subj.</span><span class="pd">3 frases en imp. subj.</span><span class="pb">Elige una imagen: ¿qué harías si…?</span><span class="pc">Tus apuntes</span></div>
