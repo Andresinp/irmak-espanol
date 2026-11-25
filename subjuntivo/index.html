@@ -324,6 +324,11 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
 .prm .ph i{font-style:italic}
 .fr{color:var(--in);font-style:normal}
 
+/* markers inside examples: bold peach, apart from the verb highlight */
+b.mk{color:var(--cn);font-weight:800}
+.prm .ph b.mk{color:var(--cn)}
+.opts b.mk,.fix b.mk{color:inherit}
+
 /* ---------- dictionary in the top bar (study-map skill, assets/dictionary.html) ---------- */.dict{position:relative;flex:0 1 330px;min-width:0}
 .dict input{width:100%;font:inherit;font-size:16px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);
   border-radius:999px;padding:9px 16px 9px 40px;min-height:40px;outline:none;-webkit-appearance:none;appearance:none}
@@ -370,8 +375,8 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
         <span>deseo</span><span>emoción</span><span>duda</span><span>futuro con «cuando»</span><span>finalidad</span><span>condición</span><span>hipótesis</span>
       </div>
       <div class="tree">
-        <div class="tp"><b>Pres. subj.</b><span>posible · ahora o después</span><i>Quiero que me <u>llames</u>.</i></div>
-        <div class="ti"><b>Imp. subj.</b><span>improbable, imaginado o en pasado</span><i>Quería que me <u>llamaras</u>.</i></div>
+        <div class="tp"><b>Pres. subj.</b><span>posible · ahora o después</span><i><b class="mk">Quiero que</b> me <u>llames</u>.</i></div>
+        <div class="ti"><b>Imp. subj.</b><span>improbable, imaginado o en pasado</span><i><b class="mk">Quería que</b> me <u>llamaras</u>.</i></div>
       </div>
     </div>
 
@@ -383,14 +388,14 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
         <div class="s3"><b>Ya imposible</b><p>Si <u>hubiera tenido</u> dinero, me habría operado.</p><span>si + pluscuamp. subj. → condicional compuesto</span></div>
       </div>
       <div class="scale sm">
-        <div class="s1"><p class="ph" data-ins="Ojalá tenga dinero. ">Ojalá <u>tenga</u> dinero.</p><span>pres. subj.: puede pasar, lo veo posible</span></div>
-        <div class="s2"><p class="ph" data-ins="Ojalá tuviera dinero. ">Ojalá <u>tuviera</u> dinero.</p><span>imp. subj.: ahora no tengo y no creo que lo tenga</span></div>
-        <div class="s3"><p class="ph" data-ins="Ojalá hubiera tenido dinero. ">Ojalá <u>hubiera tenido</u> dinero.</p><span>pluscuamp. subj.: en el pasado no lo tuve; ya no se puede cambiar</span></div>
+        <div class="s1"><p class="ph" data-ins="Ojalá tenga dinero. "><b class="mk">Ojalá</b> <u>tenga</u> dinero.</p><span>pres. subj.: puede pasar, lo veo posible</span></div>
+        <div class="s2"><p class="ph" data-ins="Ojalá tuviera dinero. "><b class="mk">Ojalá</b> <u>tuviera</u> dinero.</p><span>imp. subj.: ahora no tengo y no creo que lo tenga</span></div>
+        <div class="s3"><p class="ph" data-ins="Ojalá hubiera tenido dinero. "><b class="mk">Ojalá</b> <u>hubiera tenido</u> dinero.</p><span>pluscuamp. subj.: en el pasado no lo tuve; ya no se puede cambiar</span></div>
       </div>
       <div class="scale sm">
-        <div class="s1"><p>Ojalá me <u>llame</u>.</p><span>puede pasar</span></div>
-        <div class="s2"><p>Ojalá me <u>llamara</u>.</p><span>casi imposible</span></div>
-        <div class="s3"><p>Ojalá me <u>hubiera llamado</u>.</p><span>no llamó (ayer, la semana pasada…)</span></div>
+        <div class="s1"><p><b class="mk">Ojalá</b> me <u>llame</u>.</p><span>puede pasar</span></div>
+        <div class="s2"><p><b class="mk">Ojalá</b> me <u>llamara</u>.</p><span>casi imposible</span></div>
+        <div class="s3"><p><b class="mk">Ojalá</b> me <u>hubiera llamado</u>.</p><span>no llamó (ayer, la semana pasada…)</span></div>
       </div>
       <p class="note">La diferencia es <b>cuánto crees que puede pasar</b> y <b>cuándo</b>: tenga = lo veo posible · tuviera = lo deseo, pero no lo veo · hubiera tenido = ya pasó y no fue así.</p>
       <p class="note">⚠︎ Nunca <s>si tenga</s>: después de <b>si</b> no hay presente de subjuntivo.</p>
@@ -401,8 +406,8 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <div class="tbx"><table class="all">
         <thead><tr><th>Primer verbo</th><th>→ segundo verbo</th></tr></thead>
         <tbody>
-          <tr><th>presente · futuro<br>imperativo · he dicho</th><td class="cp"><b>pres. subj.</b><br>Quiero que <u>vengas</u>.<br>Te diré que <u>vengas</u>.<br>Dile que <u>venga</u>.</td></tr>
-          <tr><th>pasado · condicional</th><td class="ci"><b>imp. subj.</b><br>Quería que <u>vinieras</u>.<br>Me pidió que <u>viniera</u>.<br>Me gustaría que <u>vinieras</u>.</td></tr>
+          <tr><th>presente · futuro<br>imperativo · he dicho</th><td class="cp"><b>pres. subj.</b><br><b class="mk">Quiero que</b> <u>vengas</u>.<br>Te diré que <u>vengas</u>.<br>Dile que <u>venga</u>.</td></tr>
+          <tr><th>pasado · condicional</th><td class="ci"><b>imp. subj.</b><br><b class="mk">Quería que</b> <u>vinieras</u>.<br><b class="mk">Me pidió que</b> <u>viniera</u>.<br><b class="mk">Me gustaría que</b> <u>vinieras</u>.</td></tr>
         </tbody>
       </table></div>
       <p class="note">El uso no cambia, solo el tiempo: es el mismo «querer que», empujado al pasado o a lo imaginado.</p>
@@ -439,8 +444,8 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
       <p class="por">¿Por qué? Una persona quiere y <b>otra</b> hace. La acción todavía no existe.</p>
       <ul class="exs">
-        <li class="ph" data-ins="Quiero que me digas la verdad: ¿quién es esa Selin? ">Quiero que me <u>digas</u> la verdad: ¿quién es esa Selin?</li>
-        <li class="ph" data-ins="Espero que esta vez no llegues tarde a la cena. ">Espero que esta vez no <u>llegues</u> tarde a la cena.</li>
+        <li class="ph" data-ins="Quiero que me digas la verdad: ¿quién es esa Selin? "><b class="mk">Quiero que</b> me <u>digas</u> la verdad: ¿quién es esa Selin?</li>
+        <li class="ph" data-ins="Espero que esta vez no llegues tarde a la cena. "><b class="mk">Espero que</b> esta vez no <u>llegues</u> tarde a la cena.</li>
       </ul>
       <p class="trp">⚠︎ «I want <b>you to tell</b>» → <s>quiero tú decir</s> → quiero que <b>digas</b>. Mismo sujeto = infinitivo: <b>quiero decirte</b>.</p>
     </div>
@@ -456,8 +461,8 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
       <p class="por">¿Por qué? No doy la noticia: ya la sabemos. Doy mi <b>reacción</b> a ella.</p>
       <ul class="exs">
-        <li class="ph" data-ins="No soporto que mires el móvil mientras cenamos. ">No soporto que <u>mires</u> el móvil mientras cenamos.</li>
-        <li class="ph" data-ins="Es normal que discutamos: llevamos tres años juntos. ">Es normal que <u>discutamos</u>: llevamos tres años juntos.</li>
+        <li class="ph" data-ins="No soporto que mires el móvil mientras cenamos. "><b class="mk">No soporto que</b> <u>mires</u> el móvil <b class="mk">mientras</b> cenamos.</li>
+        <li class="ph" data-ins="Es normal que discutamos: llevamos tres años juntos. "><b class="mk">Es normal que</b> <u>discutamos</u>: llevamos tres años juntos.</li>
       </ul>
       <p class="trp">⚠︎ Es <b>verdad / evidente / obvio</b> que + <b>indicativo</b>: eso es un dato, no una reacción.</p>
     </div>
@@ -473,8 +478,8 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
       <p class="por">¿Por qué? <b>Creo que</b> afirma (indicativo). <b>No creo que</b> ya no afirma nada: subjuntivo.</p>
       <ul class="exs">
-        <li class="ph" data-ins="No creo que la dieta del zumo funcione. ">No creo que la dieta del zumo <u>funcione</u>.</li>
-        <li class="ph" data-ins="Puede que mañana empiece el gimnasio… o no. ">Puede que mañana <u>empiece</u> el gimnasio… o no.</li>
+        <li class="ph" data-ins="No creo que la dieta del zumo funcione. "><b class="mk">No creo que</b> la dieta del zumo <u>funcione</u>.</li>
+        <li class="ph" data-ins="Puede que mañana empiece el gimnasio… o no. "><b class="mk">Puede que</b> mañana <u>empiece</u> el gimnasio… o no.</li>
       </ul>
       <p class="trp">⚠︎ <b>Creo que</b> funciona ✓ · <b>no creo que</b> funcione ✓ · <b>a lo mejor</b> + indicativo.</p>
     </div>
@@ -491,8 +496,8 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <p class="por">¿Por qué? Hablo de un momento que <b>todavía no ha llegado</b>.</p>
       <p class="note">🇫🇷 Como en francés: <b>avant que</b> y <b>jusqu’à ce que</b> + subjonctif. Pero <b>quand</b> + futur («quand je déménagerai») y en español <b>cuando + pres. subj.</b> («cuando me mude»).</p>
       <ul class="exs">
-        <li class="ph" data-ins="Cuando me mude a Madrid, viviré en el barrio de Salamanca. ">Cuando me <u>mude</u> a Madrid, viviré en el barrio de Salamanca.</li>
-        <li class="ph" data-ins="No pienso hablarle hasta que me pida perdón. ">No pienso hablarle hasta que me <u>pida</u> perdón.</li>
+        <li class="ph" data-ins="Cuando me mude a Madrid, viviré en el barrio de Salamanca. "><b class="mk">Cuando</b> me <u>mude</u> a Madrid, viviré en el barrio de Salamanca.</li>
+        <li class="ph" data-ins="No pienso hablarle hasta que me pida perdón. ">No pienso hablarle <b class="mk">hasta que</b> me <u>pida</u> perdón.</li>
       </ul>
       <p class="trp">⚠︎ «when I <b>will</b> move» → <s>cuando me mudaré</s>. Hábito o pasado = indicativo: cuando <b>viajo</b>, como fatal.</p>
     </div>
@@ -506,8 +511,8 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
       <p class="por">¿Por qué? Un objetivo es algo que <b>todavía no ha pasado</b>.</p>
       <ul class="exs">
-        <li class="ph" data-ins="Hoy cocino yo para que no pidamos comida basura otra vez. ">Hoy cocino yo para que no <u>pidamos</u> comida basura otra vez.</li>
-        <li class="ph" data-ins="Me como el postre sin que me vea mi entrenador. ">Me como el postre sin que me <u>vea</u> mi entrenador.</li>
+        <li class="ph" data-ins="Hoy cocino yo para que no pidamos comida basura otra vez. ">Hoy cocino yo <b class="mk">para que</b> no <u>pidamos</u> comida basura otra vez.</li>
+        <li class="ph" data-ins="Me como el postre sin que me vea mi entrenador. ">Me como el postre <b class="mk">sin que</b> me <u>vea</u> mi entrenador.</li>
       </ul>
       <p class="trp">⚠︎ Mismo sujeto = infinitivo: voy al gimnasio <b>para estar</b> en forma.</p>
     </div>
@@ -523,11 +528,11 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
       <p class="por">¿Por qué? Todos ponen una condición que <b>aún no se cumple</b>. Recuerda: todos con <b>subjuntivo</b>.</p>
       <ul class="exs">
-        <li class="ph" data-ins="Te perdono siempre y cuando borres su número. ">Te perdono siempre y cuando <u>borres</u> su número.</li>
-        <li class="ph" data-ins="Como vuelvas a llegar tarde, ceno sola. ">Como <u>vuelvas</u> a llegar tarde, ceno sola.</li>
-        <li class="ph" data-ins="Mientras no me pidas perdón, no hay cena. ">Mientras no me <u>pidas</u> perdón, no hay cena.</li>
-        <li class="ph" data-ins="Yo cocino a cambio de que tú friegues. ">Yo cocino a cambio de que tú <u>friegues</u>.</li>
-        <li class="ph" data-ins="Salimos esta noche a menos que llueva. ">Salimos esta noche a menos que <u>llueva</u>.</li>
+        <li class="ph" data-ins="Te perdono siempre y cuando borres su número. ">Te perdono <b class="mk">siempre y cuando</b> <u>borres</u> su número.</li>
+        <li class="ph" data-ins="Como vuelvas a llegar tarde, ceno sola. "><b class="mk">Como</b> <u>vuelvas</u> a llegar tarde, ceno sola.</li>
+        <li class="ph" data-ins="Mientras no me pidas perdón, no hay cena. "><b class="mk">Mientras no</b> me <u>pidas</u> perdón, no hay cena.</li>
+        <li class="ph" data-ins="Yo cocino a cambio de que tú friegues. ">Yo cocino <b class="mk">a cambio de que</b> tú <u>friegues</u>.</li>
+        <li class="ph" data-ins="Salimos esta noche a menos que llueva. ">Salimos esta noche <b class="mk">a menos que</b> <u>llueva</u>.</li>
       </ul>
       <p class="trp">⚠︎ <b>Como</b> + indicativo = <i>because</i>: «Como <b>llegaste</b> tarde, cené sola». <b>Como</b> + subjuntivo = <i>if</i> con amenaza.</p>
     </div>
@@ -541,7 +546,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
       <p class="por">¿Por qué? No sé si existe. Si ya lo conozco, es un hecho: indicativo.</p>
       <ul class="exs">
-        <li class="ph" data-ins="Busco un novio que sepa cocinar. ">Busco un novio que <u>sepa</u> cocinar. <i class="vs-i">(no sé si existe)</i></li>
+        <li class="ph" data-ins="Busco un novio que sepa cocinar. "><b class="mk">Busco un novio que</b> <u>sepa</u> cocinar. <i class="vs-i">(no sé si existe)</i></li>
         <li class="ph" data-ins="Tengo un novio que sabe cocinar. ">Tengo un novio que <b>sabe</b> cocinar. <i class="vs-i">(existe: indicativo)</i></li>
       </ul>
     </div>
@@ -554,14 +559,14 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <div class="tbx"><table class="all pairs">
         <thead><tr><th>Marcador</th><th>Pres. subj. · posible / ahora</th><th>Imp. subj. · imaginado / pasado</th></tr></thead>
         <tbody>
-          <tr><th>querer que<i>want… to</i></th><td class="ph" data-ins="Quiero que cocines tú. ">Quiero que <u>cocines</u> tú.</td><td class="ph" data-ins="Quería que cocinaras tú. ">Quería que <u>cocinaras</u> tú.</td></tr>
-          <tr><th>ojalá<i>I hope / I wish</i></th><td class="ph" data-ins="Ojalá me escriba. ">Ojalá me <u>escriba</u>. <em>(puede pasar)</em></td><td class="ph" data-ins="Ojalá me escribiera. ">Ojalá me <u>escribiera</u>. <em>(no lo creo)</em></td></tr>
-          <tr><th>me molesta que<i>it bothers me</i></th><td class="ph" data-ins="Me molesta que no me escuches. ">Me molesta que no me <u>escuches</u>.</td><td class="ph" data-ins="Me molestó que no me escucharas. ">Me molestó que no me <u>escucharas</u>.</td></tr>
-          <tr><th>no creo que<i>I don't think</i></th><td class="ph" data-ins="No creo que se opere. ">No creo que se <u>opere</u>.</td><td class="ph" data-ins="No creía que se operara. ">No creía que se <u>operara</u>.</td></tr>
-          <tr><th>para que<i>so that</i></th><td class="ph" data-ins="Te lo digo para que lo sepas. ">Te lo digo para que lo <u>sepas</u>.</td><td class="ph" data-ins="Te lo dije para que lo supieras. ">Te lo dije para que lo <u>supieras</u>.</td></tr>
-          <tr><th>siempre que<i>as long as</i></th><td class="ph" data-ins="Te perdono siempre que no vuelvas a mentir. ">Te perdono siempre que no <u>vuelvas</u> a mentir.</td><td class="ph" data-ins="Me dijo que me perdonaría siempre que no volviera a mentir. ">Me dijo que me perdonaría siempre que no <u>volviera</u> a mentir.</td></tr>
-          <tr><th>si<i>if</i></th><td>Si <b>puedo</b>, voy. <em>(indicativo: nunca <s>si pueda</s>)</em></td><td class="ph" data-ins="Si pudiera, iría. ">Si <u>pudiera</u>, iría.</td></tr>
-          <tr><th>como si<i>as if</i></th><td><em>— no existe con presente</em></td><td class="ph" data-ins="Me habla como si fuera su madre. ">Me habla como si <u>fuera</u> su madre.</td></tr>
+          <tr><th>querer que<i>want… to</i></th><td class="ph" data-ins="Quiero que cocines tú. "><b class="mk">Quiero que</b> <u>cocines</u> tú.</td><td class="ph" data-ins="Quería que cocinaras tú. "><b class="mk">Quería que</b> <u>cocinaras</u> tú.</td></tr>
+          <tr><th>ojalá<i>I hope / I wish</i></th><td class="ph" data-ins="Ojalá me escriba. "><b class="mk">Ojalá</b> me <u>escriba</u>. <em>(puede pasar)</em></td><td class="ph" data-ins="Ojalá me escribiera. "><b class="mk">Ojalá</b> me <u>escribiera</u>. <em>(no lo creo)</em></td></tr>
+          <tr><th>me molesta que<i>it bothers me</i></th><td class="ph" data-ins="Me molesta que no me escuches. "><b class="mk">Me molesta que</b> no me <u>escuches</u>.</td><td class="ph" data-ins="Me molestó que no me escucharas. "><b class="mk">Me molestó que</b> no me <u>escucharas</u>.</td></tr>
+          <tr><th>no creo que<i>I don't think</i></th><td class="ph" data-ins="No creo que se opere. "><b class="mk">No creo que</b> se <u>opere</u>.</td><td class="ph" data-ins="No creía que se operara. "><b class="mk">No creía que</b> se <u>operara</u>.</td></tr>
+          <tr><th>para que<i>so that</i></th><td class="ph" data-ins="Te lo digo para que lo sepas. ">Te lo digo <b class="mk">para que</b> lo <u>sepas</u>.</td><td class="ph" data-ins="Te lo dije para que lo supieras. ">Te lo dije <b class="mk">para que</b> lo <u>supieras</u>.</td></tr>
+          <tr><th>siempre que<i>as long as</i></th><td class="ph" data-ins="Te perdono siempre que no vuelvas a mentir. ">Te perdono <b class="mk">siempre que</b> no <u>vuelvas</u> a mentir.</td><td class="ph" data-ins="Me dijo que me perdonaría siempre que no volviera a mentir. ">Me dijo que me perdonaría <b class="mk">siempre que</b> no <u>volviera</u> a mentir.</td></tr>
+          <tr><th>si<i>if</i></th><td><b class="mk">Si</b> <b>puedo</b>, voy. <em>(indicativo: nunca <s>si pueda</s>)</em></td><td class="ph" data-ins="Si pudiera, iría. "><b class="mk">Si</b> <u>pudiera</u>, iría.</td></tr>
+          <tr><th>como si<i>as if</i></th><td><em>— no existe con presente</em></td><td class="ph" data-ins="Me habla como si fuera su madre. ">Me habla <b class="mk">como si</b> <u>fuera</u> su madre.</td></tr>
         </tbody>
       </table></div>
     </div>
@@ -571,7 +576,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <p class="note">Primero piensa: ¿qué pide la gramática? Después: ¿ha pasado de verdad o no? Toca «¿Por qué?» para ver la explicación.</p>
 
       <div class="q">
-        <p class="qs"><b>1</b> Insistió en que <span class="gap">______</span> a la conferencia que tuvo lugar ayer porque os necesitaba allí.</p>
+        <p class="qs"><b>1</b> <b class="mk">Insistió en que</b> <span class="gap">______</span> a la conferencia que tuvo lugar ayer porque os necesitaba allí.</p>
         <p class="opts"><s>fuisteis</s> <b>fuerais</b> <s>vayáis</s></p>
         <details class="sol"><summary>¿Por qué fuerais?</summary><div class="fix">
           <div><b>fuerais</b><span>Insistir en que = pedir con fuerza (influencia) → subjuntivo. «Insistió» es pasado → imp. subj.</span></div>
@@ -591,7 +596,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
 
       <div class="q">
-        <p class="qs"><b>3</b> Lo que más le molestó es que nadie le <span class="gap">______</span> cuando dio el discurso.</p>
+        <p class="qs"><b>3</b> Lo que más le molestó es que nadie le <span class="gap">______</span> <b class="mk">cuando</b> dio el discurso.</p>
         <p class="opts"><s>escuchaba</s> <s>escuchó</s> <b>escuchara</b> <s>escucha</s></p>
         <details class="sol"><summary>¿Por qué escuchara?</summary><div class="fix">
           <div><b>escuchara</b><span>Molestar que = reacción → subjuntivo. «Molestó» es pasado → imp. subj.</span></div>
@@ -601,7 +606,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
 
       <div class="q">
-        <p class="qs"><b>4</b> Si <span class="gap">______</span> más tiempo en el examen, habría hecho una respuesta más elaborada, pero solamente tuve una hora.</p>
+        <p class="qs"><b>4</b> <b class="mk">Si</b> <span class="gap">______</span> más tiempo en el examen, habría hecho una respuesta más elaborada, pero solamente tuve una hora.</p>
         <p class="opts"><s>habría tenido</s> <b>hubiera tenido</b> <s>tenga</s> <s>tuviera</s> <s>tendría</s></p>
         <details class="sol"><summary>¿Por qué hubiera tenido?</summary><div class="fix">
           <div><b>hubiera tenido</b><span>El examen ya pasó («solamente tuve una hora»): hipótesis imposible en el pasado → si + pluscuamperfecto de subj. + «habría hecho».</span></div>
@@ -612,7 +617,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
 
       <div class="q">
-        <p class="qs"><b>5</b> Si <span class="gap">______</span> más tiempo para la pregunta de gramática en el examen de mayo de 2026, podría responder de forma más elaborada.</p>
+        <p class="qs"><b>5</b> <b class="mk">Si</b> <span class="gap">______</span> más tiempo para la pregunta de gramática en el examen de mayo de 2026, podría responder de forma más elaborada.</p>
         <p class="opts"><s>habría tenido</s> <s>hubiera tenido</s> <s>tenga</s> <b>tuviera</b> <s>tendría</s></p>
         <details class="sol"><summary>¿Por qué tuviera?</summary><div class="fix">
           <div><b>tuviera</b><span>El examen aún no ha pasado: hipótesis sobre el futuro, poco probable → si + imp. subj. + condicional «podría».</span></div>
@@ -622,7 +627,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
 
       <div class="q">
-        <p class="qs"><b>6</b> Tú le has ayudado desinteresadamente ayer con su ensayo, pero él, en tu lugar, no <span class="gap">______</span> lo mismo.</p>
+        <p class="qs"><b>6</b> Tú le has ayudado desinteresadamente ayer con su ensayo, pero él, <b class="mk">en tu lugar</b>, no <span class="gap">______</span> lo mismo.</p>
         <p class="opts"><s>haya hecho</s> <s>ha hecho</s> <b>habría hecho</b> <s>hacía</s></p>
         <details class="sol"><summary>¿Por qué habría hecho?</summary><div class="fix">
           <div><b>habría hecho</b><span>«En tu lugar» = <i>if he were you</i>: hipótesis sobre una situación pasada → condicional compuesto, <i>he wouldn't have done</i>.</span></div>
@@ -675,9 +680,9 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
       <p class="por">¿Por qué? No es real ahora y probablemente no lo será. Me lo <b>imagino</b>.</p>
       <ul class="exs">
-        <li class="ph" data-ins="Si me operara la nariz, mi madre no me hablaría en un mes. ">Si me <u>operara</u> la nariz, mi madre no me hablaría en un mes.</li>
-        <li class="ph" data-ins="Si viviera en Madrid, cenaría a las diez como todo el mundo. ">Si <u>viviera</u> en Madrid, cenaría a las diez como todo el mundo.</li>
-        <li class="ph" data-ins="Si engordara diez kilos, ¿me seguirías queriendo? ">Si <u>engordara</u> diez kilos, ¿me seguirías queriendo?</li>
+        <li class="ph" data-ins="Si me operara la nariz, mi madre no me hablaría en un mes. "><b class="mk">Si</b> me <u>operara</u> la nariz, mi madre no me hablaría en un mes.</li>
+        <li class="ph" data-ins="Si viviera en Madrid, cenaría a las diez como todo el mundo. "><b class="mk">Si</b> <u>viviera</u> en Madrid, cenaría a las diez como todo el mundo.</li>
+        <li class="ph" data-ins="Si engordara diez kilos, ¿me seguirías queriendo? "><b class="mk">Si</b> <u>engordara</u> diez kilos, ¿me seguirías queriendo?</li>
       </ul>
       <p class="trp">⚠︎ «if I <b>would</b> have» → <s>si tendría</s> → si <b>tuviera</b>. «Yo que tú» y «en tu lugar» van con condicional: <b>yo que tú, no se lo diría</b>.</p>
     </div>
@@ -692,8 +697,8 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
       <p class="por">¿Por qué? El condicional («gustaría») pone el deseo a distancia, y el segundo verbo lo sigue al imp. subj.</p>
       <ul class="exs">
-        <li class="ph" data-ins="Ojalá mi ex me llamara… pero no va a llamar. ">Ojalá mi ex me <u>llamara</u>… pero no va a llamar.</li>
-        <li class="ph" data-ins="Me gustaría que esta noche cocinaras tú. ">Me gustaría que esta noche <u>cocinaras</u> tú.</li>
+        <li class="ph" data-ins="Ojalá mi ex me llamara… pero no va a llamar. "><b class="mk">Ojalá</b> mi ex me <u>llamara</u>… pero no va a llamar.</li>
+        <li class="ph" data-ins="Me gustaría que esta noche cocinaras tú. "><b class="mk">Me gustaría que</b> esta noche <u>cocinaras</u> tú.</li>
       </ul>
       <p class="trp">⚠︎ Ojalá me <b>llame</b> = creo que puede pasar · ojalá me <b>llamara</b> = casi no lo creo.</p>
     </div>
@@ -709,9 +714,9 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
       <p class="por">¿Por qué? El primer verbo está en pasado y arrastra al segundo. Es la regla de arriba: el primer verbo manda.</p>
       <ul class="exs">
-        <li class="ph" data-ins="Mi madre quería que me casara antes de los treinta. ">Mi madre quería que me <u>casara</u> antes de los treinta.</li>
-        <li class="ph" data-ins="Le molestó que no le dijera nada de la cena con mi ex. ">Le molestó que no le <u>dijera</u> nada de la cena con mi ex.</li>
-        <li class="ph" data-ins="Mi entrenador me pidió que dejara el azúcar un mes. ">Mi entrenador me pidió que <u>dejara</u> el azúcar un mes.</li>
+        <li class="ph" data-ins="Mi madre quería que me casara antes de los treinta. ">Mi madre <b class="mk">quería que</b> me <u>casara</u> antes de los treinta.</li>
+        <li class="ph" data-ins="Le molestó que no le dijera nada de la cena con mi ex. "><b class="mk">Le molestó que</b> no le <u>dijera</u> nada de la cena con mi ex.</li>
+        <li class="ph" data-ins="Mi entrenador me pidió que dejara el azúcar un mes. ">Mi entrenador <b class="mk">me pidió que</b> <u>dejara</u> el azúcar un mes.</li>
       </ul>
       <p class="trp">⚠︎ En estilo indirecto: «Deja el azúcar» → me dijo que <b>dejara</b> el azúcar.</p>
     </div>
@@ -723,9 +728,9 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
       <p class="por">¿Por qué? Comparo con algo que <b>no es verdad</b>. Siempre imp. subj. (o pluscuamperfecto de subj.), aunque hablemos del presente.</p>
       <ul class="exs">
-        <li class="ph" data-ins="Me habla como si yo fuera su madre. ">Me habla como si yo <u>fuera</u> su madre.</li>
-        <li class="ph" data-ins="En vacaciones como como si no hubiera mañana. ">En vacaciones como como si no <u>hubiera</u> mañana.</li>
-        <li class="ph" data-ins="Actuó como si no me hubiera visto. ">Actuó como si no me <u>hubiera visto</u>.</li>
+        <li class="ph" data-ins="Me habla como si yo fuera su madre. ">Me habla <b class="mk">como si</b> yo <u>fuera</u> su madre.</li>
+        <li class="ph" data-ins="En vacaciones como como si no hubiera mañana. ">En vacaciones como <b class="mk">como si</b> no <u>hubiera</u> mañana.</li>
+        <li class="ph" data-ins="Actuó como si no me hubiera visto. ">Actuó <b class="mk">como si</b> no me <u>hubiera visto</u>.</li>
       </ul>
     </div>
 
@@ -738,9 +743,9 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       </div>
       <p class="por">¿Por qué? Los mismos marcadores de la rama 1, pero dentro de un pasado o de una hipótesis.</p>
       <ul class="exs">
-        <li class="ph" data-ins="Me dijo que me perdonaría siempre que no volviera a mentir. ">Me dijo que me perdonaría siempre que no <u>volviera</u> a mentir.</li>
-        <li class="ph" data-ins="Me haría la liposucción solo con tal de que fuera gratis. ">Me haría la liposucción solo con tal de que <u>fuera</u> gratis.</li>
-        <li class="ph" data-ins="Te acompañaría a la boda a cambio de que me presentaras a tu primo. ">Te acompañaría a la boda a cambio de que me <u>presentaras</u> a tu primo.</li>
+        <li class="ph" data-ins="Me dijo que me perdonaría siempre que no volviera a mentir. ">Me dijo que me perdonaría <b class="mk">siempre que</b> no <u>volviera</u> a mentir.</li>
+        <li class="ph" data-ins="Me haría la liposucción solo con tal de que fuera gratis. ">Me haría la liposucción solo <b class="mk">con tal de que</b> <u>fuera</u> gratis.</li>
+        <li class="ph" data-ins="Te acompañaría a la boda a cambio de que me presentaras a tu primo. ">Te acompañaría a la boda <b class="mk">a cambio de que</b> me <u>presentaras</u> a tu primo.</li>
       </ul>
     </div>
 
@@ -751,8 +756,8 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
         <div><p class="formula"><span class="x">Ojalá · como si</span> + <span class="f">hubiera + participio</span></p></div>
       </div>
       <ul class="exs">
-        <li class="ph" data-ins="Si no hubiera ido a esa fiesta, no lo habría conocido. ">Si no <u>hubiera ido</u> a esa fiesta, no lo habría conocido.</li>
-        <li class="ph" data-ins="Ojalá no le hubiera enseñado mis fotos de antes. ">Ojalá no le <u>hubiera enseñado</u> mis fotos de antes.</li>
+        <li class="ph" data-ins="Si no hubiera ido a esa fiesta, no lo habría conocido. "><b class="mk">Si</b> no <u>hubiera ido</u> a esa fiesta, no lo habría conocido.</li>
+        <li class="ph" data-ins="Ojalá no le hubiera enseñado mis fotos de antes. "><b class="mk">Ojalá</b> no le <u>hubiera enseñado</u> mis fotos de antes.</li>
       </ul>
       <div class="chips">
         <span class="chip ph" data-ins="hubiera sabido "><b>hubiera sabido</b></span>
@@ -764,7 +769,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
 
     <div class="card" id="k-err">
       <h3>Detecta los 6 errores <small>como en el test de King's</small></h3>
-      <p class="errtxt"><sup>1</sup>Quiero que mi novio cocina más. <sup>2</sup>Si tendría dinero, me operaría la nariz. <sup>3</sup>Mi madre quería que me case antes de los treinta. <sup>4</sup>Cuando me mudaré a Madrid, viviré en Salamanca. <sup>5</sup>Me miró como si estoy loca. <sup>6</sup>Como vuelves a llegar tarde, ceno sola. <sup>✓</sup>Creo que tiene razón.</p>
+      <p class="errtxt"><sup>1</sup><b class="mk">Quiero que</b> mi novio cocina más. <sup>2</sup><b class="mk">Si</b> tendría dinero, me operaría la nariz. <sup>3</sup>Mi madre <b class="mk">quería que</b> me case antes de los treinta. <sup>4</sup><b class="mk">Cuando</b> me mudaré a Madrid, viviré en Salamanca. <sup>5</sup>Me miró <b class="mk">como si</b> estoy loca. <sup>6</sup>Como vuelves a llegar tarde, ceno sola. <sup>✓</sup><b class="mk">Creo que</b> tiene razón.</p>
       <details class="sol"><summary>Ver soluciones</summary>
         <div class="fix">
           <div>1 · <s>cocina</s> → <b>cocine</b><span>Querer que + otra persona → subjuntivo. En inglés «I want him to cook» no cambia el verbo.</span></div>
@@ -789,10 +794,10 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <h3>Terremoto en mitad de una cita</h3>
       <p class="sit">Sábado, 21:30. Primera cita con un chico de Hinge en una terraza junto al Bósforo, en Bebek. Llega el postre… y la mesa empieza a temblar.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Si hay un terremoto, lo primero que hago es ">Si hay un terremoto, lo primero que hago es…</li>
-        <li class="ph" data-ins="Si ahora mismo ___ un terremoto, yo ">Si ahora mismo <u>___</u> <i>(haber)</i> un terremoto, yo…</li>
-        <li class="ph" data-ins="Me daría miedo que él ___ corriendo ">Me daría miedo que él <u>___</u> <i>(salir)</i> corriendo</li>
-        <li class="ph" data-ins="Ojalá ">Ojalá…</li>
+        <li class="ph" data-ins="Si hay un terremoto, lo primero que hago es "><b class="mk">Si</b> hay un terremoto, lo primero que hago es…</li>
+        <li class="ph" data-ins="Si ahora mismo ___ un terremoto, yo "><b class="mk">Si</b> ahora mismo <u>___</u> <i>(haber)</i> un terremoto, yo…</li>
+        <li class="ph" data-ins="Me daría miedo que él ___ corriendo "><b class="mk">Me daría miedo que</b> él <u>___</u> <i>(salir)</i> corriendo</li>
+        <li class="ph" data-ins="Ojalá "><b class="mk">Ojalá</b>…</li>
       </ul>
     </div>
     <div class="card img" id="t-dress">
@@ -801,10 +806,10 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <h3>El vestido se rompe en la boda</h3>
       <p class="sit">Boda de tu prima en el Çırağan, 200 invitados. Te agachas para coger el ramo y oyes «rasss»: el vestido se ha roto por detrás.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Si se me ___ el vestido en una boda, yo ">Si se me <u>___</u> <i>(romper)</i> el vestido en una boda, yo…</li>
-        <li class="ph" data-ins="Antes de que nadie lo ___, yo ">Antes de que nadie lo <u>___</u> <i>(ver)</i>, yo…</li>
-        <li class="ph" data-ins="Haría como si ">Haría como si…</li>
-        <li class="ph" data-ins="Le pediría a mi prima que ">Le pediría a mi prima que…</li>
+        <li class="ph" data-ins="Si se me ___ el vestido en una boda, yo "><b class="mk">Si</b> se me <u>___</u> <i>(romper)</i> el vestido en una boda, yo…</li>
+        <li class="ph" data-ins="Antes de que nadie lo ___, yo "><b class="mk">Antes de que</b> nadie lo <u>___</u> <i>(ver)</i>, yo…</li>
+        <li class="ph" data-ins="Haría como si ">Haría <b class="mk">como si</b>…</li>
+        <li class="ph" data-ins="Le pediría a mi prima que "><b class="mk">Le pediría a mi prima que</b>…</li>
       </ul>
     </div>
     <div class="card img" id="t-kilos">
@@ -813,10 +818,10 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <h3>Si subieras 12 kilos</h3>
       <p class="sit">Imagina: en seis meses subes 12 kilos. La boda de tu mejor amiga es en junio y el vestido que ya compraste no cierra.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Si ___ 12 kilos, ">Si <u>___</u> <i>(subir)</i> 12 kilos, …</li>
-        <li class="ph" data-ins="Me molestaría que mi madre ">Me molestaría que mi madre…</li>
-        <li class="ph" data-ins="Me compraría otro vestido para que ">Me compraría otro vestido para que…</li>
-        <li class="ph" data-ins="No dejaría el gimnasio a menos que ">No dejaría el gimnasio a menos que…</li>
+        <li class="ph" data-ins="Si ___ 12 kilos, "><b class="mk">Si</b> <u>___</u> <i>(subir)</i> 12 kilos, …</li>
+        <li class="ph" data-ins="Me molestaría que mi madre "><b class="mk">Me molestaría que</b> mi madre…</li>
+        <li class="ph" data-ins="Me compraría otro vestido para que ">Me compraría otro vestido <b class="mk">para que</b>…</li>
+        <li class="ph" data-ins="No dejaría el gimnasio a menos que ">No dejaría el gimnasio <b class="mk">a menos que</b>…</li>
       </ul>
     </div>
     <div class="band-sub"><h3>Hace un año… <small>si + <b>hubiera</b> + participio → habría + participio · o → condicional (ahora estaría…)</small></h3></div>
@@ -826,10 +831,10 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <h3>Si no hubieras venido a Londres a estudiar</h3>
       <p class="sit">Elegiste estudiar en King&#x27;s College London. ¿Y si te hubieras quedado en Estambul?</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Si no ___ a Londres a estudiar, ">Si no <u>___</u> <i>(venir)</i> a Londres a estudiar, …</li>
+        <li class="ph" data-ins="Si no ___ a Londres a estudiar, "><b class="mk">Si</b> no <u>___</u> <i>(venir)</i> a Londres a estudiar, …</li>
         <li class="ph" data-ins="No habría conocido a ">No habría conocido a…</li>
         <li class="ph" data-ins="Ahora estaría ">Ahora estaría…</li>
-        <li class="ph" data-ins="Mis padres habrían preferido que ">Mis padres habrían preferido que…</li>
+        <li class="ph" data-ins="Mis padres habrían preferido que ">Mis padres <b class="mk">habrían preferido que</b>…</li>
       </ul>
     </div>
     <div class="card img past" id="t-madrid">
@@ -838,10 +843,10 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <h3>Si hace un año te hubieras mudado a Madrid</h3>
       <p class="sit">Hace un año tenías una oferta para irte a Madrid y te quedaste en Londres. ¿Cómo sería tu vida hoy?</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Si hace un año ___ a Madrid, ">Si hace un año <u>___</u> <i>(mudarse)</i> a Madrid, …</li>
+        <li class="ph" data-ins="Si hace un año ___ a Madrid, "><b class="mk">Si</b> hace un año <u>___</u> <i>(mudarse)</i> a Madrid, …</li>
         <li class="ph" data-ins="Ahora viviría en ">Ahora viviría en…</li>
-        <li class="ph" data-ins="Si no ___ en Londres, no habría ">Si no <u>___</u> <i>(estar)</i> en Londres, no habría…</li>
-        <li class="ph" data-ins="Ojalá ">Ojalá…</li>
+        <li class="ph" data-ins="Si no ___ en Londres, no habría "><b class="mk">Si</b> no <u>___</u> <i>(estar)</i> en Londres, no habría…</li>
+        <li class="ph" data-ins="Ojalá "><b class="mk">Ojalá</b>…</li>
       </ul>
     </div>
     </div>
@@ -876,10 +881,10 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <h3>La pelea del móvil</h3>
       <p class="sit">Domingo, brunch en Notting Hill. Llevas veinte minutos contándole tu semana y él sigue mirando el móvil.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="No soporto que ">No soporto que…</li>
-        <li class="ph" data-ins="Como ___ a mirar el móvil, ">Como <u>___</u> <i>(volver)</i> a mirar el móvil, …</li>
-        <li class="ph" data-ins="Ayer le pedí que ">Ayer le pedí que…</li>
-        <li class="ph" data-ins="Me miró como si ">Me miró como si…</li>
+        <li class="ph" data-ins="No soporto que "><b class="mk">No soporto que</b>…</li>
+        <li class="ph" data-ins="Como ___ a mirar el móvil, "><b class="mk">Como</b> <u>___</u> <i>(volver)</i> a mirar el móvil, …</li>
+        <li class="ph" data-ins="Ayer le pedí que ">Ayer <b class="mk">le pedí que</b>…</li>
+        <li class="ph" data-ins="Me miró como si ">Me miró <b class="mk">como si</b>…</li>
       </ul>
     </div>
     <div class="card img" id="t-intern">
@@ -888,10 +893,10 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <h3>Prácticas en Madrid… y tu novio dice que no</h3>
       <p class="sit">Te ofrecen seis meses de prácticas en una empresa de la Castellana. Empiezas en enero. Tu novio no quiere que te vayas.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Mi novio no quiere que ">Mi novio no quiere que…</li>
-        <li class="ph" data-ins="Me iría siempre y cuando ">Me iría siempre y cuando…</li>
-        <li class="ph" data-ins="Si ___ las prácticas, ">Si <u>___</u> <i>(aceptar)</i> las prácticas, …</li>
-        <li class="ph" data-ins="No me voy a menos que ">No me voy a menos que…</li>
+        <li class="ph" data-ins="Mi novio no quiere que ">Mi novio <b class="mk">no quiere que</b>…</li>
+        <li class="ph" data-ins="Me iría siempre y cuando ">Me iría <b class="mk">siempre y cuando</b>…</li>
+        <li class="ph" data-ins="Si ___ las prácticas, "><b class="mk">Si</b> <u>___</u> <i>(aceptar)</i> las prácticas, …</li>
+        <li class="ph" data-ins="No me voy a menos que ">No me voy <b class="mk">a menos que</b>…</li>
       </ul>
     </div>
     <div class="card img" id="t-ex">
@@ -900,10 +905,10 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <h3>Tu ex, en tu restaurante favorito</h3>
       <p class="sit">Viernes, 20:00. Entras en tu japonés favorito de Chelsea y ahí está tu ex… con su nueva novia, en tu mesa de siempre.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Ojalá ">Ojalá…</li>
-        <li class="ph" data-ins="Antes de que me ___, yo ">Antes de que me <u>___</u> <i>(ver)</i>, yo…</li>
-        <li class="ph" data-ins="Si me ___, yo ">Si me <u>___</u> <i>(saludar)</i>, yo…</li>
-        <li class="ph" data-ins="Yo actuaría como si ">Yo actuaría como si…</li>
+        <li class="ph" data-ins="Ojalá "><b class="mk">Ojalá</b>…</li>
+        <li class="ph" data-ins="Antes de que me ___, yo "><b class="mk">Antes de que</b> me <u>___</u> <i>(ver)</i>, yo…</li>
+        <li class="ph" data-ins="Si me ___, yo "><b class="mk">Si</b> me <u>___</u> <i>(saludar)</i>, yo…</li>
+        <li class="ph" data-ins="Yo actuaría como si ">Yo actuaría <b class="mk">como si</b>…</li>
       </ul>
     </div>
     <div class="band-sub"><h3>…y en el pasado <small>si + <b>hubiera</b> + participio → habría + participio · o → condicional (ahora estaría…)</small></h3></div>
@@ -913,10 +918,10 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <h3>Un máster en Roma</h3>
       <p class="sit">El año pasado te ofrecieron un máster en Roma y dijiste que no.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Si ___ el máster en Roma, ">Si <u>___</u> <i>(aceptar)</i> el máster en Roma, …</li>
-        <li class="ph" data-ins="Si ___ en Italia, ahora hablaría ">Si <u>___</u> <i>(estar)</i> en Italia, ahora hablaría…</li>
+        <li class="ph" data-ins="Si ___ el máster en Roma, "><b class="mk">Si</b> <u>___</u> <i>(aceptar)</i> el máster en Roma, …</li>
+        <li class="ph" data-ins="Si ___ en Italia, ahora hablaría "><b class="mk">Si</b> <u>___</u> <i>(estar)</i> en Italia, ahora hablaría…</li>
         <li class="ph" data-ins="Habría comido tanta pasta que ">Habría comido tanta pasta que…</li>
-        <li class="ph" data-ins="Mi madre no habría permitido que ">Mi madre no habría permitido que…</li>
+        <li class="ph" data-ins="Mi madre no habría permitido que ">Mi madre <b class="mk">no habría permitido que</b>…</li>
       </ul>
     </div>
     <div class="card img past" id="t-seguir">
@@ -925,10 +930,10 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <h3>Si hubieras seguido con tu ex</h3>
       <p class="sit">Hace un año lo dejaste. Hoy ves en Instagram que se ha comprometido.</p>
       <ul class="ls prm">
-        <li class="ph" data-ins="Si ___ con él, ">Si <u>___</u> <i>(seguir)</i> con él, …</li>
+        <li class="ph" data-ins="Si ___ con él, "><b class="mk">Si</b> <u>___</u> <i>(seguir)</i> con él, …</li>
         <li class="ph" data-ins="Ahora estaría ">Ahora estaría…</li>
-        <li class="ph" data-ins="Me habría molestado que ">Me habría molestado que…</li>
-        <li class="ph" data-ins="No me arrepiento de que ">No me arrepiento de que…</li>
+        <li class="ph" data-ins="Me habría molestado que "><b class="mk">Me habría molestado que</b>…</li>
+        <li class="ph" data-ins="No me arrepiento de que "><b class="mk">No me arrepiento de que</b>…</li>
       </ul>
     </div>
     </div>
