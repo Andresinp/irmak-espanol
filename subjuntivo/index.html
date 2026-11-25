@@ -304,6 +304,45 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
 .q6 .e2{font-size:100px;right:14%;bottom:24px}
 .q6 .e3{font-size:90px;left:42%;top:110px}
 
+/* past hypotheses */
+.band-sub{grid-column:1/-1;margin-top:20px}
+.band-sub h3{font-size:44px;font-weight:800;color:var(--co);display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+.band-sub small{font:400 22px/1.35 var(--body);color:var(--muted)}
+.band-sub small b{color:var(--co)}
+.img.past{border-top-color:var(--co)} .img.past h3{color:var(--co)} .past .prm .ph{color:var(--co)}
+.q7{background:linear-gradient(160deg,#fde3cf,#f2b8a0)}
+.q7 .e1{font-size:150px;left:12%;top:50px} .q7 .e2{font-size:90px;right:14%;bottom:20px} .q7 .e3{font-size:80px;right:22%;top:18px}
+.q8{background:linear-gradient(160deg,#d8efe1,#fbe0db)}
+.q8 .e1{font-size:130px;left:12%;top:60px} .q8 .e2{font-size:120px;right:12%;top:40px} .q8 .e3{font-size:70px;left:46%;bottom:18px;transform:rotate(12deg)}
+.q9{background:linear-gradient(160deg,#e7e0f9,#c9d1d9)}
+.q9 .e1{font-size:120px;left:12%;top:40px;filter:grayscale(.4)} .q9 .e2{font-size:130px;right:14%;top:50px} .q9 .e3{font-size:70px;left:44%;bottom:16px}
+
+/* the writing page: smaller box, recorder, corrector */
+#draft{min-height:460px}
+.rec{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.rec .note{flex:1;min-width:260px}
+.recb{font:800 26px/1 var(--display);border:0;border-radius:999px;padding:20px 32px;cursor:pointer;background:var(--pr);color:#fff;min-height:68px;
+  box-shadow:0 10px 24px -12px var(--pr)}
+.recb.on{background:var(--ink);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 14px color-mix(in srgb,var(--pr) 25%,transparent)}}
+@media (prefers-reduced-motion: reduce){.recb.on{animation:none}}
+.clk{font:800 48px/1 var(--display);font-variant-numeric:tabular-nums}
+.live{min-height:1.5em;color:var(--muted);font-style:italic;font-size:19px}
+#play{width:100%}
+.fixb{font:800 24px/1 var(--display);border:0;border-radius:999px;padding:18px 28px;cursor:pointer;background:var(--so);color:#fff;justify-self:start;min-height:60px}
+.fixb:disabled{opacity:.6;cursor:default}
+.fixbox{display:grid;gap:14px;border-top:2px dashed var(--line);padding-top:16px}
+.dhx{font-size:28px;font-weight:800;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.dhx small{font:400 17px/1.3 var(--body);color:var(--muted)}
+.fixtext{font-size:21px;line-height:1.85;background:var(--board);border-radius:12px;padding:16px 20px;white-space:pre-wrap}
+.fixtext s{color:var(--pr);text-decoration-thickness:2px}
+.fixtext ins{text-decoration:none;color:var(--so);font-weight:700;background:var(--so-s);border-radius:5px;padding:0 4px;margin-left:3px}
+.fixl{display:grid;gap:8px}
+.fixl li{display:grid;grid-template-columns:minmax(120px,auto) 1fr;gap:12px;font-size:19px;background:var(--board);border-radius:10px;padding:8px 12px}
+.fixl s{color:var(--pr)}
+.fixl .ok{color:var(--so);font-weight:700}
+.fixl small{display:block;color:var(--muted);font-size:16px;line-height:1.35}
+
 /* ---------- dictionary in the top bar (study-map skill, assets/dictionary.html) ---------- */.dict{position:relative;flex:0 1 330px;min-width:0}
 .dict input{width:100%;font:inherit;font-size:16px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);
   border-radius:999px;padding:9px 16px 9px 40px;min-height:40px;outline:none;-webkit-appearance:none;appearance:none}
@@ -322,8 +361,17 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
 .dres .en{color:var(--muted);font-size:15px;margin-left:auto;text-align:right}
 .dres .none{padding:12px 14px;color:var(--muted);font-size:15px}
 .dres a.wr{display:block;padding:11px 14px;background:var(--board);color:var(--in);font-weight:700;font-size:15px;text-decoration:none}
+.wrp{position:fixed;z-index:45;right:16px;top:calc(env(safe-area-inset-top,0px) + 64px);width:min(520px,calc(100vw - 32px));
+  height:min(620px,calc(100vh - 160px));background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  box-shadow:0 20px 60px -20px rgba(20,33,43,.45);display:grid;grid-template-rows:auto 1fr}
+.wrp .wh{display:flex;gap:10px;align-items:center;padding:8px 10px 8px 16px;border-bottom:1px solid var(--line);font-size:15px}
+.wrp .wh b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wrp .wh a{color:var(--in);font-weight:700;text-decoration:none;white-space:nowrap}
+.wrp .wh button{font:inherit;font-size:18px;border:0;background:var(--board);border-radius:999px;width:36px;height:36px;cursor:pointer;color:var(--ink)}
+.wrp iframe{width:100%;height:100%;border:0;background:var(--surface)}
 @media (max-width:520px){.top .ttl{display:none}.dict{flex:1}}
-@media (max-width:760px){.dres{position:fixed;left:16px;right:16px;width:auto;top:calc(env(safe-area-inset-top,0px) + 64px)}}
+@media (max-width:760px){.dres{position:fixed;left:16px;right:16px;width:auto;top:calc(env(safe-area-inset-top,0px) + 64px)}
+  .wrp{left:16px;right:16px;width:auto}}
 </style>
 </head>
 <body>
@@ -332,7 +380,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
   <a class="back" href="../">← Irmak · Español</a>
   <span class="ttl">El mapa del subjuntivo · presente e imperfecto</span>
   <div class="dict" id="dict"><span class="dico">📖</span><input id="dq" type="search" placeholder="Diccionario · English ⇄ español" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" aria-label="Diccionario inglés español">
-  <div class="dres" id="dres" hidden><div class="dh"><span>Toca una palabra: va a tu texto</span></div><div class="dl" id="dl"></div><a class="wr" id="dwr" target="_blank" rel="noopener">WordReference ↗</a></div></div>
+  <div class="dres" id="dres" hidden><div class="dh"><span>Toca una palabra: va a tu texto</span></div><div class="dl" id="dl"></div><a class="wr" id="dwr" target="_blank" rel="noopener">WordReference</a></div></div>
   <button class="btn main" data-go="k-write" type="button">✍︎ Mi espacio</button>
 </div>
 
@@ -341,7 +389,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
 
   <!-- ================= TOP BAND · the idea ================= -->
   <div id="info">
-    <div class="band-h"><h2>Un modo, dos tiempos</h2><p>El subjuntivo es una sola familia. El presente y el imperfecto son el mismo «no es un hecho», pero en dos distancias.</p></div>
+    <div class="band-h"><h2>Un modo, dos tiempos</h2><p>El subjuntivo es una sola familia. El presente (pres. subj.) y el imperfecto (imp. subj.) son el mismo «no es un hecho», pero en dos distancias.</p></div>
 
     <div class="card" id="k-fam">
       <h3>¿Qué es el subjuntivo?</h3>
@@ -350,8 +398,8 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
         <span>deseo</span><span>emoción</span><span>duda</span><span>futuro con «cuando»</span><span>finalidad</span><span>condición</span><span>hipótesis</span>
       </div>
       <div class="tree">
-        <div class="tp"><b>Presente</b><span>posible · ahora o después</span><i>Quiero que me <u>llames</u>.</i></div>
-        <div class="ti"><b>Imperfecto</b><span>improbable, imaginado o en pasado</span><i>Quería que me <u>llamaras</u>.</i></div>
+        <div class="tp"><b>Pres. subj.</b><span>posible · ahora o después</span><i>Quiero que me <u>llames</u>.</i></div>
+        <div class="ti"><b>Imp. subj.</b><span>improbable, imaginado o en pasado</span><i>Quería que me <u>llamaras</u>.</i></div>
       </div>
     </div>
 
@@ -359,24 +407,30 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <h3>La escala de la realidad <small>de lo posible a lo imposible</small></h3>
       <div class="scale">
         <div class="s1"><b>Posible</b><p>Si <u>tengo</u> dinero, me opero la nariz.</p><span>si + presente <em>indicativo</em></span></div>
-        <div class="s2"><b>Improbable / irreal</b><p>Si <u>tuviera</u> dinero, me operaría la nariz.</p><span>si + imperfecto de subj. → condicional</span></div>
-        <div class="s3"><b>Ya imposible</b><p>Si <u>hubiera tenido</u> dinero, me habría operado.</p><span>si + pluscuamperfecto → condicional compuesto</span></div>
+        <div class="s2"><b>Improbable / irreal</b><p>Si <u>tuviera</u> dinero, me operaría la nariz.</p><span>si + imp. subj. → condicional</span></div>
+        <div class="s3"><b>Ya imposible</b><p>Si <u>hubiera tenido</u> dinero, me habría operado.</p><span>si + pluscuamp. subj. → condicional compuesto</span></div>
+      </div>
+      <div class="scale sm">
+        <div class="s1"><p class="ph" data-ins="Ojalá tenga dinero. ">Ojalá <u>tenga</u> dinero.</p><span>pres. subj.: puede pasar, lo veo posible</span></div>
+        <div class="s2"><p class="ph" data-ins="Ojalá tuviera dinero. ">Ojalá <u>tuviera</u> dinero.</p><span>imp. subj.: ahora no tengo y no creo que lo tenga</span></div>
+        <div class="s3"><p class="ph" data-ins="Ojalá hubiera tenido dinero. ">Ojalá <u>hubiera tenido</u> dinero.</p><span>pluscuamp. subj.: en el pasado no lo tuve; ya no se puede cambiar</span></div>
       </div>
       <div class="scale sm">
         <div class="s1"><p>Ojalá me <u>llame</u>.</p><span>puede pasar</span></div>
         <div class="s2"><p>Ojalá me <u>llamara</u>.</p><span>casi imposible</span></div>
-        <div class="s3"><p>Ojalá me <u>hubiera llamado</u>.</p><span>no llamó</span></div>
+        <div class="s3"><p>Ojalá me <u>hubiera llamado</u>.</p><span>no llamó (ayer, la semana pasada…)</span></div>
       </div>
+      <p class="note">La diferencia es <b>cuánto crees que puede pasar</b> y <b>cuándo</b>: tenga = lo veo posible · tuviera = lo deseo, pero no lo veo · hubiera tenido = ya pasó y no fue así.</p>
       <p class="note">⚠︎ Nunca <s>si tenga</s>: después de <b>si</b> no hay presente de subjuntivo.</p>
     </div>
 
     <div class="card" id="k-switch">
-      <h3>El interruptor <small>el primer verbo decide</small></h3>
+      <h3>La regla: el primer verbo manda <small>secuencia de tiempos</small></h3>
       <div class="tbx"><table class="all">
         <thead><tr><th>Primer verbo</th><th>→ segundo verbo</th></tr></thead>
         <tbody>
-          <tr><th>presente · futuro<br>imperativo · he dicho</th><td class="cp"><b>presente de subj.</b><br>Quiero que <u>vengas</u>.<br>Te diré que <u>vengas</u>.<br>Dile que <u>venga</u>.</td></tr>
-          <tr><th>pasado · condicional</th><td class="ci"><b>imperfecto de subj.</b><br>Quería que <u>vinieras</u>.<br>Me pidió que <u>viniera</u>.<br>Me gustaría que <u>vinieras</u>.</td></tr>
+          <tr><th>presente · futuro<br>imperativo · he dicho</th><td class="cp"><b>pres. subj.</b><br>Quiero que <u>vengas</u>.<br>Te diré que <u>vengas</u>.<br>Dile que <u>venga</u>.</td></tr>
+          <tr><th>pasado · condicional</th><td class="ci"><b>imp. subj.</b><br>Quería que <u>vinieras</u>.<br>Me pidió que <u>viniera</u>.<br>Me gustaría que <u>vinieras</u>.</td></tr>
         </tbody>
       </table></div>
       <p class="note">El uso no cambia, solo el tiempo: es el mismo «querer que», empujado al pasado o a lo imaginado.</p>
@@ -524,18 +578,31 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
   <div class="col" id="c-mid">
     <div class="card" id="k-write">
       <span class="kick">Mi espacio</span>
-      <h2>Escribe, apunta, prepara lo que vas a decir</h2>
-      <div class="parts"><span class="pa">3 frases en presente</span><span class="pd">3 frases en imperfecto</span><span class="pb">Elige una imagen: ¿qué harías si…?</span><span class="pc">Tus apuntes</span></div>
-      <p class="note">Toca cualquier frase o marcador del mapa y aparece aquí, donde dejaste el cursor.</p>
-      <textarea id="draft" lang="es" spellcheck="false" placeholder="Mis frases&#10;&#10;Quiero que…&#10;Si yo fuera…"></textarea>
+      <h2>Habla, escribe, corrige</h2>
+      <div class="parts"><span class="pa">3 frases en pres. subj.</span><span class="pd">3 frases en imp. subj.</span><span class="pb">Elige una imagen: ¿qué harías si…?</span><span class="pc">Tus apuntes</span></div>
+      <div class="rec">
+        <button class="recb" id="recBtn" type="button">🎤 Grabar</button>
+        <div class="clk"><span id="clock">0:00</span></div>
+        <p class="note" id="recSt">Pulsa 🎤 y habla: lo que dices se escribe abajo. También puedes escribir o tocar frases del mapa.</p>
+      </div>
+      <p class="live" id="live" aria-live="polite"></p>
+      <audio id="play" controls hidden></audio>
+      <textarea id="draft" lang="es" spellcheck="false" placeholder="Aquí aparece lo que dices (o escribe).&#10;&#10;Quiero que…&#10;Si yo fuera…"></textarea>
       <div class="wbar"><span class="wc" id="wc">0 palabras</span><span class="paras" id="paras"></span><span style="flex:1"></span>
-        <button class="btn" id="undoBtn" type="button" disabled>↶ Deshacer</button><button class="btn" id="copyBtn" type="button">Copiar</button></div>
+        <button class="btn" id="undoBtn" type="button" disabled>↶ Deshacer</button><button class="btn" id="clearBtn" type="button">Borrar</button><button class="btn" id="copyBtn" type="button">Copiar</button></div>
+      <button class="fixb" id="fixBtn" type="button">✓ Corregir lo que he dicho</button>
+      <div class="fixbox" id="fixBox" hidden>
+        <h4 class="dhx">Corrección <small id="fixSum"></small></h4>
+        <div class="fixtext" id="fixText"></div>
+        <ul class="fixl" id="fixList"></ul>
+        <div class="wbar"><button class="btn main" id="fixApply" type="button">Aplicar las correcciones</button><button class="btn" id="fixClose" type="button">Cerrar</button></div>
+      </div>
     </div>
 
     <div class="card cn" id="k-pairs">
       <h3>Mismo marcador, dos tiempos <small>el uso es el mismo; cambia la distancia</small></h3>
       <div class="tbx"><table class="all pairs">
-        <thead><tr><th>Marcador</th><th>Presente · posible / ahora</th><th>Imperfecto · imaginado / pasado</th></tr></thead>
+        <thead><tr><th>Marcador</th><th>Pres. subj. · posible / ahora</th><th>Imp. subj. · imaginado / pasado</th></tr></thead>
         <tbody>
           <tr><th>querer que<i>want… to</i></th><td class="ph" data-ins="Quiero que cocines tú. ">Quiero que <u>cocines</u> tú.</td><td class="ph" data-ins="Quería que cocinaras tú. ">Quería que <u>cocinaras</u> tú.</td></tr>
           <tr><th>ojalá<i>I hope / I wish</i></th><td class="ph" data-ins="Ojalá me escriba. ">Ojalá me <u>escriba</u>. <em>(puede pasar)</em></td><td class="ph" data-ins="Ojalá me escribiera. ">Ojalá me <u>escribiera</u>. <em>(no lo creo)</em></td></tr>
@@ -557,7 +624,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
         <p class="qs"><b>1</b> Insistió en que <span class="gap">______</span> a la conferencia que tuvo lugar ayer porque os necesitaba allí.</p>
         <p class="opts"><s>fuisteis</s> <b>fuerais</b> <s>vayáis</s></p>
         <details class="sol"><summary>¿Por qué fuerais?</summary><div class="fix">
-          <div><b>fuerais</b><span>Insistir en que = pedir con fuerza (influencia) → subjuntivo. «Insistió» es pasado → imperfecto.</span></div>
+          <div><b>fuerais</b><span>Insistir en que = pedir con fuerza (influencia) → subjuntivo. «Insistió» es pasado → imp. subj.</span></div>
           <div><s>fuisteis</s><span>Indicativo = informa de que fuisteis: «insistió en que fuisteis» significa <i>he insisted that you did go</i>. Pero «porque os necesitaba allí» dice que era una petición.</span></div>
           <div><s>vayáis</s><span>Presente: no cabe, la conferencia fue ayer y el primer verbo está en pasado.</span></div>
         </div></details>
@@ -577,7 +644,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
         <p class="qs"><b>3</b> Lo que más le molestó es que nadie le <span class="gap">______</span> cuando dio el discurso.</p>
         <p class="opts"><s>escuchaba</s> <s>escuchó</s> <b>escuchara</b> <s>escucha</s></p>
         <details class="sol"><summary>¿Por qué escuchara?</summary><div class="fix">
-          <div><b>escuchara</b><span>Molestar que = reacción → subjuntivo. «Molestó» es pasado → imperfecto de subjuntivo.</span></div>
+          <div><b>escuchara</b><span>Molestar que = reacción → subjuntivo. «Molestó» es pasado → imp. subj.</span></div>
           <div><s>escuchó · escuchaba</s><span>Indicativo: informan del hecho. Con «lo que le molestó» importa la reacción, no la noticia. (En la conversación a veces se oye «escuchó»; en el examen, subjuntivo.)</span></div>
           <div><s>escucha</s><span>Presente de indicativo: ni modo ni tiempo encajan con un discurso que ya fue.</span></div>
         </div></details>
@@ -598,7 +665,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
         <p class="qs"><b>5</b> Si <span class="gap">______</span> más tiempo para la pregunta de gramática en el examen de mayo de 2026, podría responder de forma más elaborada.</p>
         <p class="opts"><s>habría tenido</s> <s>hubiera tenido</s> <s>tenga</s> <b>tuviera</b> <s>tendría</s></p>
         <details class="sol"><summary>¿Por qué tuviera?</summary><div class="fix">
-          <div><b>tuviera</b><span>El examen aún no ha pasado: hipótesis sobre el futuro, poco probable → si + imperfecto de subj. + condicional «podría».</span></div>
+          <div><b>tuviera</b><span>El examen aún no ha pasado: hipótesis sobre el futuro, poco probable → si + imp. subj. + condicional «podría».</span></div>
           <div><s>hubiera tenido</s><span>Eso sería para un examen que ya pasó (frase 4). Compara las dos: la única diferencia es el momento.</span></div>
           <div><s>tenga · tendría · habría tenido</s><span>Después de «si», ni presente de subjuntivo ni condicional.</span></div>
         </div></details>
@@ -611,7 +678,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
           <div><b>habría hecho</b><span>«En tu lugar» = <i>if he were you</i>: hipótesis sobre una situación pasada → condicional compuesto, <i>he wouldn't have done</i>.</span></div>
           <div><s>ha hecho</s><span>Informa de un hecho real; él no estuvo en tu lugar.</span></div>
           <div><s>haya hecho</s><span>Nada en la frase pide subjuntivo: no hay «que» ni marcador.</span></div>
-          <div><s>hacía</s><span>Imperfecto = costumbre o descripción en el pasado, no una hipótesis.</span></div>
+          <div><s>hacía</s><span>Imperfecto de <b>indicativo</b> = costumbre o descripción en el pasado, no una hipótesis.</span></div>
           <div>✎ <b>Extra para el test</b><span>«Has ayudado… <b>ayer</b>» suena raro en España: con «ayer», pretérito indefinido → <b>le ayudaste ayer</b>.</span></div>
         </div></details>
       </div>
@@ -634,10 +701,10 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
       <details class="sol"><summary>Ver soluciones</summary>
         <div class="fix">
           <div>1 · <s>cocina</s> → <b>cocine</b><span>Querer que + otra persona → subjuntivo. En inglés «I want him to cook» no cambia el verbo.</span></div>
-          <div>2 · <s>tendría</s> → <b>tuviera</b><span>Si + imperfecto de subj., condicional. Nunca condicional después de si: calco de «if I would have».</span></div>
-          <div>3 · <s>case</s> → <b>casara</b><span>«Quería» es pasado → imperfecto de subjuntivo.</span></div>
+          <div>2 · <s>tendría</s> → <b>tuviera</b><span>Si + imp. subj., condicional. Nunca condicional después de si: calco de «if I would have».</span></div>
+          <div>3 · <s>case</s> → <b>casara</b><span>«Quería» es pasado → imp. subj.</span></div>
           <div>4 · <s>mudaré</s> → <b>mude</b><span>Cuando + futuro → presente de subjuntivo. Calco de «when I will move».</span></div>
-          <div>5 · <s>estoy</s> → <b>estuviera</b><span>Como si → siempre imperfecto (o pluscuamperfecto) de subjuntivo.</span></div>
+          <div>5 · <s>estoy</s> → <b>estuviera</b><span>Como si → siempre imp. subj. (o pluscuamperfecto de subj.).</span></div>
           <div>6 · <s>vuelves</s> → <b>vuelvas</b><span>Como de amenaza = condición → subjuntivo. Con indicativo significaría «because».</span></div>
           <div>✓ · <b>tiene</b><span>Correcta: «creo que» afirma → indicativo. Es la trampa.</span></div>
         </div>
@@ -665,9 +732,9 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
     </div>
 
     <div class="card co use" id="i-si">
-      <span class="kick">Imperfecto · 1</span><h3>Imaginar: si…, …ría</h3>
+      <span class="kick">Imp. subj. · 1</span><h3>Imaginar: si…, …ría</h3>
       <div class="mkr">
-        <span class="ph" data-ins="Si ">si + imperfecto, condicional <i>if I were / if I had…, I would…</i></span>
+        <span class="ph" data-ins="Si ">si + imp. subj., condicional <i>if I were / if I had…, I would…</i></span>
         <span class="ph" data-ins="En tu lugar, ">en tu lugar <i>if I were you</i></span>
         <span class="ph" data-ins="Yo que tú, ">yo que tú <i>if I were you</i></span>
       </div>
@@ -681,14 +748,14 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
     </div>
 
     <div class="card co use" id="i-deseo">
-      <span class="kick">Imperfecto · 2</span><h3>Desear lo difícil, pedir con suavidad</h3>
+      <span class="kick">Imp. subj. · 2</span><h3>Desear lo difícil, pedir con suavidad</h3>
       <div class="mkr">
-        <span class="ph" data-ins="Ojalá ">ojalá + imperfecto <i>I wish</i></span>
+        <span class="ph" data-ins="Ojalá ">ojalá + imp. subj. <i>I wish</i></span>
         <span class="ph" data-ins="Me gustaría que ">me gustaría que <i>I'd like you to</i></span>
         <span class="ph" data-ins="Preferiría que ">preferiría que <i>I'd rather you</i></span>
         <span class="ph" data-ins="Quisiera ">quisiera <i>I'd like (muy cortés)</i></span>
       </div>
-      <p class="por">¿Por qué? El condicional («gustaría») pone el deseo a distancia, y el segundo verbo lo sigue al imperfecto.</p>
+      <p class="por">¿Por qué? El condicional («gustaría») pone el deseo a distancia, y el segundo verbo lo sigue al imp. subj.</p>
       <ul class="exs">
         <li class="ph" data-ins="Ojalá mi ex me llamara… pero no va a llamar. ">Ojalá mi ex me <u>llamara</u>… pero no va a llamar.</li>
         <li class="ph" data-ins="Me gustaría que esta noche cocinaras tú. ">Me gustaría que esta noche <u>cocinaras</u> tú.</li>
@@ -697,7 +764,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
     </div>
 
     <div class="card co use" id="i-pasado">
-      <span class="kick">Imperfecto · 3</span><h3>Los mismos usos, en pasado</h3>
+      <span class="kick">Imp. subj. · 3</span><h3>Los mismos usos, en pasado</h3>
       <div class="mkr">
         <span class="ph" data-ins="Quería que ">quería que <i>I wanted you to</i></span>
         <span class="ph" data-ins="Me pidió que ">me pidió que <i>he asked me to</i></span>
@@ -705,7 +772,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
         <span class="ph" data-ins="Insistió en que ">insistió en que <i>he insisted that</i></span>
         <span class="ph" data-ins="No creía que ">no creía que <i>I didn't think</i></span>
       </div>
-      <p class="por">¿Por qué? El primer verbo está en pasado y arrastra al segundo. Es el interruptor de arriba.</p>
+      <p class="por">¿Por qué? El primer verbo está en pasado y arrastra al segundo. Es la regla de arriba: el primer verbo manda.</p>
       <ul class="exs">
         <li class="ph" data-ins="Mi madre quería que me casara antes de los treinta. ">Mi madre quería que me <u>casara</u> antes de los treinta.</li>
         <li class="ph" data-ins="Le molestó que no le dijera nada de la cena con mi ex. ">Le molestó que no le <u>dijera</u> nada de la cena con mi ex.</li>
@@ -715,11 +782,11 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
     </div>
 
     <div class="card co use" id="i-como">
-      <span class="kick">Imperfecto · 4</span><h3>Como si</h3>
+      <span class="kick">Imp. subj. · 4</span><h3>Como si</h3>
       <div class="mkr">
         <span class="ph" data-ins="como si ">como si <i>as if / as though</i></span>
       </div>
-      <p class="por">¿Por qué? Comparo con algo que <b>no es verdad</b>. Siempre imperfecto (o pluscuamperfecto), aunque hablemos del presente.</p>
+      <p class="por">¿Por qué? Comparo con algo que <b>no es verdad</b>. Siempre imp. subj. (o pluscuamperfecto de subj.), aunque hablemos del presente.</p>
       <ul class="exs">
         <li class="ph" data-ins="Me habla como si yo fuera su madre. ">Me habla como si yo <u>fuera</u> su madre.</li>
         <li class="ph" data-ins="En vacaciones como como si no hubiera mañana. ">En vacaciones como como si no <u>hubiera</u> mañana.</li>
@@ -728,7 +795,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
     </div>
 
     <div class="card co use" id="i-cond">
-      <span class="kick">Imperfecto · 5 · tus apuntes, semana 8</span><h3>Condiciones con carácter, a distancia</h3>
+      <span class="kick">Imp. subj. · 5 · tus apuntes, semana 8</span><h3>Condiciones con carácter, a distancia</h3>
       <div class="mkr">
         <span class="ph" data-ins="siempre que ">siempre que · con tal de que <i>as long as</i></span>
         <span class="ph" data-ins="a no ser que ">a no ser que · a menos que <i>unless</i></span>
@@ -763,8 +830,7 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
 
   <!-- ================= BOTTOM BAND · images to talk about ================= -->
   <div id="talk">
-    <div class="band-h"><h2>¿Y si…? Imágenes para hablar</h2><p>Describe la escena, imagina qué pasaría y qué harías tú. Primero en presente (puede pasar), luego en imperfecto (imagina).</p></div>
-
+    <div class="band-h"><h2>¿Y si…? Imágenes para hablar</h2><p>Describe la escena, imagina qué pasaría y qué harías tú: primero pres. subj. (puede pasar), luego imp. subj. (lo imaginas).</p></div>
     <div class="card img" id="t-quake">
       <div class="scn q1" aria-hidden="true"><span class="e1">🏢</span><span class="e2">🍷</span><span class="e3">🍽️</span><span class="crk"></span><b class="tag">6,1</b></div>
       <h3>Terremoto en mitad de una cita</h3>
@@ -836,6 +902,44 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
         <li class="ph" data-ins="Me sorprende que ">Me sorprende que…</li>
       </ul>
     </div>
+
+    <div class="band-sub"><h3>Hace un año… <small>hipótesis del pasado: si + <b>hubiera</b> + participio → habría + participio · y si hoy sería distinto: → condicional</small></h3></div>
+
+    <div class="card img past" id="t-madrid">
+      <div class="scn q7" aria-hidden="true"><span class="e1">🏙️</span><span class="e2">🥘</span><span class="e3">☀️</span><b class="tag">2025</b></div>
+      <h3>Si hace un año te hubieras mudado a Madrid</h3>
+      <p class="sit">Hace un año tenías una oferta para irte a Madrid. Te quedaste en Londres. ¿Cómo sería tu vida hoy?</p>
+      <ul class="ls prm">
+        <li class="ph" data-ins="Si hace un año me hubiera mudado a Madrid, ">Si hace un año me hubiera mudado a Madrid…</li>
+        <li class="ph" data-ins="Si no hubiera estado en Londres, no habría conocido a ">Si no hubiera estado en Londres, no habría conocido a…</li>
+        <li class="ph" data-ins="Ahora viviría en el barrio de Salamanca y ">Ahora viviría en el barrio de Salamanca y…</li>
+        <li class="ph" data-ins="Ojalá me hubiera atrevido a ">Ojalá me hubiera atrevido a…</li>
+      </ul>
+    </div>
+
+    <div class="card img past" id="t-italia">
+      <div class="scn q8" aria-hidden="true"><span class="e1">🍝</span><span class="e2">🛵</span><span class="e3">🍷</span><b class="tag">Roma</b></div>
+      <h3>Un año en Italia</h3>
+      <p class="sit">Imagina que el año pasado hubieras pasado un año en Italia: pasta todos los días, un novio italiano, una Vespa…</p>
+      <ul class="ls prm">
+        <li class="ph" data-ins="Si hubiera pasado un año en Italia, ">Si hubiera pasado un año en Italia…</li>
+        <li class="ph" data-ins="Habría comido tanta pasta que ">Habría comido tanta pasta que…</li>
+        <li class="ph" data-ins="Mi madre no habría permitido que ">Mi madre no habría permitido que…</li>
+        <li class="ph" data-ins="Si hubiera estado en Italia, ahora hablaría ">Si hubiera estado en Italia, ahora hablaría…</li>
+      </ul>
+    </div>
+
+    <div class="card img past" id="t-seguir">
+      <div class="scn q9" aria-hidden="true"><span class="e1">💍</span><span class="e2">🤔</span><span class="e3">🕰️</span></div>
+      <h3>Si hubieras seguido con tu ex</h3>
+      <p class="sit">Hace un año lo dejaste. Hoy ves en Instagram que se ha comprometido. ¿Y si hubieras seguido con él?</p>
+      <ul class="ls prm">
+        <li class="ph" data-ins="Si hubiera seguido con él, ">Si hubiera seguido con él…</li>
+        <li class="ph" data-ins="Ahora estaría ">Ahora estaría…</li>
+        <li class="ph" data-ins="No me arrepiento de que ">No me arrepiento de que…</li>
+        <li class="ph" data-ins="Me habría molestado que ">Me habría molestado que…</li>
+      </ul>
+    </div>
   </div>
 
 </div>
@@ -848,19 +952,18 @@ td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);c
     <button type="button" data-go="info" data-k="gr">La idea</button>
     <button type="button" data-go="k-pres" data-k="in">Presente</button>
     <button type="button" data-go="p-cond" data-k="in">Condiciones</button>
-    <button type="button" data-go="k-imp" data-k="co">Imperfecto</button>
+    <button type="button" data-go="k-imp" data-k="co">Imp. subj.</button>
     <button type="button" data-go="i-si" data-k="co">Si…</button>
     <button type="button" data-go="k-pairs" data-k="cn">Dos tiempos</button>
     <button type="button" data-go="k-ex" data-k="pr">Frases de clase</button>
     <button type="button" data-go="k-err">Errores</button>
     <button type="button" data-go="talk" data-k="so">Imágenes</button>
+    <button type="button" data-go="t-madrid" data-k="so">Hace un año…</button>
   </div>
   <div class="zoom"><button class="btn" id="zo" type="button" aria-label="Alejar">−</button><button class="btn" id="zi" type="button" aria-label="Acercar">+</button></div>
 </div>
 
-<div class="help" id="help"><p><b>Dos dedos</b> para mover el mapa y hacer zoom. <b>Un dedo</b> para tocar: una frase va a tu espacio.</p><button class="btn" id="helpOk" type="button">Vale</button></div>
 <div class="toast" id="toast"></div>
-<div class="two" id="two" aria-hidden="true"><p><span>✌︎</span>Usa dos dedos para mover el mapa</p></div>
 
 <script>
 (function(){
@@ -915,8 +1018,8 @@ function goEl(id,ms){
    Touch and pencil: one finger only taps; two fingers pan and pinch (like FigJam, tldraw or a Google Map
    embedded in a page), so the map never moves by accident. Mouse: drag pans. Trackpad: scroll pans, pinch zooms. */
 const pts=new Map(); let last=null, moved=0, pinch=null, hinted=false;
-const two=document.getElementById('two'); let twoT;
-let twoSeen=false; try{ twoSeen=!!localStorage.getItem(PAGE+'-two'); }catch(_){}
+const two=document.createElement('div');   // no two-finger notice on these maps let twoT;
+let twoSeen=true; try{ twoSeen=!!localStorage.getItem(PAGE+'-two'); }catch(_){}
 function hintTwo(){ if(twoSeen) return; twoSeen=true; try{localStorage.setItem(PAGE+'-two','1');}catch(_){} two.classList.add('on'); clearTimeout(twoT); twoT=setTimeout(()=>two.classList.remove('on'),1300); }
 let inField=false;
 view.addEventListener('pointerdown',e=>{
@@ -987,23 +1090,53 @@ document.getElementById('zo').onclick=()=>zoomCenter(1/1.5);
 const unscroll=()=>{ if(view.scrollTop||view.scrollLeft){ view.scrollTop=0; view.scrollLeft=0; } };
 view.addEventListener('scroll',unscroll);
 
-/* ---- mini dictionary EN ⇄ ES (words for this map; anything else → WordReference) ---- */
-const DICT=`la pareja|partner, couple;el novio|boyfriend;la novia|girlfriend;el ex|ex (m);la ex|ex (f);la cita|date (romantic);el ligue|fling, date;ligar|to flirt, to pull;salir con|to go out with, to date;enamorarse de|to fall in love with;estar enamorada|to be in love;dejar a alguien|to dump, to leave someone;cortar con|to break up with;romper|to break up, to break;volver con|to get back together with;engañar|to cheat on, to deceive;ponerle los cuernos|to cheat on (colloquial);los celos|jealousy;celoso|jealous;confiar en|to trust;la confianza|trust;mentir|to lie;la mentira|lie;pedir perdón|to apologise;perdonar|to forgive;echar de menos|to miss (someone);el compromiso|commitment, engagement;comprometerse|to get engaged, to commit;casarse con|to marry;la boda|wedding;el anillo|ring;los suegros|in-laws;la suegra|mother-in-law; la pelea|fight, row;pelearse|to fight, to fall out;discutir|to argue;la discusión|argument;enfadarse|to get angry;estar enfadada|to be angry;cabrearse|to get pissed off (colloquial);gritar|to shout;reprochar|to reproach;quejarse|to complain;ignorar|to ignore;hacer las paces|to make up;tener razón|to be right;equivocarse|to be wrong, to make a mistake;la culpa|fault, blame;echar la culpa|to blame;dar la razón|to admit someone is right;cantarle las cuarenta|to give someone a piece of your mind;no tener pelos en la lengua|to not mince your words;mantenerse en sus trece|to stick to your guns;cada dos por tres|every five minutes, all the time;hablar en plata|to speak plainly;irse de la lengua|to let it slip; molestar|to bother, to annoy;soportar|to stand, to bear;aguantar|to put up with;fastidiar|to annoy;preocupar|to worry;importar|to matter, to mind;sorprender|to surprise;alegrarse de|to be glad;dar vergüenza|to be embarrassing;la vergüenza|embarrassment, shame;dar miedo|to be scary;dar pena|to make sad, to be a shame;dar igual|to not care;harta|fed up;agobiada|overwhelmed, stressed;decepcionada|disappointed;orgullosa|proud;avergonzada|embarrassed;insegura|insecure;segura|sure, confident; insistir en|to insist on;exigir|to demand;rogar|to beg;aconsejar|to advise;prohibir|to forbid;permitir|to allow;dejar (que)|to let;sugerir|to suggest;recomendar|to recommend;obligar a|to force to;convencer|to persuade;dudar|to doubt;suponer|to suppose;imaginar|to imagine;desear|to wish;esperar|to hope, to wait, to expect; siempre y cuando|as long as;con tal de que|provided that;a menos que|unless;a no ser que|unless;salvo que|unless;a cambio de que|in exchange for;en cuanto|as soon as;hasta que|until;antes de que|before;para que|so that;sin que|without;aunque|although, even if;como si|as if;ojalá|I hope, I wish;en tu lugar|in your place, if I were you;yo que tú|if I were you; la dieta|diet;estar a dieta|to be on a diet;ponerse a dieta|to go on a diet;las calorías|calories;contar calorías|to count calories;adelgazar|to lose weight;engordar|to put on weight;perder peso|to lose weight;el peso|weight;pesar|to weigh;la báscula|scales;el kilo|kilo;picar|to snack, to nibble;el antojo|craving;saltarse|to skip;el ayuno|fasting;los hidratos|carbs;la proteína|protein;el azúcar|sugar;sin gluten|gluten-free;la comida basura|junk food;la comida a domicilio|takeaway, delivery;pedir comida|to order food;las croquetas|croquettes;el jamón|cured ham;los churros|churros;las tapas|tapas;el postre|dessert;sano|healthy;engordar dos kilos|to put on two kilos;el entrenador personal|personal trainer;el gimnasio|gym;ponerse en forma|to get fit;estar en forma|to be fit; la cirugía estética|cosmetic surgery;operarse|to have surgery, to have a procedure;operarse la nariz|to have a nose job;la operación|operation;el cirujano|surgeon;el bótox|Botox;el relleno|filler;los labios|lips;la nariz|nose;el pecho|chest, breasts;la liposucción|liposuction;la cicatriz|scar;el resultado|result;arrepentirse|to regret;natural|natural;el complejo|hang-up, insecurity;acomplejada|self-conscious;la autoestima|self-esteem; el vestido|dress;los vaqueros|jeans;la falda|skirt;los tacones|heels;la cremallera|zip;el botón|button;rasgarse|to tear, to rip;romperse|to rip, to break;la costura|seam;cerrar (una prenda)|to do up, to close;quedar bien|to suit, to fit well;quedar pequeño|to be too small;agacharse|to bend down;el ramo|bouquet; el terremoto|earthquake;temblar|to shake, to tremble;el temblor|tremor;la réplica|aftershock;el incendio|fire;la inundación|flood;la tormenta|storm;huir|to flee;salir corriendo|to run out;esconderse|to hide;meterse debajo de|to get under;el miedo|fear;el pánico|panic;asustarse|to get scared;salvar|to save;sobrevivir|to survive;herido|injured;los escombros|rubble;la alarma|alarm;evacuar|to evacuate; el móvil|mobile phone;mirar el móvil|to look at your phone;el mensaje|message;contestar|to reply;dejar en visto|to leave on read;bloquear|to block;stalkear|to stalk online (colloquial);el perfil|profile;subir una foto|to post a photo; la hipótesis|hypothesis;suponer que|to suppose that;el riesgo|risk;la consecuencia|consequence;probable|likely;improbable|unlikely;de repente|suddenly;de hecho|in fact;en realidad|actually;por suerte|luckily;por desgracia|unfortunately;sin embargo|however;por eso|that's why;además|moreover, besides;al fin y al cabo|after all`
-  .split(';').map(s=>s.trim()).filter(Boolean).map(s=>{ const [es,en]=s.split('|'); return {es,en}; });
+/* ---- mini dictionary EN ⇄ ES: topic words + everyday base; anything else → WordReference in a small window ---- */
+const TOPIC=`la pareja|partner, couple;el novio|boyfriend;la novia|girlfriend;el ex|ex (m);la ex|ex (f);la cita|date (romantic);el ligue|fling, date;ligar|to flirt, to pull;salir con|to go out with, to date;enamorarse de|to fall in love with;estar enamorada|to be in love;dejar a alguien|to dump, to leave someone;cortar con|to break up with;romper|to break up, to break;volver con|to get back together with;engañar|to cheat on, to deceive;ponerle los cuernos|to cheat on (colloquial);los celos|jealousy;celoso|jealous;confiar en|to trust;la confianza|trust;mentir|to lie;la mentira|lie;pedir perdón|to apologise;perdonar|to forgive;echar de menos|to miss (someone);el compromiso|commitment, engagement;comprometerse|to get engaged, to commit;casarse con|to marry;la boda|wedding;el anillo|ring;los suegros|in-laws;la suegra|mother-in-law; la pelea|fight, row;pelearse|to fight, to fall out;discutir|to argue;la discusión|argument;enfadarse|to get angry;estar enfadada|to be angry;cabrearse|to get pissed off (colloquial);gritar|to shout;reprochar|to reproach;quejarse|to complain;ignorar|to ignore;hacer las paces|to make up;tener razón|to be right;equivocarse|to be wrong, to make a mistake;la culpa|fault, blame;echar la culpa|to blame;dar la razón|to admit someone is right;cantarle las cuarenta|to give someone a piece of your mind;no tener pelos en la lengua|to not mince your words;mantenerse en sus trece|to stick to your guns;cada dos por tres|every five minutes, all the time;hablar en plata|to speak plainly;irse de la lengua|to let it slip; molestar|to bother, to annoy;soportar|to stand, to bear;aguantar|to put up with;fastidiar|to annoy;preocupar|to worry;importar|to matter, to mind;sorprender|to surprise;alegrarse de|to be glad;dar vergüenza|to be embarrassing;la vergüenza|embarrassment, shame;dar miedo|to be scary;dar pena|to make sad, to be a shame;dar igual|to not care;harta|fed up;agobiada|overwhelmed, stressed;decepcionada|disappointed;orgullosa|proud;avergonzada|embarrassed;insegura|insecure;segura|sure, confident; insistir en|to insist on;exigir|to demand;rogar|to beg;aconsejar|to advise;prohibir|to forbid;permitir|to allow;dejar (que)|to let;sugerir|to suggest;recomendar|to recommend;obligar a|to force to;convencer|to persuade;dudar|to doubt;suponer|to suppose;imaginar|to imagine;desear|to wish;esperar|to hope, to wait, to expect; siempre y cuando|as long as;con tal de que|provided that;a menos que|unless;a no ser que|unless;salvo que|unless;a cambio de que|in exchange for;en cuanto|as soon as;hasta que|until;antes de que|before;para que|so that;sin que|without;aunque|although, even if;como si|as if;ojalá|I hope, I wish;en tu lugar|in your place, if I were you;yo que tú|if I were you; la dieta|diet;estar a dieta|to be on a diet;ponerse a dieta|to go on a diet;las calorías|calories;contar calorías|to count calories;adelgazar|to lose weight;engordar|to put on weight;perder peso|to lose weight;el peso|weight;pesar|to weigh;la báscula|scales;el kilo|kilo;picar|to snack, to nibble;el antojo|craving;saltarse|to skip;el ayuno|fasting;los hidratos|carbs;la proteína|protein;el azúcar|sugar;sin gluten|gluten-free;la comida basura|junk food;la comida a domicilio|takeaway, delivery;pedir comida|to order food;las croquetas|croquettes;el jamón|cured ham;los churros|churros;las tapas|tapas;el postre|dessert;sano|healthy;engordar dos kilos|to put on two kilos;el entrenador personal|personal trainer;el gimnasio|gym;ponerse en forma|to get fit;estar en forma|to be fit; la cirugía estética|cosmetic surgery;operarse|to have surgery, to have a procedure;operarse la nariz|to have a nose job;la operación|operation;el cirujano|surgeon;el bótox|Botox;el relleno|filler;los labios|lips;la nariz|nose;el pecho|chest, breasts;la liposucción|liposuction;la cicatriz|scar;el resultado|result;arrepentirse|to regret;natural|natural;el complejo|hang-up, insecurity;acomplejada|self-conscious;la autoestima|self-esteem; el vestido|dress;los vaqueros|jeans;la falda|skirt;los tacones|heels;la cremallera|zip;el botón|button;rasgarse|to tear, to rip;romperse|to rip, to break;la costura|seam;cerrar (una prenda)|to do up, to close;quedar bien|to suit, to fit well;quedar pequeño|to be too small;agacharse|to bend down;el ramo|bouquet; el terremoto|earthquake;temblar|to shake, to tremble;el temblor|tremor;la réplica|aftershock;el incendio|fire;la inundación|flood;la tormenta|storm;huir|to flee;salir corriendo|to run out;esconderse|to hide;meterse debajo de|to get under;el miedo|fear;el pánico|panic;asustarse|to get scared;salvar|to save;sobrevivir|to survive;herido|injured;los escombros|rubble;la alarma|alarm;evacuar|to evacuate; el móvil|mobile phone;mirar el móvil|to look at your phone;el mensaje|message;contestar|to reply;dejar en visto|to leave on read;bloquear|to block;stalkear|to stalk online (colloquial);el perfil|profile;subir una foto|to post a photo; la hipótesis|hypothesis;suponer que|to suppose that;el riesgo|risk;la consecuencia|consequence;probable|likely;improbable|unlikely;de repente|suddenly;de hecho|in fact;en realidad|actually;por suerte|luckily;por desgracia|unfortunately;sin embargo|however;por eso|that's why;además|moreover, besides;al fin y al cabo|after all`;
+const BASE=`ser|to be (who, what);estar|to be (where, how);tener|to have;haber (hay)|there is, there are;hacer|to do, to make;ir|to go;venir|to come;volver|to come back, to return;salir|to go out, to leave;llegar|to arrive;entrar|to go in, to enter;quedarse|to stay;quedar|to meet up, to be left;irse|to leave, to go away;marcharse|to leave;subir|to go up, to get on;bajar|to go down, to get off;caer|to fall;caerse|to fall over;correr|to run;andar|to walk;caminar|to walk;pasear|to go for a walk;nadar|to swim;volar|to fly;viajar|to travel;conducir|to drive;coger|to take, to catch;tomar|to take, to have (drink);llevar|to carry, to wear, to take;traer|to bring;mover|to move;mudarse|to move house;cambiar|to change;poner|to put;ponerse|to put on, to become;quitar|to take away, to remove;dejar|to leave, to let, to lend;dar|to give;recibir|to receive;enviar|to send;mandar|to send, to order;coger el avión|to take the plane;perder|to lose, to miss;encontrar|to find;buscar|to look for; vivir|to live;trabajar|to work;estudiar|to study;aprender|to learn;enseñar|to teach, to show;hablar|to speak, to talk;decir|to say, to tell;contar|to tell, to count;explicar|to explain;preguntar|to ask (a question);pedir|to ask for, to order;contestar|to answer;responder|to reply;llamar|to call;escribir|to write;leer|to read;escuchar|to listen;oír|to hear;ver|to see, to watch;mirar|to look at;parecer|to seem;sentir|to feel, to be sorry;sentirse|to feel (well, bad);pensar|to think;creer|to believe, to think;saber|to know (facts), to know how;conocer|to know (people, places), to meet;entender|to understand;comprender|to understand;recordar|to remember;acordarse de|to remember;olvidar|to forget;decidir|to decide;elegir|to choose;intentar|to try;tratar de|to try to;conseguir|to get, to manage;lograr|to achieve;poder|to be able to, can;deber|must, should, to owe;querer|to want, to love;gustar|to like;encantar|to love (things);odiar|to hate;preferir|to prefer;necesitar|to need;esperar|to wait, to hope, to expect;empezar|to start, to begin;terminar|to finish, to end;acabar|to finish;seguir|to follow, to keep on;continuar|to continue;parar|to stop;dejar de|to stop (doing);volver a|to do again;soler|to usually do; comer|to eat;beber|to drink;cocinar|to cook;desayunar|to have breakfast;comer fuera|to eat out;cenar|to have dinner;probar|to try, to taste;comprar|to buy;vender|to sell;pagar|to pay;costar|to cost;gastar|to spend (money);ahorrar|to save (money);ganar|to earn, to win;cobrar|to charge, to get paid;alquilar|to rent;reservar|to book; dormir|to sleep;despertarse|to wake up;levantarse|to get up;acostarse|to go to bed;ducharse|to have a shower;vestirse|to get dressed;arreglarse|to get ready;maquillarse|to put on make-up;peinarse|to do your hair;descansar|to rest;relajarse|to relax; jugar|to play (a game);tocar|to touch, to play (an instrument);bailar|to dance;cantar|to sing;reír|to laugh;sonreír|to smile;llorar|to cry;gritar|to shout;besar|to kiss;abrazar|to hug;ayudar|to help;cuidar|to look after;proteger|to protect;compartir|to share;invitar|to invite;celebrar|to celebrate;quejarse|to complain; abrir|to open;cerrar|to close;romper|to break;arreglar|to fix;limpiar|to clean;lavar|to wash;usar|to use;utilizar|to use;funcionar|to work (a machine);llenar|to fill;vaciar|to empty;cortar|to cut;construir|to build;crear|to create;crecer|to grow;nacer|to be born;morir|to die;matar|to kill;sufrir|to suffer;doler|to hurt, to ache;enfermar|to get ill;curar|to cure, to heal; ocurrir|to happen;pasar|to happen, to pass, to spend (time);suceder|to happen;existir|to exist;faltar|to be missing, to lack;sobrar|to be left over;bastar|to be enough;depender de|to depend on;tener que|to have to;hay que|one must;tener ganas de|to feel like;tener miedo|to be afraid;tener razón|to be right;tener suerte|to be lucky;tener prisa|to be in a hurry; el avión|plane;el aeropuerto|airport;el vuelo|flight;el billete|ticket;la maleta|suitcase;el equipaje|luggage;el tren|train;el coche|car;el autobús|bus;el metro|underground, metro;el taxi|taxi;el barco|boat, ship;el hotel|hotel;el viaje|trip, journey;las vacaciones|holidays;el pasaporte|passport;el retraso|delay;cancelar|to cancel; la persona|person;la gente|people;el hombre|man;la mujer|woman;el chico|boy, guy;la chica|girl;el niño|child, boy;la niña|child, girl;el bebé|baby;el amigo|friend (m);la amiga|friend (f);el vecino|neighbour;el jefe|boss;el compañero|colleague, classmate;la familia|family;la madre|mother;el padre|father;los padres|parents;el hermano|brother;la hermana|sister;el hijo|son;la hija|daughter;el marido|husband;la mujer (esposa)|wife; el cuerpo|body;la cabeza|head;la cara|face;los ojos|eyes;la boca|mouth;el pelo|hair;la mano|hand;el brazo|arm;la pierna|leg;el pie|foot;el corazón|heart;la piel|skin;la espalda|back;el estómago|stomach;la salud|health;el médico|doctor;la enfermedad|illness;el dolor|pain; la casa|house, home;el piso|flat, apartment;la habitación|room;la cocina|kitchen;el baño|bathroom;la puerta|door;la ventana|window;la mesa|table;la silla|chair;la cama|bed;la ciudad|city;el pueblo|village, town;el barrio|neighbourhood;la calle|street;el país|country;el mundo|world;el campo|countryside, field;el mar|sea;la playa|beach;la montaña|mountain;el río|river; el tiempo|time, weather;el momento|moment;la vez|time (occasion);el día|day;la semana|week;el mes|month;el año|year;la hora|hour, time;el minuto|minute;hoy|today;ayer|yesterday;mañana|tomorrow;ahora|now;antes|before;después|after, afterwards;luego|later, then;siempre|always;nunca|never;a veces|sometimes;todavía|still, yet;ya|already;pronto|soon;tarde|late;temprano|early;de repente|suddenly;hace un año|a year ago;el año pasado|last year;el año que viene|next year; el trabajo|work, job;la empresa|company;la oficina|office;la reunión|meeting;el dinero|money;el precio|price;la tienda|shop;el problema|problem;la solución|solution;la idea|idea;la razón|reason;la verdad|truth;la mentira|lie;la vida|life;la muerte|death;el amor|love;la suerte|luck;el miedo|fear;la fiesta|party;el regalo|present, gift;la foto|photo;el móvil|mobile phone;la noticia|piece of news;el sueño|dream, sleepiness; la comida|food, lunch;la cena|dinner;el desayuno|breakfast;el agua|water;el vino|wine;la cerveza|beer;el café|coffee;el pan|bread;la carne|meat;el pescado|fish (food);la fruta|fruit;la verdura|vegetables;el huevo|egg;el queso|cheese; bueno|good;malo|bad;mejor|better, best;peor|worse, worst;grande|big;pequeño|small;nuevo|new;viejo|old;joven|young;guapo|good-looking;feo|ugly;bonito|pretty, nice;delgado|thin, slim;gordo|fat;alto|tall, high;bajo|short, low;fuerte|strong;débil|weak;rico|rich, tasty;pobre|poor;caro|expensive;barato|cheap;fácil|easy;difícil|difficult;importante|important;necesario|necessary;posible|possible;imposible|impossible;seguro|sure, safe;peligroso|dangerous;libre|free (not busy);gratis|free (no cost);lleno|full;vacío|empty;cansado|tired;enfadado|angry;triste|sad;feliz|happy;contento|glad, happy;preocupado|worried;nervioso|nervous;tranquilo|calm, quiet;aburrido|bored, boring;divertido|fun, funny;raro|strange;normal|normal;listo|clever, ready;tonto|silly, stupid;amable|kind;simpático|nice, friendly; muy|very;mucho|a lot, much;poco|a little;bastante|quite, enough;demasiado|too, too much;más|more;menos|less;también|also, too;tampoco|neither, not either;solo|only;casi|almost;incluso|even;quizás|maybe, perhaps;tal vez|maybe;a lo mejor|maybe;y|and;o|or;pero|but;porque|because;como|as, since, like;si|if;aunque|although, even if;entonces|then, so;así que|so;por eso|that's why;sin embargo|however;además|besides, moreover;con|with;sin|without;para|for, in order to;por|for, because of, through;hasta|until, up to;desde|since, from;durante|during;mientras|while;cuando|when;donde|where;nadie|nobody;nada|nothing;algo|something;alguien|someone;todo|everything, all;cada|each, every;otro|other, another;la mosca|fly (insect)`;
+const WR_EN='enes', WR_TL='esen';
+const DICT=(()=>{ const seen=new Set(), out=[];
+  (TOPIC+';'+BASE).split(';').map(s=>s.trim()).filter(Boolean).forEach(s=>{ const [es,en]=s.split('|'); if(!en||seen.has(es)) return; seen.add(es); out.push({es,en}); });
+  return out; })();
 const fold=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
 const ART=/^(el|la|los|las) /;
 DICT.forEach(d=>{ d.fe=fold(d.es.replace(ART,'')); d.fn=fold(d.en).split(/,\s*/).map(x=>x.replace(/^to /,'').replace(/\s*\(.*\)$/,'')); });
+/* English forms → the dictionary form: flew → fly, dresses → dress, crying → cry */
+const IRR={flew:'fly',flown:'fly',went:'go',gone:'go',ate:'eat',eaten:'eat',drank:'drink',saw:'see',seen:'see',took:'take',taken:'take',gave:'give',given:'give',came:'come',got:'get',made:'make',said:'say',told:'tell',thought:'think',knew:'know',known:'know',felt:'feel',left:'leave',met:'meet',bought:'buy',brought:'bring',fell:'fall',fallen:'fall',broke:'break',broken:'break',wore:'wear',worn:'wear',ran:'run',swam:'swim',sang:'sing',slept:'sleep',woke:'wake',wrote:'write',written:'write',spoke:'speak',spoken:'speak',tore:'tear',torn:'tear',lost:'lose',found:'find',kept:'keep',began:'begin',begun:'begin',chose:'choose',chosen:'choose',forgot:'forget',forgotten:'forget',understood:'understand',sold:'sell',paid:'pay',spent:'spend',won:'win',did:'do',done:'do',was:'be',were:'be',been:'be',had:'have',sent:'send',stood:'stand',sat:'sit',lay:'lie',hurt:'hurt',grew:'grow',grown:'grow',drove:'drive',driven:'drive',rode:'ride',hid:'hide',hidden:'hide',shook:'shake',caught:'catch',taught:'teach',fought:'fight',built:'build',cut:'cut',put:'put',children:'child',women:'woman',men:'man',feet:'foot',teeth:'tooth',people:'person'};
+function forms(q){
+  const f=new Set([q]); if(IRR[q]) f.add(IRR[q]);
+  if(!/\s/.test(q) && q.length>3){
+    [[/ies$/,'y'],[/ied$/,'y'],[/(ss|sh|ch|x|o)es$/,'$1'],[/s$/,''],[/ing$/,''],[/ing$/,'e'],[/(.)\1ing$/,'$1'],[/ed$/,''],[/ed$/,'e'],[/(.)\1ed$/,'$1']]
+      .forEach(([r,t])=>{ if(r.test(q)) f.add(q.replace(r,t)); });
+  }
+  return [...f];
+}
 const dq=document.getElementById('dq'), dres=document.getElementById('dres'), dl=document.getElementById('dl'), dwr=document.getElementById('dwr');
-function dscore(d,q){
+function dscore(d,qs){
   let best=9;
-  const try1=(w,b)=>{ if(w===q) best=Math.min(best,b); else if(w.startsWith(q)) best=Math.min(best,b+1); else if(w.split(/\s+/).some(x=>x.startsWith(q))||w.includes(' '+q)) best=Math.min(best,b+2); };
-  try1(d.fe,0); d.fn.forEach(w=>try1(w,0));
+  qs.forEach((q,i)=>{ const p=i?1:0;                         // an inflected form ranks just below the exact word
+    const try1=w=>{ if(w===q) best=Math.min(best,p); else if(w.startsWith(q)) best=Math.min(best,p+2); else if(w.split(/\s+/).some(x=>x===q)) best=Math.min(best,p+3); else if(q.length>2&&(w.split(/\s+/).some(x=>x.startsWith(q))||w.includes(' '+q))) best=Math.min(best,p+4); };
+    try1(d.fe); d.fn.forEach(try1); });
   return best;
 }
+/* WordReference opens in a small window over the map, not in a new tab */
+const wrp=document.createElement('div'); wrp.className='wrp'; wrp.hidden=true;
+wrp.innerHTML='<div class="wh"><b id="wrw"></b><a id="wrt" target="_blank" rel="noopener">Abrir ↗</a><button type="button" id="wrx" aria-label="Cerrar">✕</button></div><iframe id="wrf" title="WordReference" referrerpolicy="no-referrer"></iframe>';
+document.body.appendChild(wrp);
+const wrf=wrp.querySelector('#wrf');
+function openWR(word,dict){
+  wrp.querySelector('#wrw').textContent='WordReference · '+word;
+  wrp.querySelector('#wrt').href='https://www.wordreference.com/'+dict+'/'+encodeURIComponent(word);
+  wrf.src='https://mini.wordreference.com/mini/index.aspx?dict='+dict+'&w='+encodeURIComponent(word)+'&u=1';
+  wrp.hidden=false; dres.hidden=true; dq.blur();
+}
+wrp.querySelector('#wrx').onclick=()=>{ wrp.hidden=true; wrf.src='about:blank'; };
+let wrDict=WR_EN;
+dwr.addEventListener('click',e=>{ e.preventDefault(); openWR(dq.value.trim(),wrDict); });
 function dsearch(){
   const raw=dq.value.trim(), q=fold(raw).replace(/^to /,'');
   if(!q){ dres.hidden=true; return; }
-  const hits=DICT.map(d=>[dscore(d,q),d]).filter(r=>r[0]<9).sort((a,b)=>a[0]-b[0]||a[1].es.length-b[1].es.length).slice(0,8);
+  const qs=forms(q);
+  const hits=DICT.map(d=>[dscore(d,qs),d]).filter(r=>r[0]<9).sort((a,b)=>a[0]-b[0]||a[1].es.length-b[1].es.length).slice(0,8);
   dl.innerHTML='';
   if(!hits.length){ const n=document.createElement('div'); n.className='none'; n.textContent='No está en la lista. Búscala en WordReference ↓'; dl.appendChild(n); }
   hits.forEach(([,d])=>{
@@ -1016,14 +1149,15 @@ function dsearch(){
     b.onclick=()=>{ insert(d.es.replace(/ \(.*\)$/,'')+' '); dres.hidden=true; dq.blur(); };
     dl.appendChild(b);
   });
-  const esFirst=hits.length && hits[0][1].fe.startsWith(q) && !hits[0][1].fn.some(w=>w.startsWith(q));
-  dwr.href='https://www.wordreference.com/'+(esFirst?'esen/':'enes/')+encodeURIComponent(raw);
-  dwr.textContent='«'+raw+'» en WordReference ↗';
+  const tlFirst=hits.length && hits[0][1].fe.startsWith(q) && !hits[0][1].fn.some(w=>w.startsWith(q));
+  wrDict=tlFirst?WR_TL:WR_EN;
+  dwr.href='https://www.wordreference.com/'+wrDict+'/'+encodeURIComponent(raw);
+  dwr.textContent='«'+raw+'» en WordReference';
   dres.hidden=false;
 }
 dq.addEventListener('input',dsearch);
 dq.addEventListener('focus',()=>{ if(dq.value.trim()) dsearch(); });
-dq.addEventListener('keydown',e=>{ if(e.key==='Escape'){ dres.hidden=true; dq.blur(); } if(e.key==='Enter'){ const f=dl.querySelector('.dr'); if(f) f.click(); } });
+dq.addEventListener('keydown',e=>{ if(e.key==='Escape'){ dres.hidden=true; dq.blur(); } if(e.key==='Enter'){ const f=dl.querySelector('.dr'); if(f) f.click(); else openWR(dq.value.trim(),wrDict); } });
 document.addEventListener('pointerdown',e=>{ if(!e.target.closest('#dict')) dres.hidden=true; });
 
 /* ---- taps ---- */
@@ -1043,7 +1177,7 @@ document.addEventListener('click',e=>{
 const draft=document.getElementById('draft'), wc=document.getElementById('wc'), paras=document.getElementById('paras'), undoBtn=document.getElementById('undoBtn');
 const KEY=PAGE+'-draft', WORD=/[A-Za-zÀ-ÿ0-9]+(?:['’-][A-Za-zÀ-ÿ]+)*/g;
 try{ draft.value=localStorage.getItem(KEY)||''; }catch(_){}
-function grow(){ draft.style.height='auto'; draft.style.height=Math.max(1100,draft.scrollHeight+40)+'px'; }
+function grow(){ draft.style.height='auto'; draft.style.height=Math.max(460,draft.scrollHeight+40)+'px'; }
 function refresh(){
   const n=(draft.value.match(WORD)||[]).length;
   wc.textContent=n+(n===1?' palabra':' palabras');
@@ -1075,10 +1209,179 @@ document.getElementById('copyBtn').onclick=async()=>{
 let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),1400); }
 
 
-/* help */
-const help=document.getElementById('help');
-try{ if(localStorage.getItem(PAGE+'-help')) help.hidden=true; }catch(_){}
-document.getElementById('helpOk').onclick=()=>{ help.hidden=true; try{localStorage.setItem(PAGE+'-help','1');}catch(_){} };
+
+/* ---- the recorder: speak, see the words appear (from the speech-map skill, Eda's Coco page) ----
+   Speech-to-text is the browser's own (Web Speech API: Chrome, Edge, Safari; on iPad it needs Siri/Dictation on).
+   The audio is also recorded with MediaRecorder so she can listen back; the blob stays in memory only. */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const recBtn=document.getElementById('recBtn'), clock=document.getElementById('clock'),
+      recSt=document.getElementById('recSt'), live=document.getElementById('live'), play=document.getElementById('play');
+let recOn=false, sr=null, mr=null, stream=null, chunks=[], t0=0, tickT=null, takeWords=0, audioURL=null;
+if(!SR) recSt.textContent='Este navegador no escribe lo que dices (prueba Chrome o Safari). Puedes grabar y escucharte igual.';
+const fmt=sec=>Math.floor(sec/60)+':'+String(Math.floor(sec%60)).padStart(2,'0');
+function tick(){ clock.textContent=fmt((performance.now()-t0)/1000); }
+function appendSpoken(t){
+  t=t.trim(); if(!t) return;
+  t=t.charAt(0).toUpperCase()+t.slice(1);
+  if(!/[.!?…]$/.test(t)) t+='.';
+  const v=draft.value; draft.value=v+(v && !/\s$/.test(v)?' ':'')+t+' ';
+  takeWords+=(t.match(WORD)||[]).length; refresh();
+}
+function startSR(){
+  if(!SR) return;
+  sr=new SR(); sr.lang='es-ES'; sr.continuous=true; sr.interimResults=true;
+  sr.onresult=e=>{ let tmp='';
+    for(let i=e.resultIndex;i<e.results.length;i++){ const r=e.results[i]; if(r.isFinal) appendSpoken(r[0].transcript); else tmp+=r[0].transcript; }
+    live.textContent=tmp; };
+  sr.onerror=e=>{ if(e.error==='not-allowed'||e.error==='service-not-allowed') recSt.textContent='Sin permiso para escribir lo que dices: activa el micrófono (y en el iPad, Siri y Dictado).'; };
+  sr.onend=()=>{ live.textContent=''; if(recOn){ try{ sr.start(); }catch(_){} } };   // Safari and Chrome stop after a pause
+  try{ sr.start(); }catch(_){}
+}
+async function startRec(){
+  undo.push(draft.value); if(undo.length>30) undo.shift(); undoBtn.disabled=false;
+  if(draft.value.trim()) draft.value=draft.value.replace(/\s*$/,'')+'\n\n';
+  takeWords=0; recOn=true; recBtn.classList.add('on'); recBtn.textContent='■ Parar';
+  recSt.textContent='Te escucho… habla despacio y claro.';
+  t0=performance.now(); tick(); tickT=setInterval(tick,250);
+  startSR();
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    if(!recOn){ stream.getTracks().forEach(t=>t.stop()); return; }
+    chunks=[]; mr=new MediaRecorder(stream);
+    mr.ondataavailable=e=>{ if(e.data.size) chunks.push(e.data); };
+    mr.onstop=()=>{ if(audioURL) URL.revokeObjectURL(audioURL); audioURL=URL.createObjectURL(new Blob(chunks,{type:mr.mimeType||'audio/mp4'}));
+      play.src=audioURL; play.hidden=false; };
+    mr.start();
+  }catch(_){ if(!SR){ recSt.textContent='No hay acceso al micrófono.'; stopRec(); } }
+}
+function stopRec(){
+  if(!recOn) return; recOn=false;
+  const sec=(performance.now()-t0)/1000; clearInterval(tickT);
+  try{ sr&&sr.stop(); }catch(_){} try{ mr&&mr.state!=='inactive'&&mr.stop(); }catch(_){} if(stream) stream.getTracks().forEach(t=>t.stop());
+  recBtn.classList.remove('on'); recBtn.textContent='🎤 Grabar otra vez';
+  setTimeout(()=>{ recSt.textContent='Has hablado '+fmt(sec)+(SR?' · '+takeWords+' palabras':'')+(takeWords?' · pulsa ✓ Corregir':''); },600);
+}
+recBtn.onclick=()=>{ recOn?stopRec():startRec(); };
+document.getElementById('clearBtn').onclick=()=>{ if(!draft.value) return; undo.push(draft.value); undoBtn.disabled=false; draft.value=''; caret=null; refresh(); toast('Borrado · ↶ para recuperarlo'); };
+
+/* ---- correct what she said or wrote ----
+   1. Claude through the Supabase function `corregir` (speech-map skill): tenses, moods, everything.
+   2. Her typical subjunctive mistakes as rules (offline).
+   3. LanguageTool's public API only when Claude can't be reached. */
+// indicative → present subjunctive, present subjunctive → imperfect subjunctive (her frequent verbs)
+const IND2PS={es:'sea',eres:'seas',son:'sean',está:'esté',estás:'estés',están:'estén',tiene:'tenga',tienes:'tengas',tienen:'tengan',puede:'pueda',puedes:'puedas',
+  hace:'haga',haces:'hagas',va:'vaya',vas:'vayas',van:'vayan',viene:'venga',vienes:'vengas',dice:'diga',dices:'digas',sabe:'sepa',sabes:'sepas',quiere:'quiera',quieres:'quieras',
+  vuelve:'vuelva',vuelves:'vuelvas',llega:'llegue',llegas:'llegues',llama:'llame',llamas:'llames',escucha:'escuche',escuchas:'escuches',mira:'mire',miras:'mires',
+  come:'coma',comes:'comas',cocina:'cocine',cocinas:'cocines',llueve:'llueva',funciona:'funcione',opera:'opere',hay:'haya',pide:'pida',pides:'pidas',dejas:'dejes',deja:'deje'};
+const PS2IS={sea:'fuera',seas:'fueras',esté:'estuviera',estés:'estuvieras',tenga:'tuviera',tengas:'tuvieras',pueda:'pudiera',puedas:'pudieras',haga:'hiciera',hagas:'hicieras',
+  vaya:'fuera',vayas:'fueras',venga:'viniera',vengas:'vinieras',diga:'dijera',digas:'dijeras',sepa:'supiera',quiera:'quisiera',cocine:'cocinara',cocines:'cocinaras',
+  llame:'llamara',llames:'llamaras',case:'casara',vuelva:'volviera',vuelvas:'volvieras',escuche:'escuchara',escuches:'escucharas',deje:'dejara',dejes:'dejaras',
+  opere:'operara',llegue:'llegara',llegues:'llegaras',haya:'hubiera',coma:'comiera',mire:'mirara',pida:'pidiera'};
+const RULES=[
+  [/\bsi (tendría|sería|estaría|podría|habría|haría|iría|viviría|sabría|querría)\b/gi,
+     (m,a)=>'si '+({tendría:'tuviera',sería:'fuera',estaría:'estuviera',podría:'pudiera',habría:'hubiera',haría:'hiciera',iría:'fuera',viviría:'viviera',sabría:'supiera',querría:'quisiera'})[a.toLowerCase()],
+     'Después de «si» nunca condicional: si + imp. subj. (calco de «if I would…»)'],
+  [/\bsi (tenga|sea|esté|pueda|haya|haga|vaya|viva|sepa|quiera)\b/gi,
+     (m,a)=>'si '+({tenga:'tengo',sea:'soy',esté:'estoy',pueda:'puedo',haya:'hay',haga:'hago',vaya:'voy',viva:'vivo',sepa:'sé',quiera:'quiero'})[a.toLowerCase()],
+     'Después de «si» no hay pres. subj.: si + presente de indicativo (posible) o si + imp. subj. (imaginado)'],
+  [/\bcuando (tendré|seré|estaré|podré|iré|volveré|llegaré|me mudaré|viviré|haré|sabré)\b/gi,
+     (m,a)=>'cuando '+({tendré:'tenga',seré:'sea',estaré:'esté',podré:'pueda',iré:'vaya',volveré:'vuelva',llegaré:'llegue','me mudaré':'me mude',viviré:'viva',haré:'haga',sabré:'sepa'})[a.toLowerCase()],
+     'Cuando + futuro → pres. subj. (calco de «when I will…»)'],
+  [/\bcomo si (es|está|tiene|puede|sabe|hay|soy|estoy|tengo)\b/gi,
+     (m,a)=>'como si '+({es:'fuera',está:'estuviera',tiene:'tuviera',puede:'pudiera',sabe:'supiera',hay:'hubiera',soy:'fuera',estoy:'estuviera',tengo:'tuviera'})[a.toLowerCase()],
+     'Como si → siempre imp. subj.'],
+  [/\bojalá (tendría|sería|estaría|podría)\b/gi,
+     (m,a)=>'ojalá '+({tendría:'tuviera',sería:'fuera',estaría:'estuviera',podría:'pudiera'})[a.toLowerCase()],
+     'Ojalá + subjuntivo, nunca condicional'],
+  [/\b(quería|quise|pidió|pedí|dijo|insistió en|me gustaría|preferiría|le molestó|me molestó|era normal|no creía) que ((?:me|te|se|le|les|nos|os|lo|la) )?(\p{L}+)\b/giu,
+     (m,a,c,b)=>{ const w=PS2IS[b.toLowerCase()]; return w? a+' que '+(c||'')+w : m; },
+     'Primer verbo en pasado o condicional → imp. subj. (la regla: el primer verbo manda)'],
+  [/\b(no creo|dudo|es posible|puede|es normal|me molesta|no soporto|quiero|espero|necesito|ojalá|a menos|a no ser|siempre y cuando|con tal de|antes de|para|sin|a cambio de) que ((?:me|te|se|le|les|nos|os|lo|la) )?(\p{L}+)\b/giu,
+     (m,a,c,b)=>{ const w=IND2PS[b.toLowerCase()]; return w? a+' que '+(c||'')+w : m; },
+     'Deseo, duda, reacción o este marcador + que → subjuntivo'],
+];
+// JS \b ignores accented letters (tendría, ojalá): use Unicode letter boundaries instead
+for(const r of RULES){ const re=r[0];
+  r[0]=new RegExp(re.source.replace(/^\\b/,'(?<![\\p{L}\\p{N}])').replace(/\\b$/,'(?![\\p{L}\\p{N}])'), re.flags.replace('u','')+'u'); }
+const fixBtn=document.getElementById('fixBtn'), fixBox=document.getElementById('fixBox'), fixText=document.getElementById('fixText'),
+      fixList=document.getElementById('fixList'), fixSum=document.getElementById('fixSum');
+let fixes=[], fixSrc='';
+const esc=t=>t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function keepCase(orig,rep){ return /^[A-ZÁÉÍÓÚÑ]/.test(orig) ? rep.charAt(0).toUpperCase()+rep.slice(1) : rep; }
+function ruleFixes(t){
+  const out=[];
+  for(const [re,rep,why] of RULES){ if(!why) continue; re.lastIndex=0; let m;
+    while((m=re.exec(t))){ const r=typeof rep==='function'?rep(...m):rep; if(r!==m[0]) out.push({o:m.index,l:m[0].length,from:m[0],to:keepCase(m[0],r),why,mine:true}); }
+  }
+  return out;
+}
+async function ltFixes(t){
+  const ctl=new AbortController(), to=setTimeout(()=>ctl.abort(),15000);
+  try{
+    const body=new URLSearchParams({text:t,language:'es',disabledCategories:'TYPOGRAPHY,STYLE',disabledRules:'WHITESPACE_RULE,UPPERCASE_SENTENCE_START'});
+    const r=await fetch('https://api.languagetool.org/v2/check',{method:'POST',body,signal:ctl.signal});
+    if(!r.ok) return null;
+    const d=await r.json();
+    return d.matches.filter(m=>m.replacements.length).map(m=>{ const from=t.substr(m.offset,m.length);
+      return {o:m.offset,l:m.length,from,to:m.replacements[0].value,why:m.shortMessage||m.message.replace(/^Posible error de /,'Error de '),
+              skip: m.rule.category.id==='TYPOS' && /^[A-ZÁÉÍÓÚÑ]/.test(from)}; })
+      .filter(f=>!f.skip && f.to!==f.from);
+  }catch(_){ return null; } finally{ clearTimeout(to); }
+}
+const FN_URL='https://harjybveicpnqhlkeezk.supabase.co/functions/v1/corregir';
+const FIX_CONTEXT=`Estudiante: Irmak, turca, vive en Londres, nivel B2 (curso de King's College London), español de España, mujer (formas femeninas).
+Tarea: practicar el subjuntivo hablando o escribiendo frases sueltas y pequeñas historias: presente de subjuntivo frente a imperfecto de subjuntivo
+(deseo, reacción, duda, cuando + futuro, para que, condiciones como siempre y cuando / a menos que / como + amenaza / a cambio de que,
+relativo con antecedente desconocido, si + imperfecto de subjuntivo + condicional, ojalá, como si, correlación de tiempos, si + pluscuamperfecto + condicional compuesto).
+Temas: pareja, peleas, dieta, cirugía estética, situaciones hipotéticas (un terremoto, un vestido que se rompe, haber vivido en Madrid o Italia).
+Explica cada corrección de modo y tiempo de forma breve, con la regla («el primer verbo manda», «después de si nunca condicional»…). Es habla transcrita: no corrijas la puntuación.`;
+async function aiFixes(t){
+  if(!FN_URL) return null;
+  const ctl=new AbortController(), to=setTimeout(()=>ctl.abort(),60000);
+  try{
+    const r=await fetch(FN_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:t,context:FIX_CONTEXT}),signal:ctl.signal});
+    if(!r.ok){ console.warn('corregir: HTTP',r.status); return null; }
+    const d=await r.json(); if(!Array.isArray(d.corrections)) return null;
+    const out=[]; let from=0;
+    for(const c of d.corrections){
+      if(typeof c.from!=='string'||typeof c.to!=='string') continue;
+      let o=t.indexOf(c.from,from); if(o<0) o=t.indexOf(c.from); if(o<0) continue;
+      out.push({o,l:c.from.length,from:c.from,to:c.to,why:String(c.why||''),ai:true}); from=o+c.from.length;
+    }
+    return out;
+  }catch(e){ console.warn('corregir: failed',e); return null; } finally{ clearTimeout(to); }
+}
+function merge(list){
+  const rank=f=>f.ai?2:f.mine?1:0;
+  list.sort((a,b)=>rank(b)-rank(a)||a.o-b.o);
+  const kept=[]; for(const f of list){ if(!kept.some(k=>f.o<k.o+k.l && k.o<f.o+f.l)) kept.push(f); }
+  return kept.sort((a,b)=>a.o-b.o);
+}
+function showFixes(t,online,full){
+  let h='', p=0;
+  for(const f of fixes){ h+=esc(t.slice(p,f.o))+'<s>'+esc(f.from)+'</s><ins>'+esc(f.to)+'</ins>'; p=f.o+f.l; }
+  fixText.innerHTML=h+esc(t.slice(p));
+  fixList.innerHTML=fixes.map(f=>'<li><s>'+esc(f.from)+'</s><span><span class="ok">'+esc(f.to)+'</span><small>'+esc(f.why)+'</small></span></li>').join('');
+  fixSum.textContent=(fixes.length?fixes.length+(fixes.length===1?' corrección':' correcciones'):'¡Sin errores! ✓')+(full?'':online?' · corrección básica (sin modos ni tiempos)':' · sin internet: solo tus errores típicos');
+  document.getElementById('fixApply').hidden=!fixes.length;
+  fixBox.hidden=false;
+}
+fixBtn.onclick=async()=>{
+  const t=draft.value; if(!t.trim()){ toast('Primero graba o escribe algo'); return; }
+  fixBtn.disabled=true; fixBtn.textContent='Corrigiendo… (unos 20 segundos)';
+  const ai=await aiFixes(t);
+  const lt=ai?[]:await ltFixes(t);
+  fixSrc=t; fixes=merge([...(ai||[]),...ruleFixes(t),...(lt||[])]);
+  showFixes(t,!!(ai||lt),!!ai);
+  fixBtn.disabled=false; fixBtn.textContent='✓ Corregir otra vez';
+};
+document.getElementById('fixApply').onclick=()=>{
+  if(draft.value!==fixSrc){ toast('Has cambiado el texto: corrige otra vez'); return; }
+  undo.push(draft.value); undoBtn.disabled=false;
+  let t=draft.value; for(const f of [...fixes].reverse()) t=t.slice(0,f.o)+f.to+t.slice(f.o+f.l);
+  draft.value=t; caret=null; refresh(); fixBox.hidden=true; toast('Corregido · ↶ para volver');
+};
+document.getElementById('fixClose').onclick=()=>{ fixBox.hidden=true; };
 
 /* start on the whole map; re-fit once fonts load unless she has already moved */
 function start(){ unscroll(); refresh(); const id=location.hash.slice(1); if(id&&document.getElementById(id)) goEl(id,0); else goAll(0); }
