@@ -1,0 +1,1092 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>El mapa del subjuntivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Engine from the study-map skill. Poppins = Irmak's site font; Atkinson Hyperlegible for reading.
+   Pastel colour per part of the column: entrada = blue, consecuencias = rose, lo que hace falta = mint,
+   propuesta y cierre = lavender, gramática = butter, conectores = peach */
+:root{
+  --board:#e3e8ed; --dots:#c9d1d9; --surface:#ffffff; --ink:#17212b; --muted:#55636f; --line:#d3dbe2;
+  --in:#2b5a9e; --in-s:#dce8fa;
+  --pr:#a43a2d; --pr-s:#fbe0db;
+  --so:#22744a; --so-s:#d8efe1;
+  --co:#5a44a6; --co-s:#e7e0f9;
+  --gr:#835c00; --gr-s:#fbf0cb;
+  --cn:#a0501a; --cn-s:#fde3cf;
+  --display:"Poppins","Avenir Next",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+}
+/* Always light: brighter for studying, whatever the device setting. */
+:root{color-scheme:light}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;overflow:hidden;margin:0}
+body{background:var(--board);color:var(--ink);font-family:var(--body);-webkit-text-size-adjust:100%;overscroll-behavior:none}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.12;margin:0;text-wrap:balance}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+
+/* ---------- bars ---------- */
+.top{position:fixed;left:0;right:0;top:0;z-index:20;padding:calc(env(safe-area-inset-top,0px) + 8px) 16px 8px;
+  display:flex;gap:10px;align-items:center;background:color-mix(in srgb,var(--board) 96%,transparent);
+  border-bottom:1px solid var(--line)}
+.top a.back{color:var(--muted);text-decoration:none;font-size:.9rem;white-space:nowrap}
+.top .ttl{font-family:var(--display);font-weight:700;font-size:1.05rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{font:inherit;font-size:.95rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap;min-height:40px}
+.btn.main{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:700}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible{outline:2px solid var(--in);outline-offset:2px}
+.nav{position:fixed;left:0;bottom:0;z-index:20;right:0;padding:8px 12px calc(env(safe-area-inset-bottom,0px) + 8px);
+  display:flex;gap:8px;align-items:center;background:color-mix(in srgb,var(--board) 96%,transparent);
+  border-top:1px solid var(--line)}
+.nav .go{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:none}
+.nav .go::-webkit-scrollbar{display:none}
+.nav .go button{font:inherit;font-size:.9rem;border:0;border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap;color:var(--ink);background:var(--surface);min-height:40px}
+.nav .go button[data-k="in"]{background:var(--in-s)} .nav .go button[data-k="pr"]{background:var(--pr-s)}
+.nav .go button[data-k="so"]{background:var(--so-s)} .nav .go button[data-k="co"]{background:var(--co-s)}
+.nav .go button[data-k="cn"]{background:var(--cn-s)} .nav .go button[data-k="gr"]{background:var(--gr-s)}
+.nav .go button[data-k="w"]{background:var(--ink);color:var(--surface);font-weight:700}
+.zoom{display:flex;gap:4px}
+.zoom .btn{width:40px;padding:0;font-size:1.2rem;font-weight:700}
+@media (max-width:520px){.top .ttl{visibility:hidden}}
+
+/* ---------- board ---------- */
+#view{position:fixed;inset:0;overflow:hidden;touch-action:none;cursor:grab;
+  background-color:var(--board);background-image:radial-gradient(var(--dots) 1.4px,transparent 1.6px);background-size:28px 28px}
+#view.grabbing{cursor:grabbing}
+#board{position:absolute;left:0;top:0;transform-origin:0 0;display:grid;padding:80px;
+  grid-template-columns:740px 1040px 740px;gap:90px 110px;align-items:start;font-size:21px;line-height:1.5}
+#board.moving{will-change:transform}
+.col{display:grid;gap:40px;align-content:start}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:24px 28px;display:grid;gap:14px;align-content:start;
+  box-shadow:0 1px 0 rgba(0,0,0,.03),0 8px 24px -14px rgba(20,33,43,.25);cursor:zoom-in}
+.card > h3{font-size:30px;font-weight:700;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.card > h3 small{font:400 18px/1.3 var(--body);color:var(--muted)}
+.kick{font:700 15px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sec{display:grid;gap:4px}
+.sec .kick{margin-bottom:2px}
+.sec h2{font-size:50px;font-weight:800;letter-spacing:-.02em}
+.in .sec .kick,.in h2{color:var(--in)} .pr .sec .kick,.pr h2{color:var(--pr)}
+.so .sec .kick,.so h2{color:var(--so)} .co .sec .kick,.co h2{color:var(--co)}
+.in{border-top:8px solid var(--in)} .pr{border-top:8px solid var(--pr)} .so{border-top:8px solid var(--so)} .co{border-top:8px solid var(--co)}
+.gr{background:var(--gr-s);border-color:transparent}
+.cn{background:var(--cn-s);border-color:transparent}
+
+/* plain tappable list */
+.ls{display:grid;gap:2px}
+.ls .ph{position:relative;padding:6px 10px 6px 30px;border-radius:10px;font-weight:700;font-size:23px;line-height:1.35;cursor:pointer}
+.ls .ph::before{content:"";position:absolute;left:10px;top:.72em;width:9px;height:9px;border-radius:50%;background:currentColor;opacity:.55}
+.in .ls .ph{color:var(--in)} .pr .ls .ph{color:var(--pr)} .so .ls .ph{color:var(--so)} .co .ls .ph{color:var(--co)}
+.ph:hover{background:color-mix(in srgb,currentColor 8%,transparent)}
+.ph.flash{background:color-mix(in srgb,var(--so) 22%,transparent)}
+.ls .ph i{font-style:normal;font-weight:400;color:var(--muted);font-size:18px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--surface);border-radius:999px;padding:5px 14px;font-size:19px;cursor:pointer;border:1px solid var(--line)}
+.gr .chip,.cn .chip{border-color:transparent}
+.chip b{font-weight:700}
+.chip i{font-style:normal;color:var(--muted);font-size:16px;margin-left:4px}
+.cn .chip b{color:var(--cn)}
+.formula{font-family:var(--display);font-size:23px;font-weight:700;line-height:1.35}
+.formula .p{color:var(--in)} .formula .f{color:var(--gr)} .formula .x{color:var(--pr)}
+.rule{display:grid;gap:8px}
+.rule > div{background:color-mix(in srgb,var(--surface) 70%,transparent);border-radius:12px;padding:8px 12px}
+.note{font-size:18px;color:var(--muted)}
+.end{color:var(--gr);font-weight:800}
+
+
+/* ---------- writing page (centre) ---------- */
+#k-write{cursor:auto;padding:34px 40px;gap:16px;border:2px solid var(--ink);box-shadow:0 20px 60px -30px rgba(20,33,43,.5)}
+#k-write h2{font-size:48px;font-weight:800}
+.parts{display:flex;flex-wrap:wrap;gap:8px}
+.parts span{border-radius:999px;padding:4px 14px;font-size:18px;font-weight:700}
+.parts .pa{background:var(--in-s);color:var(--in)} .parts .pb{background:var(--pr-s);color:var(--pr)}
+.parts .pc{background:var(--so-s);color:var(--so)} .parts .pd{background:var(--co-s);color:var(--co)}
+#draft{width:100%;min-height:1100px;font:22px/1.75 var(--body);color:var(--ink);border:0;border-radius:12px;padding:20px 24px;resize:none;overflow:hidden;
+  background:repeating-linear-gradient(to bottom,transparent 0 calc(1.75em - 1px),var(--line) calc(1.75em - 1px) 1.75em) var(--board);
+  background-attachment:local;background-position:0 20px}
+#draft:focus-visible{outline:3px solid var(--in);outline-offset:2px}
+.wbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.wc{font-variant-numeric:tabular-nums;font-weight:700;padding:6px 14px;border-radius:999px;font-size:19px;background:var(--board)}
+.wc.ok{background:var(--so-s);color:var(--so)} .wc.over{background:var(--pr-s);color:var(--pr)}
+.paras{font-size:18px;color:var(--muted)}
+#k-write .btn{font-size:18px}
+
+/* ---------- info band (top) ---------- */
+#info{grid-column:1/-1;display:grid;grid-template-columns:1.15fr 1.25fr .78fr 1.2fr;gap:40px;align-items:start}
+.band-h{grid-column:1/-1;display:flex;align-items:baseline;gap:20px;flex-wrap:wrap}
+.band-h h2{font-size:62px;font-weight:800;letter-spacing:-.02em}
+.band-h p{font-size:24px;color:var(--muted)}
+.tl{display:grid;gap:7px}
+.tl > div{display:grid;grid-template-columns:118px 1fr;gap:12px;font-size:18.5px;line-height:1.35}
+.tl b{font-family:var(--display);font-weight:700;color:var(--muted);font-size:17px;padding-top:1px}
+.tl .now b,.tl .now span{color:var(--pr);font-weight:700}
+.tl .oil b{color:var(--cn)}
+.views{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.views > div{border-radius:16px;padding:14px 16px;display:grid;gap:8px;align-content:start}
+.views .out{background:var(--cn-s)} .views .ins{background:var(--co-s)}
+.views h4{font-size:21px;font-weight:700}
+.views .out h4{color:var(--cn)} .views .ins h4{color:var(--co)}
+.views .t{font:700 13px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.views ul{display:grid;gap:6px}
+.views li{position:relative;padding-left:18px;font-size:18px;line-height:1.35}
+.views li::before{content:"";position:absolute;left:2px;top:.55em;width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.5}
+.big{font-family:var(--display);font-size:25px;font-weight:700;line-height:1.25}
+.big em{font-style:normal;color:var(--pr)}
+.chain{display:grid;gap:0}
+.chain .s{font-weight:700;font-size:19px;padding:5px 0;line-height:1.3}
+.chain .s.hot{color:var(--pr);font-family:var(--display);font-size:24px;font-weight:700}
+.chain .ar{color:var(--pr);font:700 20px/1 var(--display);padding-left:4px}
+.tbx{overflow:hidden;border-radius:14px}
+.all{border-collapse:collapse;width:100%;font-size:18px;line-height:1.35}
+.all th,.all td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.all thead th{font:700 14px/1.2 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.all tbody th{font-family:var(--display);font-size:18px;font-weight:600;white-space:nowrap}
+.all tr:last-child td,.all tr:last-child th{border-bottom:0}
+.all td.max{background:var(--pr-s);font-weight:700}
+.src{font-size:14px;color:var(--muted)}
+
+/* who acts */
+.who{display:grid;gap:14px}
+.who .lvl{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:6px}
+.who .lvl b{font-family:var(--display);font-size:21px;font-weight:700}
+.who .lvl span{font-size:15px;color:var(--muted);white-space:nowrap}
+.who .chip{background:var(--so-s);border-color:transparent;color:var(--so);font-weight:700}
+
+/* model */
+.para{padding:10px 14px;border-radius:12px;border-left:6px solid;font-size:19px;line-height:1.6}
+.para.p1{border-color:var(--in);background:var(--in-s)} .para.p2{border-color:var(--pr);background:var(--pr-s)}
+.para.p3{border-color:var(--so);background:var(--so-s)} .para.p4{border-color:var(--co);background:var(--co-s)}
+.mt{font-family:var(--display);font-size:28px;font-weight:800}
+.st{font-weight:700}
+.cx{color:var(--cn);font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.vs{color:var(--gr);font-weight:700;background:var(--gr-s);border-radius:4px;padding:0 3px}
+.vm{color:var(--so);font-weight:700;background:var(--surface);border-radius:4px;padding:0 3px;outline:2px solid var(--so)}
+.vi{color:var(--in);font-weight:700}
+.mkey{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:15px;color:var(--muted);align-items:center}
+.mold .ph{padding:6px 10px;border-radius:10px;font-size:19px;cursor:pointer}
+.mold .ph u{text-decoration:none;color:var(--muted)}
+.mold h4{font:700 14px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
+.checks{display:grid;gap:4px}
+.checks li{position:relative;padding-left:32px;font-size:19px}
+.checks li::before{content:"☐";position:absolute;left:0;top:-3px;font-size:23px;color:var(--co)}
+
+/* spot the errors */
+.errtxt{font-size:20px;line-height:1.7;background:var(--board);border-radius:12px;padding:14px 18px}
+.errtxt sup{font:700 13px/1 var(--display);color:var(--pr);margin-right:2px}
+details.sol{border-radius:12px;background:var(--pr-s);padding:10px 16px}
+details.sol summary{cursor:pointer;font:700 18px/1.4 var(--display);color:var(--pr)}
+.fix{display:grid;gap:10px;margin-top:10px}
+.fix > div{font-size:18px;line-height:1.4;background:var(--surface);border-radius:10px;padding:8px 12px}
+.fix s{color:var(--pr)} .fix b{color:var(--so)}
+.fix span{display:block;color:var(--muted);font-size:16.5px}
+
+/* toast + help */
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 70px);transform:translate(-50%,-10px);z-index:40;background:var(--ink);color:var(--surface);
+  padding:8px 16px;border-radius:999px;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:90vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.help{position:fixed;z-index:25;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 76px);transform:translateX(-50%);background:var(--surface);border:1px solid var(--line);
+  border-radius:16px;padding:12px 16px;display:flex;gap:12px;align-items:center;font-size:.95rem;box-shadow:0 10px 30px -16px rgba(0,0,0,.4);width:min(600px,calc(100vw - 32px))}
+.help p{flex:1;line-height:1.4}
+.two{position:fixed;inset:0;z-index:15;display:grid;place-items:center;pointer-events:none;opacity:0;transition:opacity .25s;
+  background:color-mix(in srgb,var(--ink) 38%,transparent)}
+.two.on{opacity:1}
+.two p{background:var(--surface);color:var(--ink);border-radius:18px;padding:16px 22px;font:700 1.15rem/1.3 var(--body);display:flex;gap:12px;align-items:center;
+  box-shadow:0 12px 40px -16px rgba(0,0,0,.5);max-width:calc(100vw - 32px)}
+.two p span{font-size:1.8rem}
+@media (prefers-reduced-motion: reduce){.toast,.two{transition:none}}
+
+/* ---------- subjuntivo map: Presente = blue (in), Imperfecto = lavender (co), clase = rose, imágenes = mint ---------- */
+#board{grid-template-columns:780px 1040px 780px}
+#info{grid-template-columns:1fr 1.25fr 1fr}
+.big em.eb{color:var(--in)} .big em.ec{color:var(--co)}
+.fam{display:flex;flex-wrap:wrap;gap:8px}
+.fam span{background:var(--gr-s);color:var(--gr);font-weight:700;border-radius:999px;padding:4px 14px;font-size:18px}
+.tree{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tree > div{border-radius:16px;padding:14px 16px;display:grid;gap:4px}
+.tree b{font:800 26px/1.1 var(--display)}
+.tree span{font-size:17px;color:var(--muted)}
+.tree i{font-style:normal;font-size:19px;margin-top:4px}
+.tree u,.scale u,.exs u,.pairs u,.all u{text-decoration:none;font-weight:700;border-radius:4px;padding:0 3px}
+.tree .tp{background:var(--in-s)} .tree .tp b{color:var(--in)} .tree .tp u{background:var(--surface);color:var(--in)}
+.tree .ti{background:var(--co-s)} .tree .ti b{color:var(--co)} .tree .ti u{background:var(--surface);color:var(--co)}
+.scale{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.scale > div{border-radius:14px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.scale b{font:700 15px/1.2 var(--display);letter-spacing:.08em;text-transform:uppercase}
+.scale p{font-size:19px;line-height:1.35}
+.scale span{font-size:15px;color:var(--muted);line-height:1.3}
+.scale em{font-style:normal;font-weight:700}
+.scale .s1{background:var(--in-s)} .scale .s1 b,.scale .s1 u{color:var(--in)}
+.scale .s2{background:var(--co-s)} .scale .s2 b,.scale .s2 u{color:var(--co)}
+.scale .s3{background:var(--pr-s)} .scale .s3 b,.scale .s3 u{color:var(--pr)}
+.scale u{background:var(--surface)}
+.scale.sm p{font-size:18px}
+td.cp b{color:var(--in)} td.ci b{color:var(--co)}
+td.cp u{background:var(--in-s);color:var(--in)} td.ci u{background:var(--co-s);color:var(--co)}
+
+/* a use card */
+.use > h3{font-size:34px}
+.use > .kick{margin-bottom:-6px}
+.in.use > .kick{color:var(--in)} .co.use > .kick{color:var(--co)}
+.mkr{display:flex;flex-wrap:wrap;gap:8px}
+.mkr .ph{border-radius:12px;padding:6px 14px;font-weight:700;font-size:20px;cursor:pointer;line-height:1.3}
+.mkr .ph i{font-style:italic;font-weight:400;font-size:16px;color:var(--muted);margin-left:6px}
+.in .mkr .ph{background:var(--in-s);color:var(--in)} .co .mkr .ph{background:var(--co-s);color:var(--co)}
+.por{font-size:19px;line-height:1.45}
+.exs{display:grid;gap:4px}
+.exs .ph{position:relative;padding:6px 10px 6px 30px;border-radius:10px;font-size:20px;line-height:1.4;cursor:pointer}
+.exs .ph::before{content:"›";position:absolute;left:10px;top:4px;font-weight:800;color:var(--muted)}
+.in .exs u{background:var(--in-s);color:var(--in)} .co .exs u{background:var(--co-s);color:var(--co)} .gr .exs u{background:var(--surface);color:var(--gr)}
+.exs i.vs-i{font-style:normal;font-size:16px;color:var(--muted)}
+.trp{font-size:17.5px;line-height:1.4;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+.trp b{color:var(--ink)} .trp s{color:var(--pr)}
+
+/* pairs table */
+.pairs th i{display:block;font:italic 400 14px/1.2 var(--body);color:var(--muted);text-transform:none;letter-spacing:0;margin-top:2px}
+.pairs td{font-size:18px}
+.pairs td:nth-child(2) u{background:var(--in-s);color:var(--in)}
+.pairs td:nth-child(3) u{background:var(--co-s);color:var(--co)}
+.pairs td em{font-style:normal;font-size:15px;color:var(--muted)}
+.pairs td.ph{cursor:pointer}
+.pairs thead th:nth-child(2){color:var(--in)} .pairs thead th:nth-child(3){color:var(--co)}
+.cn .tbx{background:var(--surface)}
+
+/* class exercises */
+.cls{border-top:8px solid var(--pr)}
+.cls .sec .kick,.cls h2{color:var(--pr)}
+.q{display:grid;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+.qs{font-size:20px;line-height:1.45}
+.qs > b{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--pr);color:var(--surface);font:700 16px/1 var(--display);margin-right:6px}
+.gap{color:var(--pr);font-weight:700;letter-spacing:-.05em}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts s,.opts b{border-radius:999px;padding:3px 12px;font-size:17px}
+.opts s{color:var(--muted);background:var(--board)}
+.opts b{background:var(--so-s);color:var(--so)}
+.fix i{font-style:italic}
+
+/* bottom band: images to talk */
+#talk{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:40px;align-items:start}
+.img{border-top:8px solid var(--so)}
+.img h3{color:var(--so)}
+.sit{font-size:19px;line-height:1.45}
+.prm .ph{color:var(--so)}
+.scn{position:relative;height:270px;border-radius:16px;overflow:hidden}
+.scn span{position:absolute;line-height:1}
+.scn .tag{position:absolute;right:16px;top:14px;font:800 22px/1 var(--display);background:var(--surface);color:var(--pr);border-radius:999px;padding:6px 12px}
+.q1{background:linear-gradient(160deg,#2c3e66,#d9826b)}
+.q1 .e1{font-size:150px;left:36%;top:18px;transform:rotate(-9deg)}
+.q1 .e2{font-size:70px;left:14%;bottom:20px;transform:rotate(28deg)}
+.q1 .e3{font-size:76px;right:14%;bottom:18px;transform:rotate(-14deg)}
+.q1 .crk{left:0;right:0;bottom:0;height:24px;background:repeating-linear-gradient(115deg,#1b2440 0 14px,transparent 14px 30px);opacity:.6}
+.q2{background:linear-gradient(160deg,#fbe0db,#f5c3d2)}
+.q2 .e1{font-size:170px;left:30%;top:40px;transform:rotate(6deg)}
+.q2 .e2{font-size:80px;right:12%;top:22px;transform:rotate(-20deg)}
+.q2 .rip{font:800 46px/1 var(--display);color:var(--pr);left:12%;bottom:26px;transform:rotate(-12deg);letter-spacing:.04em}
+.q3{background:linear-gradient(160deg,#e7e0f9,#cfe6f7)}
+.q3 .e1{font-size:150px;left:12%;top:56px}
+.q3 .e2{font-size:110px;right:16%;top:30px;transform:rotate(10deg)}
+.q3 .e3{font-size:60px;right:8%;bottom:20px;transform:rotate(-20deg)}
+.q4{background:linear-gradient(160deg,#fde3cf,#fbf0cb)}
+.q4 .e1{font-size:120px;left:12%;top:40px;transform:rotate(-12deg)}
+.q4 .e2{font-size:130px;right:14%;top:30px}
+.q4 .e3{font-size:70px;left:42%;bottom:16px}
+.q5{background:linear-gradient(160deg,#fbf0cb,#f6c99b)}
+.q5 .e1{font-size:150px;left:10%;top:56px;transform:rotate(-8deg)}
+.q5 .e2{font-size:110px;right:14%;top:24px}
+.q5 .e3{font-size:72px;right:30%;bottom:16px;transform:rotate(14deg)}
+.q6{background:linear-gradient(160deg,#d8efe1,#f5d0d0)}
+.q6 .e1{font-size:120px;left:12%;top:30px}
+.q6 .e2{font-size:100px;right:14%;bottom:24px}
+.q6 .e3{font-size:90px;left:42%;top:110px}
+
+/* ---------- dictionary in the top bar (study-map skill, assets/dictionary.html) ---------- */.dict{position:relative;flex:0 1 330px;min-width:0}
+.dict input{width:100%;font:inherit;font-size:16px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);
+  border-radius:999px;padding:9px 16px 9px 40px;min-height:40px;outline:none;-webkit-appearance:none;appearance:none}
+.dict input:focus{border-color:var(--in)}
+.dict .dico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;color:var(--muted)}
+.dres{position:absolute;right:0;top:calc(100% + 8px);width:min(400px,calc(100vw - 32px));background:var(--surface);
+  border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 36px rgba(29,36,51,.18);overflow:hidden;z-index:30}
+.dres .dh{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;font-size:13px;color:var(--muted);
+  letter-spacing:.06em;text-transform:uppercase;font-weight:700;border-bottom:1px solid var(--line)}
+.dres .dl{max-height:min(50vh,420px);overflow-y:auto}
+.dres button.dr{display:flex;width:100%;gap:10px;align-items:baseline;text-align:left;border:0;background:none;font:inherit;
+  padding:10px 14px;cursor:pointer;color:var(--ink);border-bottom:1px solid var(--line)}
+.dres button.dr:hover,.dres button.dr:focus-visible{background:var(--board);outline:none}
+.dres .es{font-weight:700;font-size:18px}
+.dres .es small{font-weight:400;color:var(--muted);font-size:15px;margin-right:4px}
+.dres .en{color:var(--muted);font-size:15px;margin-left:auto;text-align:right}
+.dres .none{padding:12px 14px;color:var(--muted);font-size:15px}
+.dres a.wr{display:block;padding:11px 14px;background:var(--board);color:var(--in);font-weight:700;font-size:15px;text-decoration:none}
+@media (max-width:520px){.top .ttl{display:none}.dict{flex:1}}
+@media (max-width:760px){.dres{position:fixed;left:16px;right:16px;width:auto;top:calc(env(safe-area-inset-top,0px) + 64px)}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <a class="back" href="../">← Irmak · Español</a>
+  <span class="ttl">El mapa del subjuntivo · presente e imperfecto</span>
+  <div class="dict" id="dict"><span class="dico">📖</span><input id="dq" type="search" placeholder="Diccionario · English ⇄ español" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" aria-label="Diccionario inglés español">
+  <div class="dres" id="dres" hidden><div class="dh"><span>Toca una palabra: va a tu texto</span></div><div class="dl" id="dl"></div><a class="wr" id="dwr" target="_blank" rel="noopener">WordReference ↗</a></div></div>
+  <button class="btn main" data-go="k-write" type="button">✍︎ Mi espacio</button>
+</div>
+
+<div id="view" aria-label="Mapa: dos dedos para moverte y hacer zoom">
+<div id="board">
+
+  <!-- ================= TOP BAND · the idea ================= -->
+  <div id="info">
+    <div class="band-h"><h2>Un modo, dos tiempos</h2><p>El subjuntivo es una sola familia. El presente y el imperfecto son el mismo «no es un hecho», pero en dos distancias.</p></div>
+
+    <div class="card" id="k-fam">
+      <h3>¿Qué es el subjuntivo?</h3>
+      <p class="big">No <em>informo</em> de un hecho: lo <em>deseo</em>, lo <em>siento</em>, lo <em>dudo</em>, lo <em>espero</em> o lo <em>imagino</em>.</p>
+      <div class="fam">
+        <span>deseo</span><span>emoción</span><span>duda</span><span>futuro con «cuando»</span><span>finalidad</span><span>condición</span><span>hipótesis</span>
+      </div>
+      <div class="tree">
+        <div class="tp"><b>Presente</b><span>posible · ahora o después</span><i>Quiero que me <u>llames</u>.</i></div>
+        <div class="ti"><b>Imperfecto</b><span>improbable, imaginado o en pasado</span><i>Quería que me <u>llamaras</u>.</i></div>
+      </div>
+    </div>
+
+    <div class="card" id="k-scale">
+      <h3>La escala de la realidad <small>de lo posible a lo imposible</small></h3>
+      <div class="scale">
+        <div class="s1"><b>Posible</b><p>Si <u>tengo</u> dinero, me opero la nariz.</p><span>si + presente <em>indicativo</em></span></div>
+        <div class="s2"><b>Improbable / irreal</b><p>Si <u>tuviera</u> dinero, me operaría la nariz.</p><span>si + imperfecto de subj. → condicional</span></div>
+        <div class="s3"><b>Ya imposible</b><p>Si <u>hubiera tenido</u> dinero, me habría operado.</p><span>si + pluscuamperfecto → condicional compuesto</span></div>
+      </div>
+      <div class="scale sm">
+        <div class="s1"><p>Ojalá me <u>llame</u>.</p><span>puede pasar</span></div>
+        <div class="s2"><p>Ojalá me <u>llamara</u>.</p><span>casi imposible</span></div>
+        <div class="s3"><p>Ojalá me <u>hubiera llamado</u>.</p><span>no llamó</span></div>
+      </div>
+      <p class="note">⚠︎ Nunca <s>si tenga</s>: después de <b>si</b> no hay presente de subjuntivo.</p>
+    </div>
+
+    <div class="card" id="k-switch">
+      <h3>El interruptor <small>el primer verbo decide</small></h3>
+      <div class="tbx"><table class="all">
+        <thead><tr><th>Primer verbo</th><th>→ segundo verbo</th></tr></thead>
+        <tbody>
+          <tr><th>presente · futuro<br>imperativo · he dicho</th><td class="cp"><b>presente de subj.</b><br>Quiero que <u>vengas</u>.<br>Te diré que <u>vengas</u>.<br>Dile que <u>venga</u>.</td></tr>
+          <tr><th>pasado · condicional</th><td class="ci"><b>imperfecto de subj.</b><br>Quería que <u>vinieras</u>.<br>Me pidió que <u>viniera</u>.<br>Me gustaría que <u>vinieras</u>.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">El uso no cambia, solo el tiempo: es el mismo «querer que», empujado al pasado o a lo imaginado.</p>
+    </div>
+  </div>
+
+  <!-- ================= LEFT · PRESENTE ================= -->
+  <div class="col" id="c-left">
+    <div class="card in" id="k-pres">
+      <div class="sec"><span class="kick">Rama 1</span><h2>Presente de subjuntivo</h2></div>
+      <p class="big">Lo que <em class="eb">todavía no ha pasado</em> y <em class="eb">puede pasar</em>: ahora o en el futuro.</p>
+      <p class="formula">yo hablo → <span class="end">hable</span> · como → <span class="end">coma</span> · vivo → <span class="end">viva</span></p>
+      <p class="note">-ar → e · -er/-ir → a. La raíz es la del «yo»: tengo → <b>tenga</b>, hago → <b>haga</b>, salgo → <b>salga</b>.</p>
+      <div class="chips">
+        <span class="chip ph" data-ins="sea "><b>sea</b><i>ser</i></span>
+        <span class="chip ph" data-ins="esté "><b>esté</b><i>estar</i></span>
+        <span class="chip ph" data-ins="vaya "><b>vaya</b><i>ir</i></span>
+        <span class="chip ph" data-ins="haya "><b>haya</b><i>haber</i></span>
+        <span class="chip ph" data-ins="sepa "><b>sepa</b><i>saber</i></span>
+        <span class="chip ph" data-ins="dé "><b>dé</b><i>dar</i></span>
+        <span class="chip ph" data-ins="quiera "><b>quiera</b><i>querer</i></span>
+        <span class="chip ph" data-ins="pueda "><b>pueda</b><i>poder</i></span>
+      </div>
+    </div>
+
+    <div class="card in use" id="p-deseo">
+      <span class="kick">Presente · 1</span><h3>Querer que otro haga algo</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="Quiero que ">quiero que <i>I want you to</i></span>
+        <span class="ph" data-ins="Te pido que ">te pido que <i>I'm asking you to</i></span>
+        <span class="ph" data-ins="Necesito que ">necesito que <i>I need you to</i></span>
+        <span class="ph" data-ins="Espero que ">espero que <i>I hope</i></span>
+        <span class="ph" data-ins="Ojalá ">ojalá <i>I really hope</i></span>
+      </div>
+      <p class="por">¿Por qué? Una persona quiere y <b>otra</b> hace. La acción todavía no existe.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="Quiero que me digas la verdad: ¿quién es esa Selin? ">Quiero que me <u>digas</u> la verdad: ¿quién es esa Selin?</li>
+        <li class="ph" data-ins="Espero que esta vez no llegues tarde a la cena. ">Espero que esta vez no <u>llegues</u> tarde a la cena.</li>
+      </ul>
+      <p class="trp">⚠︎ «I want <b>you to tell</b>» → <s>quiero tú decir</s> → quiero que <b>digas</b>. Mismo sujeto = infinitivo: <b>quiero decirte</b>.</p>
+    </div>
+
+    <div class="card in use" id="p-emo">
+      <span class="kick">Presente · 2</span><h3>Reaccionar y valorar</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="Me molesta que ">me molesta que <i>it bothers me that</i></span>
+        <span class="ph" data-ins="No soporto que ">no soporto que <i>I can't stand it when</i></span>
+        <span class="ph" data-ins="Me encanta que ">me encanta que <i>I love it that</i></span>
+        <span class="ph" data-ins="Es normal que ">es normal que <i>it's normal that</i></span>
+        <span class="ph" data-ins="Es una pena que ">es una pena que <i>it's a shame that</i></span>
+      </div>
+      <p class="por">¿Por qué? No doy la noticia: ya la sabemos. Doy mi <b>reacción</b> a ella.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="No soporto que mires el móvil mientras cenamos. ">No soporto que <u>mires</u> el móvil mientras cenamos.</li>
+        <li class="ph" data-ins="Es normal que discutamos: llevamos tres años juntos. ">Es normal que <u>discutamos</u>: llevamos tres años juntos.</li>
+      </ul>
+      <p class="trp">⚠︎ Es <b>verdad / evidente / obvio</b> que + <b>indicativo</b>: eso es un dato, no una reacción.</p>
+    </div>
+
+    <div class="card in use" id="p-duda">
+      <span class="kick">Presente · 3</span><h3>Dudar o negar una opinión</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="No creo que ">no creo que <i>I don't think</i></span>
+        <span class="ph" data-ins="Dudo que ">dudo que <i>I doubt</i></span>
+        <span class="ph" data-ins="Puede que ">puede que <i>maybe / it may be</i></span>
+        <span class="ph" data-ins="Es posible que ">es posible que <i>it's possible that</i></span>
+        <span class="ph" data-ins="No es verdad que ">no es verdad que <i>it's not true that</i></span>
+      </div>
+      <p class="por">¿Por qué? <b>Creo que</b> afirma (indicativo). <b>No creo que</b> ya no afirma nada: subjuntivo.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="No creo que la dieta del zumo funcione. ">No creo que la dieta del zumo <u>funcione</u>.</li>
+        <li class="ph" data-ins="Puede que mañana empiece el gimnasio… o no. ">Puede que mañana <u>empiece</u> el gimnasio… o no.</li>
+      </ul>
+      <p class="trp">⚠︎ <b>Creo que</b> funciona ✓ · <b>no creo que</b> funcione ✓ · <b>a lo mejor</b> + indicativo.</p>
+    </div>
+
+    <div class="card in use" id="p-cuando">
+      <span class="kick">Presente · 4</span><h3>El futuro con «cuando»</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="Cuando ">cuando <i>when</i></span>
+        <span class="ph" data-ins="En cuanto ">en cuanto <i>as soon as</i></span>
+        <span class="ph" data-ins="Hasta que ">hasta que <i>until</i></span>
+        <span class="ph" data-ins="Antes de que ">antes de que <i>before</i></span>
+        <span class="ph" data-ins="Después de que ">después de que <i>after</i></span>
+      </div>
+      <p class="por">¿Por qué? Hablo de un momento que <b>todavía no ha llegado</b>.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="Cuando me mude a Madrid, viviré en el barrio de Salamanca. ">Cuando me <u>mude</u> a Madrid, viviré en el barrio de Salamanca.</li>
+        <li class="ph" data-ins="No pienso hablarle hasta que me pida perdón. ">No pienso hablarle hasta que me <u>pida</u> perdón.</li>
+      </ul>
+      <p class="trp">⚠︎ «when I <b>will</b> move» → <s>cuando me mudaré</s>. Hábito o pasado = indicativo: cuando <b>viajo</b>, como fatal.</p>
+    </div>
+
+    <div class="card in use" id="p-para">
+      <span class="kick">Presente · 5</span><h3>Para qué</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="para que ">para que <i>so that</i></span>
+        <span class="ph" data-ins="sin que ">sin que <i>without</i></span>
+        <span class="ph" data-ins="a fin de que ">a fin de que <i>in order that</i></span>
+      </div>
+      <p class="por">¿Por qué? Un objetivo es algo que <b>todavía no ha pasado</b>.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="Hoy cocino yo para que no pidamos comida basura otra vez. ">Hoy cocino yo para que no <u>pidamos</u> comida basura otra vez.</li>
+        <li class="ph" data-ins="Me como el postre sin que me vea mi entrenador. ">Me como el postre sin que me <u>vea</u> mi entrenador.</li>
+      </ul>
+      <p class="trp">⚠︎ Mismo sujeto = infinitivo: voy al gimnasio <b>para estar</b> en forma.</p>
+    </div>
+
+    <div class="card in use" id="p-cond">
+      <span class="kick">Presente · 6 · tus apuntes, semana 8</span><h3>Condiciones con carácter</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="siempre y cuando ">siempre y cuando · siempre que · con tal de que <i>as long as</i></span>
+        <span class="ph" data-ins="a menos que ">a menos que · a no ser que · salvo que <i>unless</i></span>
+        <span class="ph" data-ins="Mientras no ">mientras <i>as long as (duración o amenaza)</i></span>
+        <span class="ph" data-ins="Como ">como <i>if… (amenaza o aviso)</i></span>
+        <span class="ph" data-ins="a cambio de que ">a cambio de que <i>in exchange for</i></span>
+      </div>
+      <p class="por">¿Por qué? Todos ponen una condición que <b>aún no se cumple</b>. Recuerda: todos con <b>subjuntivo</b>.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="Te perdono siempre y cuando borres su número. ">Te perdono siempre y cuando <u>borres</u> su número.</li>
+        <li class="ph" data-ins="Como vuelvas a llegar tarde, ceno sola. ">Como <u>vuelvas</u> a llegar tarde, ceno sola.</li>
+        <li class="ph" data-ins="Mientras no me pidas perdón, no hay cena. ">Mientras no me <u>pidas</u> perdón, no hay cena.</li>
+        <li class="ph" data-ins="Yo cocino a cambio de que tú friegues. ">Yo cocino a cambio de que tú <u>friegues</u>.</li>
+        <li class="ph" data-ins="Salimos esta noche a menos que llueva. ">Salimos esta noche a menos que <u>llueva</u>.</li>
+      </ul>
+      <p class="trp">⚠︎ <b>Como</b> + indicativo = <i>because</i>: «Como <b>llegaste</b> tarde, cené sola». <b>Como</b> + subjuntivo = <i>if</i> con amenaza.</p>
+    </div>
+
+    <div class="card in use" id="p-rel">
+      <span class="kick">Presente · 7</span><h3>Algo que no conozco</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="Busco a alguien que ">busco a alguien que <i>I'm looking for someone who</i></span>
+        <span class="ph" data-ins="No hay nadie que ">no hay nadie que <i>there's nobody who</i></span>
+        <span class="ph" data-ins="¿Conoces algún restaurante que ">¿conoces algún… que? <i>do you know any… that?</i></span>
+      </div>
+      <p class="por">¿Por qué? No sé si existe. Si ya lo conozco, es un hecho: indicativo.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="Busco un novio que sepa cocinar. ">Busco un novio que <u>sepa</u> cocinar. <i class="vs-i">(no sé si existe)</i></li>
+        <li class="ph" data-ins="Tengo un novio que sabe cocinar. ">Tengo un novio que <b>sabe</b> cocinar. <i class="vs-i">(existe: indicativo)</i></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ================= CENTRE ================= -->
+  <div class="col" id="c-mid">
+    <div class="card" id="k-write">
+      <span class="kick">Mi espacio</span>
+      <h2>Escribe, apunta, prepara lo que vas a decir</h2>
+      <div class="parts"><span class="pa">3 frases en presente</span><span class="pd">3 frases en imperfecto</span><span class="pb">Elige una imagen: ¿qué harías si…?</span><span class="pc">Tus apuntes</span></div>
+      <p class="note">Toca cualquier frase o marcador del mapa y aparece aquí, donde dejaste el cursor.</p>
+      <textarea id="draft" lang="es" spellcheck="false" placeholder="Mis frases&#10;&#10;Quiero que…&#10;Si yo fuera…"></textarea>
+      <div class="wbar"><span class="wc" id="wc">0 palabras</span><span class="paras" id="paras"></span><span style="flex:1"></span>
+        <button class="btn" id="undoBtn" type="button" disabled>↶ Deshacer</button><button class="btn" id="copyBtn" type="button">Copiar</button></div>
+    </div>
+
+    <div class="card cn" id="k-pairs">
+      <h3>Mismo marcador, dos tiempos <small>el uso es el mismo; cambia la distancia</small></h3>
+      <div class="tbx"><table class="all pairs">
+        <thead><tr><th>Marcador</th><th>Presente · posible / ahora</th><th>Imperfecto · imaginado / pasado</th></tr></thead>
+        <tbody>
+          <tr><th>querer que<i>want… to</i></th><td class="ph" data-ins="Quiero que cocines tú. ">Quiero que <u>cocines</u> tú.</td><td class="ph" data-ins="Quería que cocinaras tú. ">Quería que <u>cocinaras</u> tú.</td></tr>
+          <tr><th>ojalá<i>I hope / I wish</i></th><td class="ph" data-ins="Ojalá me escriba. ">Ojalá me <u>escriba</u>. <em>(puede pasar)</em></td><td class="ph" data-ins="Ojalá me escribiera. ">Ojalá me <u>escribiera</u>. <em>(no lo creo)</em></td></tr>
+          <tr><th>me molesta que<i>it bothers me</i></th><td class="ph" data-ins="Me molesta que no me escuches. ">Me molesta que no me <u>escuches</u>.</td><td class="ph" data-ins="Me molestó que no me escucharas. ">Me molestó que no me <u>escucharas</u>.</td></tr>
+          <tr><th>no creo que<i>I don't think</i></th><td class="ph" data-ins="No creo que se opere. ">No creo que se <u>opere</u>.</td><td class="ph" data-ins="No creía que se operara. ">No creía que se <u>operara</u>.</td></tr>
+          <tr><th>para que<i>so that</i></th><td class="ph" data-ins="Te lo digo para que lo sepas. ">Te lo digo para que lo <u>sepas</u>.</td><td class="ph" data-ins="Te lo dije para que lo supieras. ">Te lo dije para que lo <u>supieras</u>.</td></tr>
+          <tr><th>siempre que<i>as long as</i></th><td class="ph" data-ins="Te perdono siempre que no vuelvas a mentir. ">Te perdono siempre que no <u>vuelvas</u> a mentir.</td><td class="ph" data-ins="Me dijo que me perdonaría siempre que no volviera a mentir. ">Me dijo que me perdonaría siempre que no <u>volviera</u> a mentir.</td></tr>
+          <tr><th>si<i>if</i></th><td>Si <b>puedo</b>, voy. <em>(indicativo: nunca <s>si pueda</s>)</em></td><td class="ph" data-ins="Si pudiera, iría. ">Si <u>pudiera</u>, iría.</td></tr>
+          <tr><th>como si<i>as if</i></th><td><em>— no existe con presente</em></td><td class="ph" data-ins="Me habla como si fuera su madre. ">Me habla como si <u>fuera</u> su madre.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="card cls" id="k-ex">
+      <div class="sec"><span class="kick">Semana 8 · 6AASHS04</span><h2>Las frases de clase</h2></div>
+      <p class="note">Primero piensa: ¿qué pide la gramática? Después: ¿ha pasado de verdad o no? Toca «¿Por qué?» para ver la explicación.</p>
+
+      <div class="q">
+        <p class="qs"><b>1</b> Insistió en que <span class="gap">______</span> a la conferencia que tuvo lugar ayer porque os necesitaba allí.</p>
+        <p class="opts"><s>fuisteis</s> <b>fuerais</b> <s>vayáis</s></p>
+        <details class="sol"><summary>¿Por qué fuerais?</summary><div class="fix">
+          <div><b>fuerais</b><span>Insistir en que = pedir con fuerza (influencia) → subjuntivo. «Insistió» es pasado → imperfecto.</span></div>
+          <div><s>fuisteis</s><span>Indicativo = informa de que fuisteis: «insistió en que fuisteis» significa <i>he insisted that you did go</i>. Pero «porque os necesitaba allí» dice que era una petición.</span></div>
+          <div><s>vayáis</s><span>Presente: no cabe, la conferencia fue ayer y el primer verbo está en pasado.</span></div>
+        </div></details>
+      </div>
+
+      <div class="q">
+        <p class="qs"><b>2</b> Con nuestra compañía aérea habitual ya <span class="gap">______</span>, pero con esta nos han cancelado el vuelo y tendremos que esperar.</p>
+        <p class="opts"><s>habremos llegado</s> <b>habríamos llegado</b> <s>llegaremos</s></p>
+        <details class="sol"><summary>¿Por qué habríamos llegado?</summary><div class="fix">
+          <div><b>habríamos llegado</b><span>Hipótesis sobre algo que no pasó: <i>we would have arrived</i>. La condición está escondida: «(si hubiéramos volado) con nuestra compañía habitual».</span></div>
+          <div><s>habremos llegado</s><span>Futuro perfecto = <i>we will have arrived</i>: una predicción. Pero ya sabemos que no llegamos.</span></div>
+          <div><s>llegaremos</s><span>Futuro simple: habla de algo real que va a pasar, no de lo que habría pasado.</span></div>
+        </div></details>
+      </div>
+
+      <div class="q">
+        <p class="qs"><b>3</b> Lo que más le molestó es que nadie le <span class="gap">______</span> cuando dio el discurso.</p>
+        <p class="opts"><s>escuchaba</s> <s>escuchó</s> <b>escuchara</b> <s>escucha</s></p>
+        <details class="sol"><summary>¿Por qué escuchara?</summary><div class="fix">
+          <div><b>escuchara</b><span>Molestar que = reacción → subjuntivo. «Molestó» es pasado → imperfecto de subjuntivo.</span></div>
+          <div><s>escuchó · escuchaba</s><span>Indicativo: informan del hecho. Con «lo que le molestó» importa la reacción, no la noticia. (En la conversación a veces se oye «escuchó»; en el examen, subjuntivo.)</span></div>
+          <div><s>escucha</s><span>Presente de indicativo: ni modo ni tiempo encajan con un discurso que ya fue.</span></div>
+        </div></details>
+      </div>
+
+      <div class="q">
+        <p class="qs"><b>4</b> Si <span class="gap">______</span> más tiempo en el examen, habría hecho una respuesta más elaborada, pero solamente tuve una hora.</p>
+        <p class="opts"><s>habría tenido</s> <b>hubiera tenido</b> <s>tenga</s> <s>tuviera</s> <s>tendría</s></p>
+        <details class="sol"><summary>¿Por qué hubiera tenido?</summary><div class="fix">
+          <div><b>hubiera tenido</b><span>El examen ya pasó («solamente tuve una hora»): hipótesis imposible en el pasado → si + pluscuamperfecto de subj. + «habría hecho».</span></div>
+          <div><s>tuviera</s><span>Hipótesis de ahora o del futuro. Aquí miramos atrás.</span></div>
+          <div><s>habría tenido · tendría</s><span>Condicional después de «si»: nunca. Es el calco de <i>if I would have</i>.</span></div>
+          <div><s>tenga</s><span>Después de «si» no hay presente de subjuntivo.</span></div>
+        </div></details>
+      </div>
+
+      <div class="q">
+        <p class="qs"><b>5</b> Si <span class="gap">______</span> más tiempo para la pregunta de gramática en el examen de mayo de 2026, podría responder de forma más elaborada.</p>
+        <p class="opts"><s>habría tenido</s> <s>hubiera tenido</s> <s>tenga</s> <b>tuviera</b> <s>tendría</s></p>
+        <details class="sol"><summary>¿Por qué tuviera?</summary><div class="fix">
+          <div><b>tuviera</b><span>El examen aún no ha pasado: hipótesis sobre el futuro, poco probable → si + imperfecto de subj. + condicional «podría».</span></div>
+          <div><s>hubiera tenido</s><span>Eso sería para un examen que ya pasó (frase 4). Compara las dos: la única diferencia es el momento.</span></div>
+          <div><s>tenga · tendría · habría tenido</s><span>Después de «si», ni presente de subjuntivo ni condicional.</span></div>
+        </div></details>
+      </div>
+
+      <div class="q">
+        <p class="qs"><b>6</b> Tú le has ayudado desinteresadamente ayer con su ensayo, pero él, en tu lugar, no <span class="gap">______</span> lo mismo.</p>
+        <p class="opts"><s>haya hecho</s> <s>ha hecho</s> <b>habría hecho</b> <s>hacía</s></p>
+        <details class="sol"><summary>¿Por qué habría hecho?</summary><div class="fix">
+          <div><b>habría hecho</b><span>«En tu lugar» = <i>if he were you</i>: hipótesis sobre una situación pasada → condicional compuesto, <i>he wouldn't have done</i>.</span></div>
+          <div><s>ha hecho</s><span>Informa de un hecho real; él no estuvo en tu lugar.</span></div>
+          <div><s>haya hecho</s><span>Nada en la frase pide subjuntivo: no hay «que» ni marcador.</span></div>
+          <div><s>hacía</s><span>Imperfecto = costumbre o descripción en el pasado, no una hipótesis.</span></div>
+          <div>✎ <b>Extra para el test</b><span>«Has ayudado… <b>ayer</b>» suena raro en España: con «ayer», pretérito indefinido → <b>le ayudaste ayer</b>.</span></div>
+        </div></details>
+      </div>
+
+      <div class="q">
+        <p class="qs"><b>7</b> Como no <span class="gap">______</span> el informe preparado para finales de semana, esto retrasará todo el proceso.</p>
+        <p class="opts"><s>tendrás</s> <s>tenías</s> <s>hayas tenido</s> <b>tengas</b></p>
+        <details class="sol"><summary>¿Por qué tengas?</summary><div class="fix">
+          <div><b>tengas</b><span>Como + subjuntivo = <i>if</i> con aviso o amenaza (como en tus apuntes). Habla del futuro («retrasará») → presente de subjuntivo.</span></div>
+          <div><s>tenías</s><span>Como + indicativo = <i>because</i>: «como no tenías el informe…», pero el resultado está en futuro y no encaja.</span></div>
+          <div><s>tendrás</s><span>Futuro después de una condición: nunca, igual que «si tendrás».</span></div>
+          <div><s>hayas tenido</s><span>Mira una acción ya terminada; con «tener preparado para finales de semana» lo natural es «tengas».</span></div>
+        </div></details>
+      </div>
+    </div>
+
+    <div class="card" id="k-err">
+      <h3>Detecta los 6 errores <small>como en el test de King's</small></h3>
+      <p class="errtxt"><sup>1</sup>Quiero que mi novio cocina más. <sup>2</sup>Si tendría dinero, me operaría la nariz. <sup>3</sup>Mi madre quería que me case antes de los treinta. <sup>4</sup>Cuando me mudaré a Madrid, viviré en Salamanca. <sup>5</sup>Me miró como si estoy loca. <sup>6</sup>Como vuelves a llegar tarde, ceno sola. <sup>✓</sup>Creo que tiene razón.</p>
+      <details class="sol"><summary>Ver soluciones</summary>
+        <div class="fix">
+          <div>1 · <s>cocina</s> → <b>cocine</b><span>Querer que + otra persona → subjuntivo. En inglés «I want him to cook» no cambia el verbo.</span></div>
+          <div>2 · <s>tendría</s> → <b>tuviera</b><span>Si + imperfecto de subj., condicional. Nunca condicional después de si: calco de «if I would have».</span></div>
+          <div>3 · <s>case</s> → <b>casara</b><span>«Quería» es pasado → imperfecto de subjuntivo.</span></div>
+          <div>4 · <s>mudaré</s> → <b>mude</b><span>Cuando + futuro → presente de subjuntivo. Calco de «when I will move».</span></div>
+          <div>5 · <s>estoy</s> → <b>estuviera</b><span>Como si → siempre imperfecto (o pluscuamperfecto) de subjuntivo.</span></div>
+          <div>6 · <s>vuelves</s> → <b>vuelvas</b><span>Como de amenaza = condición → subjuntivo. Con indicativo significaría «because».</span></div>
+          <div>✓ · <b>tiene</b><span>Correcta: «creo que» afirma → indicativo. Es la trampa.</span></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ================= RIGHT · IMPERFECTO ================= -->
+  <div class="col" id="c-right">
+    <div class="card co" id="k-imp">
+      <div class="sec"><span class="kick">Rama 2</span><h2>Imperfecto de subjuntivo</h2></div>
+      <p class="big">Lo mismo, pero <em class="ec">más lejos</em>: lo improbable, lo imaginado o lo que se quería en el pasado.</p>
+      <p class="formula">ellos habla<span class="x">ron</span> → habla<span class="end">ra</span> · tuvie<span class="x">ron</span> → tuvie<span class="end">ra</span></p>
+      <p class="note">3.ª plural del indefinido − <i>ron</i> + <b>ra · ras · ra · ramos · rais · ran</b>. Nosotros con tilde: habl<b>á</b>ramos. En España también -<b>se</b>: hablase, tuviese.</p>
+      <div class="chips">
+        <span class="chip ph" data-ins="fuera "><b>fuera</b><i>ser / ir</i></span>
+        <span class="chip ph" data-ins="tuviera "><b>tuviera</b><i>tener</i></span>
+        <span class="chip ph" data-ins="estuviera "><b>estuviera</b><i>estar</i></span>
+        <span class="chip ph" data-ins="hubiera "><b>hubiera</b><i>haber</i></span>
+        <span class="chip ph" data-ins="pudiera "><b>pudiera</b><i>poder</i></span>
+        <span class="chip ph" data-ins="hiciera "><b>hiciera</b><i>hacer</i></span>
+        <span class="chip ph" data-ins="dijera "><b>dijera</b><i>decir</i></span>
+        <span class="chip ph" data-ins="supiera "><b>supiera</b><i>saber</i></span>
+      </div>
+    </div>
+
+    <div class="card co use" id="i-si">
+      <span class="kick">Imperfecto · 1</span><h3>Imaginar: si…, …ría</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="Si ">si + imperfecto, condicional <i>if I were / if I had…, I would…</i></span>
+        <span class="ph" data-ins="En tu lugar, ">en tu lugar <i>if I were you</i></span>
+        <span class="ph" data-ins="Yo que tú, ">yo que tú <i>if I were you</i></span>
+      </div>
+      <p class="por">¿Por qué? No es real ahora y probablemente no lo será. Me lo <b>imagino</b>.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="Si me operara la nariz, mi madre no me hablaría en un mes. ">Si me <u>operara</u> la nariz, mi madre no me hablaría en un mes.</li>
+        <li class="ph" data-ins="Si viviera en Madrid, cenaría a las diez como todo el mundo. ">Si <u>viviera</u> en Madrid, cenaría a las diez como todo el mundo.</li>
+        <li class="ph" data-ins="Si engordara diez kilos, ¿me seguirías queriendo? ">Si <u>engordara</u> diez kilos, ¿me seguirías queriendo?</li>
+      </ul>
+      <p class="trp">⚠︎ «if I <b>would</b> have» → <s>si tendría</s> → si <b>tuviera</b>. «Yo que tú» y «en tu lugar» van con condicional: <b>yo que tú, no se lo diría</b>.</p>
+    </div>
+
+    <div class="card co use" id="i-deseo">
+      <span class="kick">Imperfecto · 2</span><h3>Desear lo difícil, pedir con suavidad</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="Ojalá ">ojalá + imperfecto <i>I wish</i></span>
+        <span class="ph" data-ins="Me gustaría que ">me gustaría que <i>I'd like you to</i></span>
+        <span class="ph" data-ins="Preferiría que ">preferiría que <i>I'd rather you</i></span>
+        <span class="ph" data-ins="Quisiera ">quisiera <i>I'd like (muy cortés)</i></span>
+      </div>
+      <p class="por">¿Por qué? El condicional («gustaría») pone el deseo a distancia, y el segundo verbo lo sigue al imperfecto.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="Ojalá mi ex me llamara… pero no va a llamar. ">Ojalá mi ex me <u>llamara</u>… pero no va a llamar.</li>
+        <li class="ph" data-ins="Me gustaría que esta noche cocinaras tú. ">Me gustaría que esta noche <u>cocinaras</u> tú.</li>
+      </ul>
+      <p class="trp">⚠︎ Ojalá me <b>llame</b> = creo que puede pasar · ojalá me <b>llamara</b> = casi no lo creo.</p>
+    </div>
+
+    <div class="card co use" id="i-pasado">
+      <span class="kick">Imperfecto · 3</span><h3>Los mismos usos, en pasado</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="Quería que ">quería que <i>I wanted you to</i></span>
+        <span class="ph" data-ins="Me pidió que ">me pidió que <i>he asked me to</i></span>
+        <span class="ph" data-ins="Le molestó que ">le molestó que <i>it bothered her that</i></span>
+        <span class="ph" data-ins="Insistió en que ">insistió en que <i>he insisted that</i></span>
+        <span class="ph" data-ins="No creía que ">no creía que <i>I didn't think</i></span>
+      </div>
+      <p class="por">¿Por qué? El primer verbo está en pasado y arrastra al segundo. Es el interruptor de arriba.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="Mi madre quería que me casara antes de los treinta. ">Mi madre quería que me <u>casara</u> antes de los treinta.</li>
+        <li class="ph" data-ins="Le molestó que no le dijera nada de la cena con mi ex. ">Le molestó que no le <u>dijera</u> nada de la cena con mi ex.</li>
+        <li class="ph" data-ins="Mi entrenador me pidió que dejara el azúcar un mes. ">Mi entrenador me pidió que <u>dejara</u> el azúcar un mes.</li>
+      </ul>
+      <p class="trp">⚠︎ En estilo indirecto: «Deja el azúcar» → me dijo que <b>dejara</b> el azúcar.</p>
+    </div>
+
+    <div class="card co use" id="i-como">
+      <span class="kick">Imperfecto · 4</span><h3>Como si</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="como si ">como si <i>as if / as though</i></span>
+      </div>
+      <p class="por">¿Por qué? Comparo con algo que <b>no es verdad</b>. Siempre imperfecto (o pluscuamperfecto), aunque hablemos del presente.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="Me habla como si yo fuera su madre. ">Me habla como si yo <u>fuera</u> su madre.</li>
+        <li class="ph" data-ins="En vacaciones como como si no hubiera mañana. ">En vacaciones como como si no <u>hubiera</u> mañana.</li>
+        <li class="ph" data-ins="Actuó como si no me hubiera visto. ">Actuó como si no me <u>hubiera visto</u>.</li>
+      </ul>
+    </div>
+
+    <div class="card co use" id="i-cond">
+      <span class="kick">Imperfecto · 5 · tus apuntes, semana 8</span><h3>Condiciones con carácter, a distancia</h3>
+      <div class="mkr">
+        <span class="ph" data-ins="siempre que ">siempre que · con tal de que <i>as long as</i></span>
+        <span class="ph" data-ins="a no ser que ">a no ser que · a menos que <i>unless</i></span>
+        <span class="ph" data-ins="a cambio de que ">a cambio de que <i>in exchange for</i></span>
+      </div>
+      <p class="por">¿Por qué? Los mismos marcadores de la rama 1, pero dentro de un pasado o de una hipótesis.</p>
+      <ul class="exs">
+        <li class="ph" data-ins="Me dijo que me perdonaría siempre que no volviera a mentir. ">Me dijo que me perdonaría siempre que no <u>volviera</u> a mentir.</li>
+        <li class="ph" data-ins="Me haría la liposucción solo con tal de que fuera gratis. ">Me haría la liposucción solo con tal de que <u>fuera</u> gratis.</li>
+        <li class="ph" data-ins="Te acompañaría a la boda a cambio de que me presentaras a tu primo. ">Te acompañaría a la boda a cambio de que me <u>presentaras</u> a tu primo.</li>
+      </ul>
+    </div>
+
+    <div class="card gr" id="k-back">
+      <h3>Un paso más atrás <small>hubiera + participio</small></h3>
+      <div class="rule">
+        <div><p class="formula"><span class="x">Si</span> + <span class="f">hubiera + participio</span>, habría + participio</p><p class="note">imposible: ya pasó</p></div>
+        <div><p class="formula"><span class="x">Ojalá · como si</span> + <span class="f">hubiera + participio</span></p></div>
+      </div>
+      <ul class="exs">
+        <li class="ph" data-ins="Si no hubiera ido a esa fiesta, no lo habría conocido. ">Si no <u>hubiera ido</u> a esa fiesta, no lo habría conocido.</li>
+        <li class="ph" data-ins="Ojalá no le hubiera enseñado mis fotos de antes. ">Ojalá no le <u>hubiera enseñado</u> mis fotos de antes.</li>
+      </ul>
+      <div class="chips">
+        <span class="chip ph" data-ins="hubiera sabido "><b>hubiera sabido</b></span>
+        <span class="chip ph" data-ins="hubiera dicho "><b>hubiera dicho</b></span>
+        <span class="chip ph" data-ins="habría hecho "><b>habría hecho</b></span>
+        <span class="chip ph" data-ins="habría llegado "><b>habría llegado</b></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= BOTTOM BAND · images to talk about ================= -->
+  <div id="talk">
+    <div class="band-h"><h2>¿Y si…? Imágenes para hablar</h2><p>Describe la escena, imagina qué pasaría y qué harías tú. Primero en presente (puede pasar), luego en imperfecto (imagina).</p></div>
+
+    <div class="card img" id="t-quake">
+      <div class="scn q1" aria-hidden="true"><span class="e1">🏢</span><span class="e2">🍷</span><span class="e3">🍽️</span><span class="crk"></span><b class="tag">6,1</b></div>
+      <h3>Terremoto en mitad de una cita</h3>
+      <p class="sit">Primera cena con un chico en Bebek. Postre, velas… y de repente la mesa empieza a temblar.</p>
+      <ul class="ls prm">
+        <li class="ph" data-ins="Si hay un terremoto, lo primero que hago es ">Si hay un terremoto, lo primero que hago es…</li>
+        <li class="ph" data-ins="Si ahora mismo hubiera un terremoto, yo ">Si ahora mismo hubiera un terremoto, yo…</li>
+        <li class="ph" data-ins="Me daría miedo que ">Me daría miedo que…</li>
+        <li class="ph" data-ins="Ojalá él no saliera corriendo sin ">Ojalá él no saliera corriendo sin…</li>
+      </ul>
+    </div>
+
+    <div class="card img" id="t-dress">
+      <div class="scn q2" aria-hidden="true"><span class="e1">👗</span><span class="e2">💐</span><span class="rip">rasss</span></div>
+      <h3>El vestido se rompe en la boda</h3>
+      <p class="sit">Boda de tu mejor amiga. Te agachas para coger el ramo y… el vestido se rompe por detrás.</p>
+      <ul class="ls prm">
+        <li class="ph" data-ins="Si se me rompiera el vestido en una boda, ">Si se me rompiera el vestido en una boda…</li>
+        <li class="ph" data-ins="Haría como si no ">Haría como si no…</li>
+        <li class="ph" data-ins="Le pediría a alguien que ">Le pediría a alguien que…</li>
+        <li class="ph" data-ins="No me importa que ">No me importa que…</li>
+      </ul>
+    </div>
+
+    <div class="card img" id="t-nose">
+      <div class="scn q3" aria-hidden="true"><span class="e1">👃</span><span class="e2">📱</span><span class="e3">✈️</span></div>
+      <h3>Tu novio quiere operarse</h3>
+      <p class="sit">Te enseña fotos de narices en Instagram: quiere operarse en Estambul el mes que viene.</p>
+      <ul class="ls prm">
+        <li class="ph" data-ins="No creo que necesite ">No creo que necesite…</li>
+        <li class="ph" data-ins="Si yo me operara algo, sería ">Si yo me operara algo, sería…</li>
+        <li class="ph" data-ins="Me molestaría que ">Me molestaría que…</li>
+        <li class="ph" data-ins="Le apoyo siempre que ">Le apoyo siempre que…</li>
+      </ul>
+    </div>
+
+    <div class="card img" id="t-phone">
+      <div class="scn q4" aria-hidden="true"><span class="e1">📱</span><span class="e2">😤</span><span class="e3">🍝</span></div>
+      <h3>La pelea del móvil</h3>
+      <p class="sit">Llevas veinte minutos contando tu día y él sigue mirando el móvil. Otra vez.</p>
+      <ul class="ls prm">
+        <li class="ph" data-ins="No soporto que ">No soporto que…</li>
+        <li class="ph" data-ins="Como vuelvas a ">Como vuelvas a…</li>
+        <li class="ph" data-ins="Ayer le pedí que ">Ayer le pedí que…</li>
+        <li class="ph" data-ins="Me miró como si ">Me miró como si…</li>
+      </ul>
+    </div>
+
+    <div class="card img" id="t-jeans">
+      <div class="scn q5" aria-hidden="true"><span class="e1">👖</span><span class="e2">🥘</span><span class="e3">🍷</span></div>
+      <h3>Un mes de tapas en Madrid</h3>
+      <p class="sit">Croquetas, jamón, churros a las cuatro de la mañana… y tus vaqueros favoritos ya no cierran.</p>
+      <ul class="ls prm">
+        <li class="ph" data-ins="Cuando vuelva a Londres, ">Cuando vuelva a Londres…</li>
+        <li class="ph" data-ins="Si viviera en Madrid todo el año, ">Si viviera en Madrid todo el año…</li>
+        <li class="ph" data-ins="Seguiré comiendo croquetas a menos que ">Seguiré comiendo croquetas a menos que…</li>
+        <li class="ph" data-ins="Mi entrenador quería que ">Mi entrenador quería que…</li>
+      </ul>
+    </div>
+
+    <div class="card img" id="t-ex">
+      <div class="scn q6" aria-hidden="true"><span class="e1">💔</span><span class="e2">🍣</span><span class="e3">👀</span></div>
+      <h3>Tu ex, en tu restaurante favorito</h3>
+      <p class="sit">Entras en tu restaurante de siempre y ahí está tu ex… con su nueva novia, en tu mesa.</p>
+      <ul class="ls prm">
+        <li class="ph" data-ins="Ojalá no me vea. ">Ojalá no me vea.</li>
+        <li class="ph" data-ins="Si me saludara, yo ">Si me saludara, yo…</li>
+        <li class="ph" data-ins="Actuaría como si ">Actuaría como si…</li>
+        <li class="ph" data-ins="Me sorprende que ">Me sorprende que…</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="nav">
+  <div class="go" id="go">
+    <button type="button" data-go="all">Todo</button>
+    <button type="button" data-go="k-write" data-k="w">Mi espacio</button>
+    <button type="button" data-go="info" data-k="gr">La idea</button>
+    <button type="button" data-go="k-pres" data-k="in">Presente</button>
+    <button type="button" data-go="p-cond" data-k="in">Condiciones</button>
+    <button type="button" data-go="k-imp" data-k="co">Imperfecto</button>
+    <button type="button" data-go="i-si" data-k="co">Si…</button>
+    <button type="button" data-go="k-pairs" data-k="cn">Dos tiempos</button>
+    <button type="button" data-go="k-ex" data-k="pr">Frases de clase</button>
+    <button type="button" data-go="k-err">Errores</button>
+    <button type="button" data-go="talk" data-k="so">Imágenes</button>
+  </div>
+  <div class="zoom"><button class="btn" id="zo" type="button" aria-label="Alejar">−</button><button class="btn" id="zi" type="button" aria-label="Acercar">+</button></div>
+</div>
+
+<div class="help" id="help"><p><b>Dos dedos</b> para mover el mapa y hacer zoom. <b>Un dedo</b> para tocar: una frase va a tu espacio.</p><button class="btn" id="helpOk" type="button">Vale</button></div>
+<div class="toast" id="toast"></div>
+<div class="two" id="two" aria-hidden="true"><p><span>✌︎</span>Usa dos dedos para mover el mapa</p></div>
+
+<script>
+(function(){
+const view=document.getElementById('view'), board=document.getElementById('board');
+const MIN=0.1, MAX=2.6, PAGE='mapa-subj', LO=0, HI=1e9;
+let s=1, x=0, y=0, anim=null, settleT=null;
+
+function apply(){
+  board.style.transform=`translate(${x}px,${y}px) scale(${s})`;
+  board.classList.add('moving');
+  clearTimeout(settleT);
+  settleT=setTimeout(()=>board.classList.remove('moving'),180); // re-rasterise text crisply at rest
+}
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+function zoomAt(f,cx,cy){ const ns=clamp(s*f,MIN,MAX); f=ns/s; x=cx-(cx-x)*f; y=cy-(cy-y)*f; s=ns; apply(); }
+function stopAnim(){ if(anim){cancelAnimationFrame(anim);anim=null;} }
+
+function insets(){
+  const t=document.querySelector('.top').getBoundingClientRect().bottom;
+  const b=document.querySelector('.nav').getBoundingClientRect().height;
+  return {t:t+16,b:b+16,l:16,r:16};
+}
+function worldRect(el){            // layout position, independent of the current zoom
+  let x0=0,y0=0,n=el;
+  while(n && n!==board){ x0+=n.offsetLeft; y0+=n.offsetTop; n=n.offsetParent; }
+  return {x:x0, y:y0, w:el.offsetWidth, h:el.offsetHeight};
+}
+function fitTarget(r,maxS,topW){
+  const vr=view.getBoundingClientRect(), i=insets(), aw=vr.width-i.l-i.r, ah=vr.height-i.t-i.b;
+  const ns=clamp(topW?Math.min(aw/r.w,maxS):Math.min(aw/r.w,ah/r.h,maxS),MIN,MAX);
+  return {s:ns, x:i.l+(aw-r.w*ns)/2-r.x*ns, y:(r.h*ns>ah ? i.t : i.t+(ah-r.h*ns)/2)-r.y*ns};
+}
+function flyTo(t,ms=650){
+  stopAnim();
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) ms=0;
+  const s0=s,x0=x,y0=y,t0=performance.now(), ease=k=>1-Math.pow(1-k,3);
+  (function step(now){
+    const k=ms?Math.min(1,((now||t0)-t0)/ms):1, e=ease(k);
+    s=Math.exp(Math.log(s0)+(Math.log(t.s)-Math.log(s0))*e); x=x0+(t.x-x0)*e; y=y0+(t.y-y0)*e; apply();
+    anim=k<1?requestAnimationFrame(step):null;
+  })();
+}
+function goAll(ms){ flyTo(fitTarget({x:0,y:0,w:board.offsetWidth,h:board.offsetHeight},1),ms); }
+function goEl(id,ms){
+  if(id==='all') return goAll(ms);
+  const el=document.getElementById(id); if(!el) return;
+  const tall=id==='k-write'||id==='info'||id==='talk'||id==='k-ex';
+  flyTo(fitTarget(worldRect(el), id==='k-write'?0.85:1.2, tall), ms);
+}
+
+/* ---- gestures ----
+   Touch and pencil: one finger only taps; two fingers pan and pinch (like FigJam, tldraw or a Google Map
+   embedded in a page), so the map never moves by accident. Mouse: drag pans. Trackpad: scroll pans, pinch zooms. */
+const pts=new Map(); let last=null, moved=0, pinch=null, hinted=false;
+const two=document.getElementById('two'); let twoT;
+let twoSeen=false; try{ twoSeen=!!localStorage.getItem(PAGE+'-two'); }catch(_){}
+function hintTwo(){ if(twoSeen) return; twoSeen=true; try{localStorage.setItem(PAGE+'-two','1');}catch(_){} two.classList.add('on'); clearTimeout(twoT); twoT=setTimeout(()=>two.classList.remove('on'),1300); }
+let inField=false;
+view.addEventListener('pointerdown',e=>{
+  if(pts.size>=2) return;                                  // ignore a palm or third finger
+  // a finger on the text or a button still counts for a two-finger pinch, but is not captured,
+  // so a single tap keeps placing the cursor or pressing the button as usual
+  const field=!!e.target.closest('textarea,button,summary');
+  if(field && e.pointerType==='mouse') return;
+  stopAnim();
+  if(!field){ try{ view.setPointerCapture(e.pointerId); }catch(_){} }
+  if(pts.size===0) inField=field;
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY,type:e.pointerType});
+  if(e.pointerType!=='mouse') lastTouch=performance.now();
+  if(pts.size===1){ last={x:e.clientX,y:e.clientY}; moved=0; hinted=false; }
+  if(pts.size===2){ const [a,b]=[...pts.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y),cx:(a.x+b.x)/2,cy:(a.y+b.y)/2};
+    moved=99; hinted=true; two.classList.remove('on'); }
+  if(e.pointerType==='mouse') view.classList.add('grabbing');
+});
+addEventListener('pointermove',e=>{
+  const p=pts.get(e.pointerId); if(!p) return;
+  p.x=e.clientX; p.y=e.clientY;
+  if(pts.size===2 && pinch){
+    const [a,b]=[...pts.values()], d=Math.hypot(a.x-b.x,a.y-b.y), cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
+    x+=cx-pinch.cx; y+=cy-pinch.cy;
+    zoomAt(d/pinch.d,cx,cy);   // #view is fixed at 0,0: no layout read per frame
+    pinch={d,cx,cy};
+  } else if(pts.size===1 && last){
+    const dx=e.clientX-last.x, dy=e.clientY-last.y;
+    moved+=Math.abs(dx)+Math.abs(dy);
+    last={x:e.clientX,y:e.clientY};
+    if(p.type==='mouse'){ x+=dx; y+=dy; apply(); }
+    else if(moved>14 && !hinted && !inField){ hinted=true; hintTwo(); }
+  }
+});
+function up(e){
+  if(!pts.has(e.pointerId)) return;
+  pts.delete(e.pointerId);
+  if(pts.size===1){                                        // one finger of a pinch lifted: stop, don't pan
+    pinch=null; const q=[...pts.values()][0]; last={x:q.x,y:q.y}; return;
+  }
+  if(pts.size===0){ pinch=null; view.classList.remove('grabbing'); }   // no glide: the map stops where the fingers left it
+}
+addEventListener('pointerup',up); addEventListener('pointercancel',up);
+/* Trackpad and mouse wheel. Chrome, Edge and Firefox send a trackpad pinch as ctrl+wheel; scroll pans.
+   ZOOM_SPEED 0.02 = twice the browser's own pinch rate, which felt sluggish on a big board.
+   Line and page deltas (some mice) become pixels; one wheel notch is capped so a mouse doesn't jump. */
+const ZOOM_SPEED=0.02;
+let gs=null, lastTouch=-1e9;
+view.addEventListener('wheel',e=>{
+  e.preventDefault(); stopAnim();
+  if(gs!==null) return;                                    // Safari pinch in progress: the gesture events zoom
+  const k=e.deltaMode===1?16:e.deltaMode===2?view.clientHeight:1;
+  if(e.ctrlKey||e.metaKey) zoomAt(Math.exp(-clamp(e.deltaY*k,-20,20)*ZOOM_SPEED),e.clientX,e.clientY);
+  else { x-=e.deltaX*k; y-=e.deltaY*k; apply(); }
+},{passive:false});
+/* Safari on the Mac (and an iPad with a trackpad) sends a pinch as gesturestart/change/end with a cumulative
+   scale, not as ctrl+wheel. On a touch screen the pointer code already handles the pinch, so a gesture that
+   comes with or right after a finger is ignored (otherwise iPad and iPhone would zoom twice). */
+document.addEventListener('gesturestart',e=>{ e.preventDefault(); if(pts.size||performance.now()-lastTouch<800) return; stopAnim(); gs=e.scale||1; });
+document.addEventListener('gesturechange',e=>{ e.preventDefault(); if(gs===null) return; const sc=e.scale||1; zoomAt(Math.pow(sc/gs,1.4),e.clientX,e.clientY); gs=sc; });
+document.addEventListener('gestureend',e=>{ e.preventDefault(); gs=null; });
+function zoomCenter(f){ const vr=view.getBoundingClientRect(), ns=clamp(s*f,MIN,MAX);
+  flyTo({s:ns, x:vr.width/2-(vr.width/2-x)*ns/s, y:vr.height/2-(vr.height/2-y)*ns/s},300); }
+document.getElementById('zi').onclick=()=>zoomCenter(1.5);
+document.getElementById('zo').onclick=()=>zoomCenter(1/1.5);
+
+// the board moves only by transform; never let the browser scroll the container (hash links, focus)
+const unscroll=()=>{ if(view.scrollTop||view.scrollLeft){ view.scrollTop=0; view.scrollLeft=0; } };
+view.addEventListener('scroll',unscroll);
+
+/* ---- mini dictionary EN ⇄ ES (words for this map; anything else → WordReference) ---- */
+const DICT=`la pareja|partner, couple;el novio|boyfriend;la novia|girlfriend;el ex|ex (m);la ex|ex (f);la cita|date (romantic);el ligue|fling, date;ligar|to flirt, to pull;salir con|to go out with, to date;enamorarse de|to fall in love with;estar enamorada|to be in love;dejar a alguien|to dump, to leave someone;cortar con|to break up with;romper|to break up, to break;volver con|to get back together with;engañar|to cheat on, to deceive;ponerle los cuernos|to cheat on (colloquial);los celos|jealousy;celoso|jealous;confiar en|to trust;la confianza|trust;mentir|to lie;la mentira|lie;pedir perdón|to apologise;perdonar|to forgive;echar de menos|to miss (someone);el compromiso|commitment, engagement;comprometerse|to get engaged, to commit;casarse con|to marry;la boda|wedding;el anillo|ring;los suegros|in-laws;la suegra|mother-in-law; la pelea|fight, row;pelearse|to fight, to fall out;discutir|to argue;la discusión|argument;enfadarse|to get angry;estar enfadada|to be angry;cabrearse|to get pissed off (colloquial);gritar|to shout;reprochar|to reproach;quejarse|to complain;ignorar|to ignore;hacer las paces|to make up;tener razón|to be right;equivocarse|to be wrong, to make a mistake;la culpa|fault, blame;echar la culpa|to blame;dar la razón|to admit someone is right;cantarle las cuarenta|to give someone a piece of your mind;no tener pelos en la lengua|to not mince your words;mantenerse en sus trece|to stick to your guns;cada dos por tres|every five minutes, all the time;hablar en plata|to speak plainly;irse de la lengua|to let it slip; molestar|to bother, to annoy;soportar|to stand, to bear;aguantar|to put up with;fastidiar|to annoy;preocupar|to worry;importar|to matter, to mind;sorprender|to surprise;alegrarse de|to be glad;dar vergüenza|to be embarrassing;la vergüenza|embarrassment, shame;dar miedo|to be scary;dar pena|to make sad, to be a shame;dar igual|to not care;harta|fed up;agobiada|overwhelmed, stressed;decepcionada|disappointed;orgullosa|proud;avergonzada|embarrassed;insegura|insecure;segura|sure, confident; insistir en|to insist on;exigir|to demand;rogar|to beg;aconsejar|to advise;prohibir|to forbid;permitir|to allow;dejar (que)|to let;sugerir|to suggest;recomendar|to recommend;obligar a|to force to;convencer|to persuade;dudar|to doubt;suponer|to suppose;imaginar|to imagine;desear|to wish;esperar|to hope, to wait, to expect; siempre y cuando|as long as;con tal de que|provided that;a menos que|unless;a no ser que|unless;salvo que|unless;a cambio de que|in exchange for;en cuanto|as soon as;hasta que|until;antes de que|before;para que|so that;sin que|without;aunque|although, even if;como si|as if;ojalá|I hope, I wish;en tu lugar|in your place, if I were you;yo que tú|if I were you; la dieta|diet;estar a dieta|to be on a diet;ponerse a dieta|to go on a diet;las calorías|calories;contar calorías|to count calories;adelgazar|to lose weight;engordar|to put on weight;perder peso|to lose weight;el peso|weight;pesar|to weigh;la báscula|scales;el kilo|kilo;picar|to snack, to nibble;el antojo|craving;saltarse|to skip;el ayuno|fasting;los hidratos|carbs;la proteína|protein;el azúcar|sugar;sin gluten|gluten-free;la comida basura|junk food;la comida a domicilio|takeaway, delivery;pedir comida|to order food;las croquetas|croquettes;el jamón|cured ham;los churros|churros;las tapas|tapas;el postre|dessert;sano|healthy;engordar dos kilos|to put on two kilos;el entrenador personal|personal trainer;el gimnasio|gym;ponerse en forma|to get fit;estar en forma|to be fit; la cirugía estética|cosmetic surgery;operarse|to have surgery, to have a procedure;operarse la nariz|to have a nose job;la operación|operation;el cirujano|surgeon;el bótox|Botox;el relleno|filler;los labios|lips;la nariz|nose;el pecho|chest, breasts;la liposucción|liposuction;la cicatriz|scar;el resultado|result;arrepentirse|to regret;natural|natural;el complejo|hang-up, insecurity;acomplejada|self-conscious;la autoestima|self-esteem; el vestido|dress;los vaqueros|jeans;la falda|skirt;los tacones|heels;la cremallera|zip;el botón|button;rasgarse|to tear, to rip;romperse|to rip, to break;la costura|seam;cerrar (una prenda)|to do up, to close;quedar bien|to suit, to fit well;quedar pequeño|to be too small;agacharse|to bend down;el ramo|bouquet; el terremoto|earthquake;temblar|to shake, to tremble;el temblor|tremor;la réplica|aftershock;el incendio|fire;la inundación|flood;la tormenta|storm;huir|to flee;salir corriendo|to run out;esconderse|to hide;meterse debajo de|to get under;el miedo|fear;el pánico|panic;asustarse|to get scared;salvar|to save;sobrevivir|to survive;herido|injured;los escombros|rubble;la alarma|alarm;evacuar|to evacuate; el móvil|mobile phone;mirar el móvil|to look at your phone;el mensaje|message;contestar|to reply;dejar en visto|to leave on read;bloquear|to block;stalkear|to stalk online (colloquial);el perfil|profile;subir una foto|to post a photo; la hipótesis|hypothesis;suponer que|to suppose that;el riesgo|risk;la consecuencia|consequence;probable|likely;improbable|unlikely;de repente|suddenly;de hecho|in fact;en realidad|actually;por suerte|luckily;por desgracia|unfortunately;sin embargo|however;por eso|that's why;además|moreover, besides;al fin y al cabo|after all`
+  .split(';').map(s=>s.trim()).filter(Boolean).map(s=>{ const [es,en]=s.split('|'); return {es,en}; });
+const fold=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+const ART=/^(el|la|los|las) /;
+DICT.forEach(d=>{ d.fe=fold(d.es.replace(ART,'')); d.fn=fold(d.en).split(/,\s*/).map(x=>x.replace(/^to /,'').replace(/\s*\(.*\)$/,'')); });
+const dq=document.getElementById('dq'), dres=document.getElementById('dres'), dl=document.getElementById('dl'), dwr=document.getElementById('dwr');
+function dscore(d,q){
+  let best=9;
+  const try1=(w,b)=>{ if(w===q) best=Math.min(best,b); else if(w.startsWith(q)) best=Math.min(best,b+1); else if(w.split(/\s+/).some(x=>x.startsWith(q))||w.includes(' '+q)) best=Math.min(best,b+2); };
+  try1(d.fe,0); d.fn.forEach(w=>try1(w,0));
+  return best;
+}
+function dsearch(){
+  const raw=dq.value.trim(), q=fold(raw).replace(/^to /,'');
+  if(!q){ dres.hidden=true; return; }
+  const hits=DICT.map(d=>[dscore(d,q),d]).filter(r=>r[0]<9).sort((a,b)=>a[0]-b[0]||a[1].es.length-b[1].es.length).slice(0,8);
+  dl.innerHTML='';
+  if(!hits.length){ const n=document.createElement('div'); n.className='none'; n.textContent='No está en la lista. Búscala en WordReference ↓'; dl.appendChild(n); }
+  hits.forEach(([,d])=>{
+    const b=document.createElement('button'); b.type='button'; b.className='dr';
+    const m=d.es.match(ART), es=document.createElement('span'); es.className='es';
+    if(m){ const sm=document.createElement('small'); sm.textContent=m[1]; es.appendChild(sm); }
+    es.appendChild(document.createTextNode(d.es.replace(ART,'')));
+    const en=document.createElement('span'); en.className='en'; en.textContent=d.en;
+    b.append(es,en);
+    b.onclick=()=>{ insert(d.es.replace(/ \(.*\)$/,'')+' '); dres.hidden=true; dq.blur(); };
+    dl.appendChild(b);
+  });
+  const esFirst=hits.length && hits[0][1].fe.startsWith(q) && !hits[0][1].fn.some(w=>w.startsWith(q));
+  dwr.href='https://www.wordreference.com/'+(esFirst?'esen/':'enes/')+encodeURIComponent(raw);
+  dwr.textContent='«'+raw+'» en WordReference ↗';
+  dres.hidden=false;
+}
+dq.addEventListener('input',dsearch);
+dq.addEventListener('focus',()=>{ if(dq.value.trim()) dsearch(); });
+dq.addEventListener('keydown',e=>{ if(e.key==='Escape'){ dres.hidden=true; dq.blur(); } if(e.key==='Enter'){ const f=dl.querySelector('.dr'); if(f) f.click(); } });
+document.addEventListener('pointerdown',e=>{ if(!e.target.closest('#dict')) dres.hidden=true; });
+
+/* ---- taps ---- */
+view.addEventListener('click',e=>{
+  if(moved>8) return;                                   // that was a drag
+  const ph=e.target.closest('.ph');
+  if(ph){ insert(ph.dataset.ins||ph.textContent.trim()+' '); ph.classList.add('flash'); setTimeout(()=>ph.classList.remove('flash'),400); return; }
+  if(e.target.closest('details,#dict')) return;               // opening the solutions is not a zoom
+  const card=e.target.closest('.card');
+  if(card && card.id!=='k-write') flyTo(fitTarget(worldRect(card),1.2));
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.nav [data-go], .top [data-go]'); if(b) goEl(b.dataset.go);
+});
+
+/* ---- the writing page ---- */
+const draft=document.getElementById('draft'), wc=document.getElementById('wc'), paras=document.getElementById('paras'), undoBtn=document.getElementById('undoBtn');
+const KEY=PAGE+'-draft', WORD=/[A-Za-zÀ-ÿ0-9]+(?:['’-][A-Za-zÀ-ÿ]+)*/g;
+try{ draft.value=localStorage.getItem(KEY)||''; }catch(_){}
+function grow(){ draft.style.height='auto'; draft.style.height=Math.max(1100,draft.scrollHeight+40)+'px'; }
+function refresh(){
+  const n=(draft.value.match(WORD)||[]).length;
+  wc.textContent=n+(n===1?' palabra':' palabras');
+  wc.className='wc';
+  const p=draft.value.split(/\n\s*\n/).filter(t=>t.trim()).length;
+  paras.textContent=p?p+(p===1?' párrafo':' párrafos'):'';
+  grow();
+  try{localStorage.setItem(KEY,draft.value);}catch(_){}
+}
+draft.addEventListener('input',refresh);
+let caret=null; const undo=[];
+draft.addEventListener('blur',()=>{ caret=[draft.selectionStart,draft.selectionEnd]; });
+function insert(txt){
+  const v=draft.value;
+  const [a,b]=document.activeElement===draft?[draft.selectionStart,draft.selectionEnd]:(caret||[v.length,v.length]);
+  const before=v.slice(0,a), after=v.slice(b);
+  if(before && !/\s$/.test(before)) txt=' '+txt;
+  undo.push(v); if(undo.length>30) undo.shift(); undoBtn.disabled=false;
+  draft.value=before+txt+after;
+  const pos=(before+txt).length; caret=[pos,pos];
+  if(document.activeElement===draft) draft.setSelectionRange(pos,pos);
+  refresh(); toast('→ '+txt.trim());
+}
+undoBtn.onclick=()=>{ if(!undo.length) return; draft.value=undo.pop(); caret=null; refresh(); undoBtn.disabled=!undo.length; toast('Deshecho'); };
+document.getElementById('copyBtn').onclick=async()=>{
+  try{ await navigator.clipboard.writeText(draft.value); toast('Texto copiado'); }
+  catch(_){ draft.focus(); draft.select(); toast('Selecciona y copia'); }
+};
+let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),1400); }
+
+
+/* help */
+const help=document.getElementById('help');
+try{ if(localStorage.getItem(PAGE+'-help')) help.hidden=true; }catch(_){}
+document.getElementById('helpOk').onclick=()=>{ help.hidden=true; try{localStorage.setItem(PAGE+'-help','1');}catch(_){} };
+
+/* start on the whole map; re-fit once fonts load unless she has already moved */
+function start(){ unscroll(); refresh(); const id=location.hash.slice(1); if(id&&document.getElementById(id)) goEl(id,0); else goAll(0); }
+let touched=false; view.addEventListener('pointerdown',()=>touched=true,{once:true});
+const again=()=>{ if(!touched) start(); };
+start(); addEventListener('load',again);
+if(document.fonts){ document.fonts.ready.then(again); document.fonts.addEventListener('loadingdone',again); }
+let rz; addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(!pts.size && !touched) goAll(300); },250); });
+})();
+</script>
+</body></html>
