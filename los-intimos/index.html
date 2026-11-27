@@ -329,6 +329,7 @@ details.ans p{font-size:19px;line-height:1.5;margin-top:6px}
 .dres .es small{font-weight:400;color:var(--muted);font-size:15px;margin-right:4px}
 .dres .en{color:var(--muted);font-size:15px;margin-left:auto;text-align:right}
 .dres .none{padding:12px 14px;color:var(--muted);font-size:15px}
+.dres a.wr.wr2{font-weight:400;font-size:13.5px;padding:7px 14px;color:var(--muted);border-top:1px solid var(--line)}
 .dres a.wr{display:block;padding:11px 14px;background:var(--board);color:var(--in);font-weight:700;font-size:15px;text-decoration:none}
 @media (max-width:520px){.top .ttl{display:none}.dict{flex:1}}
 @media (max-width:760px){.dres{position:fixed;left:16px;right:16px;width:auto;top:calc(env(safe-area-inset-top,0px) + 64px)}}
@@ -339,7 +340,7 @@ details.ans p{font-size:19px;line-height:1.5;margin-top:6px}
   <a class="back" href="../">← Irmak · Español</a>
   <span class="ttl">Los íntimos · Marta Sanz</span>
   <div class="dict" id="dict"><span class="dico">📖</span><input id="dq" type="search" placeholder="Diccionario · English ⇄ español" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" aria-label="Diccionario inglés español">
-  <div class="dres" id="dres" hidden><div class="dh"><span>Toca una palabra: va a tus notas</span></div><div class="dl" id="dl"></div><a class="wr" id="dwr" target="_blank" rel="noopener">WordReference</a></div></div>
+  <div class="dres" id="dres" hidden><div class="dh"><span>Toca una palabra: va a tus notas</span></div><div class="dl" id="dl"></div><a class="wr" id="dwr" target="_blank" rel="noopener">WordReference</a><a class="wr wr2" id="dwr2" target="_blank" rel="noopener"></a></div></div>
   <button class="btn main" data-go="k-text" type="button">📖 El texto</button>
 </div>
 
@@ -362,7 +363,7 @@ details.ans p{font-size:19px;line-height:1.5;margin-top:6px}
       <span class="hl t-r">referencia</span><em>personas, lugares, cultura · 23</em>
       <span class="hl t-j">juego · estilo</span><em>juegos de palabras, imágenes, retos de traducción · 13</em>
     </div>
-    <p class="note">Toca cualquier palabra marcada: al lado aparece qué significa en inglés y por qué está ahí. «＋ Mis notas» la guarda en tu lista.</p></div>
+    <p class="note">Toca cualquier palabra marcada: al lado aparece qué significa en inglés y por qué está ahí. Una palabra sin marcar: el diccionario de arriba la busca. «＋ Mis notas» la guarda en tu lista.</p></div>
 </section>
 
 <div class="col">
@@ -380,7 +381,7 @@ details.ans p{font-size:19px;line-height:1.5;margin-top:6px}
 
 <div class="col">
   <div class="card" id="k-text">
-    <div class="txh"><span class="kick">El texto</span><h2>Los íntimos</h2><p class="note">Marta Sanz · 2025 · toca las palabras marcadas</p>
+    <div class="txh"><span class="kick">El texto</span><h2>Los íntimos</h2><p class="note">Marta Sanz · 2025 · toca una palabra marcada para ver su explicación, o cualquier otra para buscarla en el diccionario</p>
       <div class="key mini"><span class="hl t-v">vocabulario</span><span class="hl t-x">expresión</span><span class="hl t-r">referencia</span><span class="hl t-j">juego · estilo</span></div></div>
     <div class="ext x1" id="ext1"><div class="exh"><span class="kick">Fragmento 1</span><h3>El padre Karras</h3><small>Inicio del libro, pp. 11–13 (del fragmento «El padre Karras», pp. 11–16)</small></div>
 <p class="tp" id="e1-1"><b class="pn">1</b><span class="hl t-x" data-g="0">Llevo muchas noches</span>, incluso una larga <span class="hl t-v" data-g="1">temporada</span>, <span class="hl t-v" data-g="2">reparando en</span> que cada vez que pienso en algo estoy pensando en lo mismo. El pensamiento <span class="hl t-v" data-g="3">se fuerza</span>, pero también <span class="hl t-v" data-g="4">sucede</span>. El pensamiento se produce, y decir que “fluye” me parece un <span class="hl t-v" data-g="5">alarde</span> de <span class="hl t-v" data-g="6">pretenciosa</span> facilidad –<span class="hl t-x" data-g="7">qué mierda va a fluir el pensamiento, ojalá</span>–. El pensamiento se va quedando <span class="hl t-v" data-g="8">pegado</span> a la <span class="hl t-v" data-g="9">carótida</span> y al nervio óptico como el colesterol a las arterias. <span class="hl t-j" data-g="10">Hace bola y trombo</span>.</p>
@@ -644,7 +645,16 @@ function openWR(word,dict){
   dres.hidden=true; dq.blur(); return true;
 }
 let wrDict=WR_EN;
+const dwr2=document.getElementById('dwr2');
 dwr.addEventListener('click',e=>{ if(openWR(dq.value.trim(),wrDict)) e.preventDefault(); });
+dwr2.addEventListener('click',e=>{ if(openWR(dq.value.trim(),wrDict===WR_EN?WR_TL:WR_EN)) e.preventDefault(); });
+/* a word that is not in the lists: target language if it has accents or appears on the page (the text, the cards) */
+let pageWords=null;
+function looksTL(raw,q){
+  if(/[áéíóúüñ¿¡]/i.test(raw)) return true;
+  if(!pageWords) pageWords=new Set(fold(document.getElementById('board').textContent).match(/[a-z]+/g)||[]);
+  return pageWords.has(q);
+}
 function dsearch(){
   const raw=dq.value.trim(), q=fold(raw).replace(/^to /,'');
   if(!q){ dres.hidden=true; return; }
@@ -662,10 +672,13 @@ function dsearch(){
     b.onclick=()=>{ insert(d.es.replace(/ \(.*\)$/,'')+' '); dres.hidden=true; dq.blur(); };
     dl.appendChild(b);
   });
-  const tlFirst=hits.length && hits[0][1].fe.startsWith(q) && !hits[0][1].fn.some(w=>w.startsWith(q));
+  const tlFirst=hits.length ? hits[0][1].fe.startsWith(q) && !hits[0][1].fn.some(w=>w.startsWith(q)) : looksTL(raw,q);
   wrDict=tlFirst?WR_TL:WR_EN;
+  const other=tlFirst?WR_EN:WR_TL, lab=d=>d===WR_TL?'español → inglés':'inglés → español';
   dwr.href='https://www.wordreference.com/'+wrDict+'/'+encodeURIComponent(raw);
-  dwr.textContent='«'+raw+'» en WordReference ↗';
+  dwr.textContent='«'+raw+'» '+lab(wrDict)+' · WordReference ↗';
+  dwr2.href='https://www.wordreference.com/'+other+'/'+encodeURIComponent(raw);
+  dwr2.textContent='o al revés: '+lab(other)+' ↗';
   dres.hidden=false;
 }
 dq.addEventListener('input',dsearch);
@@ -738,12 +751,31 @@ function goParas(a,b){
     if(ex===a.split('-')[0] && k>=+a.split('-')[1] && k<=+b.split('-')[1]){ n.classList.add('pul'); setTimeout(()=>n.classList.remove('pul'),1600); } });
 }
 
+/* ---- tap any plain word of the text: the dictionary looks it up (Spanish → English) ---- */
+function wordAt(cx,cy){
+  let node,off;
+  if(document.caretRangeFromPoint){ const r=document.caretRangeFromPoint(cx,cy); if(!r) return ''; node=r.startContainer; off=r.startOffset; }
+  else if(document.caretPositionFromPoint){ const r=document.caretPositionFromPoint(cx,cy); if(!r) return ''; node=r.offsetNode; off=r.offset; }
+  if(!node || node.nodeType!==3) return '';
+  const txt=node.textContent, L=/[\p{L}]/u; let a=off, b=off;
+  while(a>0 && L.test(txt[a-1])) a--;
+  while(b<txt.length && L.test(txt[b])) b++;
+  return txt.slice(a,b);
+}
+function lookUpAt(cx,cy){
+  const w=wordAt(cx,cy); if(w.length<2) return;
+  closeGloss();
+  dq.value=w; dsearch();                                   // no focus: the iPad keyboard stays down
+  toast('📖 '+w);
+}
+
 /* ---- taps ---- */
 view.addEventListener('click',e=>{
   if(moved>8) return;                                   // that was a drag
   const t=(downT && view.contains(downT)) ? downT : e.target; downT=null;
   const hl=t.closest('.tp .hl'); if(hl){ showGloss(+hl.dataset.g,'text'); return; }
   const gl=t.closest('.gl'); if(gl){ showGloss(+gl.dataset.g,'text'); flyToSpan(+gl.dataset.g); return; }
+  const tp=t.closest('.tp'); if(tp){ lookUpAt(e.clientX,e.clientY); return; }
   const st=t.closest('.stp'); if(st){ goParas(st.dataset.p, st.dataset.q); return; }
   if(t.closest('details,#dict,textarea,button')) return;
   if(!gloss.hidden){ closeGloss(); return; }             // a tap elsewhere closes the pop-up first
