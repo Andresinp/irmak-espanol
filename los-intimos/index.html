@@ -1,0 +1,772 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Los íntimos · Marta Sanz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Engine from the study-map skill. Poppins = Irmak's site font; Atkinson Hyperlegible for reading.
+   Pastel colour per part of the column: entrada = blue, consecuencias = rose, lo que hace falta = mint,
+   propuesta y cierre = lavender, gramática = butter, conectores = peach */
+:root{
+  --board:#e3e8ed; --dots:#c9d1d9; --surface:#ffffff; --ink:#17212b; --muted:#55636f; --line:#d3dbe2;
+  --in:#2b5a9e; --in-s:#dce8fa;
+  --pr:#a43a2d; --pr-s:#fbe0db;
+  --so:#22744a; --so-s:#d8efe1;
+  --co:#5a44a6; --co-s:#e7e0f9;
+  --gr:#835c00; --gr-s:#fbf0cb;
+  --cn:#a0501a; --cn-s:#fde3cf;
+  --display:"Poppins","Avenir Next",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+}
+/* Always light: brighter for studying, whatever the device setting. */
+:root{color-scheme:light}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;overflow:hidden;margin:0}
+body{background:var(--board);color:var(--ink);font-family:var(--body);-webkit-text-size-adjust:100%;overscroll-behavior:none}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.12;margin:0;text-wrap:balance}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+
+/* ---------- bars ---------- */
+.top{position:fixed;left:0;right:0;top:0;z-index:20;padding:calc(env(safe-area-inset-top,0px) + 8px) 16px 8px;
+  display:flex;gap:10px;align-items:center;background:color-mix(in srgb,var(--board) 96%,transparent);
+  border-bottom:1px solid var(--line)}
+.top a.back{color:var(--muted);text-decoration:none;font-size:.9rem;white-space:nowrap}
+.top .ttl{font-family:var(--display);font-weight:700;font-size:1.05rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{font:inherit;font-size:.95rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap;min-height:40px}
+.btn.main{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:700}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible{outline:2px solid var(--in);outline-offset:2px}
+.nav{position:fixed;left:0;bottom:0;z-index:20;right:0;padding:8px 12px calc(env(safe-area-inset-bottom,0px) + 8px);
+  display:flex;gap:8px;align-items:center;background:color-mix(in srgb,var(--board) 96%,transparent);
+  border-top:1px solid var(--line)}
+.nav .go{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:none}
+.nav .go::-webkit-scrollbar{display:none}
+.nav .go button{font:inherit;font-size:.9rem;border:0;border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap;color:var(--ink);background:var(--surface);min-height:40px}
+.nav .go button[data-k="in"]{background:var(--in-s)} .nav .go button[data-k="pr"]{background:var(--pr-s)}
+.nav .go button[data-k="so"]{background:var(--so-s)} .nav .go button[data-k="co"]{background:var(--co-s)}
+.nav .go button[data-k="cn"]{background:var(--cn-s)} .nav .go button[data-k="gr"]{background:var(--gr-s)}
+.nav .go button[data-k="w"]{background:var(--ink);color:var(--surface);font-weight:700}
+.zoom{display:flex;gap:4px}
+.zoom .btn{width:40px;padding:0;font-size:1.2rem;font-weight:700}
+@media (max-width:520px){.top .ttl{visibility:hidden}}
+
+/* ---------- board ---------- */
+#view{position:fixed;inset:0;overflow:hidden;touch-action:none;cursor:grab;
+  background-color:var(--board);background-image:radial-gradient(var(--dots) 1.4px,transparent 1.6px);background-size:28px 28px}
+#view.grabbing{cursor:grabbing}
+#board{position:absolute;left:0;top:0;transform-origin:0 0;display:grid;padding:80px;
+  grid-template-columns:740px 1040px 740px;gap:90px 110px;align-items:start;font-size:21px;line-height:1.5}
+#board.moving{will-change:transform}
+.col{display:grid;gap:40px;align-content:start}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:24px 28px;display:grid;gap:14px;align-content:start;
+  box-shadow:0 1px 0 rgba(0,0,0,.03),0 8px 24px -14px rgba(20,33,43,.25);cursor:zoom-in}
+.card > h3{font-size:30px;font-weight:700;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.card > h3 small{font:400 18px/1.3 var(--body);color:var(--muted)}
+.kick{font:700 15px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sec{display:grid;gap:4px}
+.sec .kick{margin-bottom:2px}
+.sec h2{font-size:50px;font-weight:800;letter-spacing:-.02em}
+.in .sec .kick,.in h2{color:var(--in)} .pr .sec .kick,.pr h2{color:var(--pr)}
+.so .sec .kick,.so h2{color:var(--so)} .co .sec .kick,.co h2{color:var(--co)}
+.in{border-top:8px solid var(--in)} .pr{border-top:8px solid var(--pr)} .so{border-top:8px solid var(--so)} .co{border-top:8px solid var(--co)}
+.gr{background:var(--gr-s);border-color:transparent}
+.cn{background:var(--cn-s);border-color:transparent}
+
+/* plain tappable list */
+.ls{display:grid;gap:2px}
+.ls .ph{position:relative;padding:6px 10px 6px 30px;border-radius:10px;font-weight:700;font-size:23px;line-height:1.35;cursor:pointer}
+.ls .ph::before{content:"";position:absolute;left:10px;top:.72em;width:9px;height:9px;border-radius:50%;background:currentColor;opacity:.55}
+.in .ls .ph{color:var(--in)} .pr .ls .ph{color:var(--pr)} .so .ls .ph{color:var(--so)} .co .ls .ph{color:var(--co)}
+.ph:hover{background:color-mix(in srgb,currentColor 8%,transparent)}
+.ph.flash{background:color-mix(in srgb,var(--so) 22%,transparent)}
+.ls .ph i{font-style:normal;font-weight:400;color:var(--muted);font-size:18px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--surface);border-radius:999px;padding:5px 14px;font-size:19px;cursor:pointer;border:1px solid var(--line)}
+.gr .chip,.cn .chip{border-color:transparent}
+.chip b{font-weight:700}
+.chip i{font-style:normal;color:var(--muted);font-size:16px;margin-left:4px}
+.cn .chip b{color:var(--cn)}
+.formula{font-family:var(--display);font-size:23px;font-weight:700;line-height:1.35}
+.formula .p{color:var(--in)} .formula .f{color:var(--gr)} .formula .x{color:var(--pr)}
+.rule{display:grid;gap:8px}
+.rule > div{background:color-mix(in srgb,var(--surface) 70%,transparent);border-radius:12px;padding:8px 12px}
+.note{font-size:18px;color:var(--muted)}
+.end{color:var(--gr);font-weight:800}
+
+
+/* ---------- writing page (centre) ---------- */
+#k-write{cursor:auto;padding:34px 40px;gap:16px;border:2px solid var(--ink);box-shadow:0 20px 60px -30px rgba(20,33,43,.5)}
+#k-write h2{font-size:48px;font-weight:800}
+.parts{display:flex;flex-wrap:wrap;gap:8px}
+.parts span{border-radius:999px;padding:4px 14px;font-size:18px;font-weight:700}
+.parts .pa{background:var(--in-s);color:var(--in)} .parts .pb{background:var(--pr-s);color:var(--pr)}
+.parts .pc{background:var(--so-s);color:var(--so)} .parts .pd{background:var(--co-s);color:var(--co)}
+#draft{width:100%;min-height:1100px;font:22px/1.75 var(--body);color:var(--ink);border:0;border-radius:12px;padding:20px 24px;resize:none;overflow:hidden;
+  background:repeating-linear-gradient(to bottom,transparent 0 calc(1.75em - 1px),var(--line) calc(1.75em - 1px) 1.75em) var(--board);
+  background-attachment:local;background-position:0 20px}
+#draft:focus-visible{outline:3px solid var(--in);outline-offset:2px}
+.wbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.wc{font-variant-numeric:tabular-nums;font-weight:700;padding:6px 14px;border-radius:999px;font-size:19px;background:var(--board)}
+.wc.ok{background:var(--so-s);color:var(--so)} .wc.over{background:var(--pr-s);color:var(--pr)}
+.paras{font-size:18px;color:var(--muted)}
+#k-write .btn{font-size:18px}
+
+/* ---------- info band (top) ---------- */
+#info{grid-column:1/-1;display:grid;grid-template-columns:1.15fr 1.25fr .78fr 1.2fr;gap:40px;align-items:start}
+.band-h{grid-column:1/-1;display:flex;align-items:baseline;gap:20px;flex-wrap:wrap}
+.band-h h2{font-size:62px;font-weight:800;letter-spacing:-.02em}
+.band-h p{font-size:24px;color:var(--muted)}
+.tl{display:grid;gap:7px}
+.tl > div{display:grid;grid-template-columns:118px 1fr;gap:12px;font-size:18.5px;line-height:1.35}
+.tl b{font-family:var(--display);font-weight:700;color:var(--muted);font-size:17px;padding-top:1px}
+.tl .now b,.tl .now span{color:var(--pr);font-weight:700}
+.tl .oil b{color:var(--cn)}
+.views{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.views > div{border-radius:16px;padding:14px 16px;display:grid;gap:8px;align-content:start}
+.views .out{background:var(--cn-s)} .views .ins{background:var(--co-s)}
+.views h4{font-size:21px;font-weight:700}
+.views .out h4{color:var(--cn)} .views .ins h4{color:var(--co)}
+.views .t{font:700 13px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.views ul{display:grid;gap:6px}
+.views li{position:relative;padding-left:18px;font-size:18px;line-height:1.35}
+.views li::before{content:"";position:absolute;left:2px;top:.55em;width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.5}
+.big{font-family:var(--display);font-size:25px;font-weight:700;line-height:1.25}
+.big em{font-style:normal;color:var(--pr)}
+.chain{display:grid;gap:0}
+.chain .s{font-weight:700;font-size:19px;padding:5px 0;line-height:1.3}
+.chain .s.hot{color:var(--pr);font-family:var(--display);font-size:24px;font-weight:700}
+.chain .ar{color:var(--pr);font:700 20px/1 var(--display);padding-left:4px}
+.tbx{overflow:hidden;border-radius:14px}
+.all{border-collapse:collapse;width:100%;font-size:18px;line-height:1.35}
+.all th,.all td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.all thead th{font:700 14px/1.2 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.all tbody th{font-family:var(--display);font-size:18px;font-weight:600;white-space:nowrap}
+.all tr:last-child td,.all tr:last-child th{border-bottom:0}
+.all td.max{background:var(--pr-s);font-weight:700}
+.src{font-size:14px;color:var(--muted)}
+
+/* who acts */
+.who{display:grid;gap:14px}
+.who .lvl{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:6px}
+.who .lvl b{font-family:var(--display);font-size:21px;font-weight:700}
+.who .lvl span{font-size:15px;color:var(--muted);white-space:nowrap}
+.who .chip{background:var(--so-s);border-color:transparent;color:var(--so);font-weight:700}
+
+/* model */
+.para{padding:10px 14px;border-radius:12px;border-left:6px solid;font-size:19px;line-height:1.6}
+.para.p1{border-color:var(--in);background:var(--in-s)} .para.p2{border-color:var(--pr);background:var(--pr-s)}
+.para.p3{border-color:var(--so);background:var(--so-s)} .para.p4{border-color:var(--co);background:var(--co-s)}
+.mt{font-family:var(--display);font-size:28px;font-weight:800}
+.st{font-weight:700}
+.cx{color:var(--cn);font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.vs{color:var(--gr);font-weight:700;background:var(--gr-s);border-radius:4px;padding:0 3px}
+.vm{color:var(--so);font-weight:700;background:var(--surface);border-radius:4px;padding:0 3px;outline:2px solid var(--so)}
+.vi{color:var(--in);font-weight:700}
+.mkey{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:15px;color:var(--muted);align-items:center}
+.mold .ph{padding:6px 10px;border-radius:10px;font-size:19px;cursor:pointer}
+.mold .ph u{text-decoration:none;color:var(--muted)}
+.mold h4{font:700 14px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
+.checks{display:grid;gap:4px}
+.checks li{position:relative;padding-left:32px;font-size:19px}
+.checks li::before{content:"☐";position:absolute;left:0;top:-3px;font-size:23px;color:var(--co)}
+
+/* spot the errors */
+.errtxt{font-size:20px;line-height:1.7;background:var(--board);border-radius:12px;padding:14px 18px}
+.errtxt sup{font:700 13px/1 var(--display);color:var(--pr);margin-right:2px}
+details.sol{border-radius:12px;background:var(--pr-s);padding:10px 16px}
+details.sol summary{cursor:pointer;font:700 18px/1.4 var(--display);color:var(--pr)}
+.fix{display:grid;gap:10px;margin-top:10px}
+.fix > div{font-size:18px;line-height:1.4;background:var(--surface);border-radius:10px;padding:8px 12px}
+.fix s{color:var(--pr)} .fix b{color:var(--so)}
+.fix span{display:block;color:var(--muted);font-size:16.5px}
+
+/* toast + help */
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 70px);transform:translate(-50%,-10px);z-index:40;background:var(--ink);color:var(--surface);
+  padding:8px 16px;border-radius:999px;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:90vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.help{position:fixed;z-index:25;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 76px);transform:translateX(-50%);background:var(--surface);border:1px solid var(--line);
+  border-radius:16px;padding:12px 16px;display:flex;gap:12px;align-items:center;font-size:.95rem;box-shadow:0 10px 30px -16px rgba(0,0,0,.4);width:min(600px,calc(100vw - 32px))}
+.help p{flex:1;line-height:1.4}
+.two{position:fixed;inset:0;z-index:15;display:grid;place-items:center;pointer-events:none;opacity:0;transition:opacity .25s;
+  background:color-mix(in srgb,var(--ink) 38%,transparent)}
+.two.on{opacity:1}
+.two p{background:var(--surface);color:var(--ink);border-radius:18px;padding:16px 22px;font:700 1.15rem/1.3 var(--body);display:flex;gap:12px;align-items:center;
+  box-shadow:0 12px 40px -16px rgba(0,0,0,.5);max-width:calc(100vw - 32px)}
+.two p span{font-size:1.8rem}
+@media (prefers-reduced-motion: reduce){.toast,.two{transition:none}}
+
+
+/* ---------- Los íntimos: reading map. Fragmento 1 = blue, fragmento 2 = lavender;
+   highlights: vocabulario = butter, expresión = mint, referencia = rose, juego = peach ---------- */
+#board{grid-template-columns:980px 1180px 980px}
+#info{grid-template-columns:1fr 1fr 1fr 1fr}
+.band-h .au{font-weight:600;color:var(--muted)}
+.lt{border-top:8px solid var(--line)}
+.lt.t-r{border-top-color:var(--pr)} .lt.t-j{border-top-color:var(--cn)} .lt.t-x{border-top-color:var(--so)} .lt.t-v{border-top-color:var(--gr)}
+.lt.t-r > .kick{color:var(--pr)} .lt.t-j > .kick{color:var(--cn)} .lt.t-x > .kick{color:var(--so)} .lt.t-v > .kick{color:var(--gr)}
+.co2{background:var(--co-s);border-color:transparent}
+.por{font-size:20px;line-height:1.5}
+.dots{display:grid;gap:8px}
+.dots li{position:relative;padding-left:20px;font-size:19px;line-height:1.4}
+.dots li::before{content:"";position:absolute;left:2px;top:.6em;width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.45}
+
+/* highlights */
+.hl{border-radius:5px;padding:0 2px;cursor:pointer;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.hl.t-v{background:var(--gr-s);box-shadow:inset 0 -3px 0 #e2c766}
+.hl.t-x{background:var(--so-s);box-shadow:inset 0 -3px 0 #8ccaa4}
+.hl.t-r{background:var(--pr-s);box-shadow:inset 0 -3px 0 #e79a8f}
+.hl.t-j{background:var(--cn-s);box-shadow:inset 0 -3px 0 #eba878}
+.hl.on{outline:3px solid var(--ink);outline-offset:1px}
+.hl.flash{animation:fl 1.2s ease-out 1}
+@keyframes fl{0%,40%{outline:6px solid var(--ink);outline-offset:4px}100%{outline:3px solid var(--ink);outline-offset:1px}}
+.key{display:grid;grid-template-columns:auto 1fr;gap:10px 14px;align-items:baseline;font-size:19px}
+.key em{font-style:normal;color:var(--muted);font-size:17px}
+.key.mini{display:flex;flex-wrap:wrap;gap:8px;font-size:17px}
+
+/* the text */
+#k-text{cursor:auto;padding:44px 56px 56px;gap:22px;border:2px solid var(--ink);box-shadow:0 20px 60px -30px rgba(20,33,43,.5)}
+#k-text .txh h2{font-size:64px;font-weight:800;letter-spacing:-.02em}
+.ext{display:grid;gap:16px;padding-top:26px}
+.exh{display:grid;gap:4px;border-left:8px solid;padding-left:18px}
+.x1 .exh{border-color:var(--in)} .x2 .exh{border-color:var(--co)}
+.x1 .exh .kick{color:var(--in)} .x2 .exh .kick{color:var(--co)}
+.exh h3{font-size:40px;font-weight:800}
+.exh small{font-size:17px;color:var(--muted)}
+.tp{position:relative;font-size:24px;line-height:1.8;padding-left:52px;text-wrap:pretty;hyphens:manual}
+.tp .pn{position:absolute;left:0;top:.35em;font:700 15px/1 var(--display);width:34px;height:34px;display:grid;place-items:center;border-radius:50%}
+.x1 .pn{background:var(--in-s);color:var(--in)} .x2 .pn{background:var(--co-s);color:var(--co)}
+.tp.pul{background:color-mix(in srgb,var(--gr-s) 55%,transparent);border-radius:10px;transition:background 1s}
+.gapline{color:var(--muted);padding-left:52px;font-size:22px}
+
+/* structure */
+.steps{display:grid;gap:12px}
+.stp{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:start;padding:12px 14px;border-radius:14px;cursor:pointer;background:var(--board)}
+.stp:hover{background:color-mix(in srgb,var(--board) 70%,var(--line))}
+.stp .sp{font:800 20px/1.2 var(--display);border-radius:999px;padding:6px 0;text-align:center}
+.in .stp .sp{background:var(--in-s);color:var(--in)} .co .stp .sp{background:var(--co-s);color:var(--co)}
+.stp h4{font-size:23px;font-weight:700;margin-bottom:4px}
+.stp p{font-size:18.5px;line-height:1.45}
+
+/* glossary lists */
+.gls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gls.full{grid-template-columns:1fr}
+.gl{all:unset;box-sizing:border-box;display:grid;gap:2px;padding:9px 12px;border-radius:12px;cursor:pointer;background:var(--board);border-left:5px solid var(--line)}
+.gl.t-v{border-left-color:#e2c766} .gl.t-x{border-left-color:#8ccaa4} .gl.t-r{border-left-color:#e79a8f} .gl.t-j{border-left-color:#eba878}
+.gl:hover{background:color-mix(in srgb,var(--board) 70%,var(--line))}
+.gl:focus-visible{outline:2px solid var(--in)}
+.ges{font-weight:700;font-size:20px;line-height:1.3}
+.gen{color:var(--muted);font-size:17.5px;line-height:1.3}
+.gn{font-size:17px;line-height:1.45;margin-top:4px}
+
+/* tenses */
+.tns{display:grid;gap:10px}
+.tn{border-radius:14px;padding:12px 16px;display:grid;gap:3px;background:var(--surface);border-left:7px solid}
+.tn.co{border-color:var(--co)} .tn.in{border-color:var(--in)} .tn.pr{border-color:var(--pr)}
+.tn b{font-family:var(--display);font-size:25px}
+.tn.co b{color:var(--co)} .tn.in b{color:var(--in)} .tn.pr b{color:var(--pr)}
+.tn .tl2{font:700 14px/1.2 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tn i{font-size:18px}
+.tn p{font-size:17.5px;color:var(--muted)}
+
+/* subjunctive */
+.sbj{display:grid;gap:10px}
+.sbj li{background:var(--surface);border-radius:12px;padding:10px 14px;display:grid;gap:2px}
+.sx{font-style:italic;font-size:19px}
+.sbj b{color:var(--co);font-size:18px}
+.sbj small{color:var(--muted);font-size:16px}
+
+/* questions */
+.so{border-top:8px solid var(--so)} .so h2,.so .sec .kick{color:var(--so)}
+.pr{border-top:8px solid var(--pr)}
+.qs2{display:grid;gap:14px}
+.qs2 li{display:grid;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
+.qq{font-size:20px;line-height:1.45;font-weight:700}
+.qq b{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--surface);font:700 15px/1 var(--display);margin-right:8px}
+details.ans{background:var(--board);border-radius:12px;padding:8px 14px}
+details.ans summary{cursor:pointer;font:700 16px/1.4 var(--display);color:var(--muted)}
+details.ans p{font-size:19px;line-height:1.5;margin-top:6px}
+
+/* notes */
+#k-write{cursor:auto}
+#draft{min-height:460px}
+
+/* gloss panel (fixed, above the bottom bar) */
+.gloss{position:fixed;z-index:22;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 70px);
+  width:min(680px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--line);border-radius:18px;
+  padding:14px 18px 14px;box-shadow:0 18px 50px -18px rgba(20,33,43,.45);display:grid;gap:6px;max-height:46vh;overflow-y:auto}
+.gloss.t-v{border-top-color:#e2c766} .gloss.t-x{border-top-color:#8ccaa4} .gloss.t-r{border-top-color:#e79a8f} .gloss.t-j{border-top-color:#eba878}
+.gloss .gh{display:flex;gap:10px;align-items:center}
+.gloss .gt{font:700 12px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);flex:1}
+.gloss .gx{font:inherit;border:0;background:var(--board);border-radius:999px;width:34px;height:34px;cursor:pointer;font-size:16px}
+.gloss .gw{font:800 1.35rem/1.25 var(--display)}
+.gloss .ge{font-size:1.1rem;font-weight:700;color:var(--in)}
+.gloss .gnote{font-size:1rem;line-height:1.45;color:var(--ink)}
+.gloss .gq{font-size:.9rem;color:var(--muted);font-style:italic}
+.gloss .ga{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.gloss .ga .btn{font-size:.9rem;min-height:36px;padding:6px 12px}
+@media (max-width:520px){.gloss{bottom:calc(env(safe-area-inset-bottom,0px) + 64px)}}
+/* ---------- dictionary in the top bar (study-map skill, assets/dictionary.html) ---------- */.dict{position:relative;flex:0 1 330px;min-width:0}
+.dict input{width:100%;font:inherit;font-size:16px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);
+  border-radius:999px;padding:9px 16px 9px 40px;min-height:40px;outline:none;-webkit-appearance:none;appearance:none}
+.dict input:focus{border-color:var(--in)}
+.dict .dico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;color:var(--muted)}
+.dres{position:absolute;right:0;top:calc(100% + 8px);width:min(400px,calc(100vw - 32px));background:var(--surface);
+  border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 36px rgba(29,36,51,.18);overflow:hidden;z-index:30}
+.dres .dh{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;font-size:13px;color:var(--muted);
+  letter-spacing:.06em;text-transform:uppercase;font-weight:700;border-bottom:1px solid var(--line)}
+.dres .dl{max-height:min(50vh,420px);overflow-y:auto}
+.dres button.dr{display:flex;width:100%;gap:10px;align-items:baseline;text-align:left;border:0;background:none;font:inherit;
+  padding:10px 14px;cursor:pointer;color:var(--ink);border-bottom:1px solid var(--line)}
+.dres button.dr:hover,.dres button.dr:focus-visible{background:var(--board);outline:none}
+.dres .es{font-weight:700;font-size:18px}
+.dres .es small{font-weight:400;color:var(--muted);font-size:15px;margin-right:4px}
+.dres .en{color:var(--muted);font-size:15px;margin-left:auto;text-align:right}
+.dres .none{padding:12px 14px;color:var(--muted);font-size:15px}
+.dres a.wr{display:block;padding:11px 14px;background:var(--board);color:var(--in);font-weight:700;font-size:15px;text-decoration:none}
+@media (max-width:520px){.top .ttl{display:none}.dict{flex:1}}
+@media (max-width:760px){.dres{position:fixed;left:16px;right:16px;width:auto;top:calc(env(safe-area-inset-top,0px) + 64px)}}
+</style>
+</head>
+<body>
+<div class="top">
+  <a class="back" href="../">← Irmak · Español</a>
+  <span class="ttl">Los íntimos · Marta Sanz</span>
+  <div class="dict" id="dict"><span class="dico">📖</span><input id="dq" type="search" placeholder="Diccionario · English ⇄ español" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" aria-label="Diccionario inglés español">
+  <div class="dres" id="dres" hidden><div class="dh"><span>Toca una palabra: va a tus notas</span></div><div class="dl" id="dl"></div><a class="wr" id="dwr" target="_blank" rel="noopener">WordReference</a></div></div>
+  <button class="btn main" data-go="k-text" type="button">📖 El texto</button>
+</div>
+
+<div id="view" aria-label="Mapa: dos dedos para moverte y hacer zoom">
+<div id="board">
+
+<section id="info">
+  <div class="band-h"><h2>Los íntimos <span class="au">· Marta Sanz (2025)</span></h2><p>Un texto en el centro, todo lo que necesitas para entenderlo y traducirlo alrededor.</p></div>
+  <div class="card gr" id="k-book"><span class="kick">El libro</span><h3>Una memoria a medias</h3>
+    <p class="por"><b>Los íntimos</b> es una memoria parcial: Marta Sanz, novelista madrileña, repasa su carrera literaria, cómo encontró su voz y cómo funcionan por dentro el mundo literario y editorial español: premios, festivales, dinero, quién entra y quién no.</p>
+    <p class="por">Fragmento 1 = la primera página del libro. Fragmento 2 = casi al final (pp. 223–230).</p></div>
+  <div class="card cn" id="k-task"><span class="kick">La clase · semanas 3 y 5</span><h3>Traducir un «yo situado»</h3>
+    <ul class="dots"><li>¿Cómo hacer entendibles las <b>referencias culturales</b> para un lector inglés?</li><li>¿Cómo traducir el <b>humor</b> cuando depende de un juego de palabras?</li><li>¿Cómo hacer las dos cosas y que se siga oyendo <b>la voz de Sanz</b>?</li></ul>
+    <p class="note">Anota preguntas lingüísticas, culturales y socioeconómicas, y piensa qué tendrías que investigar para cada una.</p></div>
+  <div class="card lt" id="k-voice"><span class="kick">Cómo escribe</span><h3>La voz de Sanz</h3><ul class="dots"><li><b>Registro que salta</b> culto ↔ vulgar en la misma frase: «alarde de pretenciosa facilidad» + «qué mierda va a fluir».</li><li><b>Campos de imágenes</b> medicina (carótida, trombo, esclerotizado), química (compuestos, probeta), deporte (vallas, tercera regional, ascenso), dinero (cuentas, rentabilidad).</li><li><b>Cultura alta y popular</b> Quijote, Bovary, Eco, Bourdieu junto a Sharon Stone, El exorcista, Gail Devers, una canción infantil.</li><li><b>Metalenguaje</b> habla de sus propias palabras: «infraestructural», «petricor», los tiempos verbales.</li><li><b>Frases cortas y listas</b> «Peleo. Soy responsable.» «Abruma. Irrita.» Anáforas: «Pienso en…», «Soy una escritora que…», «Quiero contar…».</li><li><b>Clase y género</b> el trabajo, el dinero, las mujeres que vienen de «lugares no previsibles».</li></ul></div>
+  <div class="card lt" id="k-key"><span class="kick">Cómo leer el mapa</span><h3>Los colores del texto</h3>
+    <div class="key">
+      <span class="hl t-v">vocabulario</span><em>palabras que debes aprender · 69</em>
+      <span class="hl t-x">expresión</span><em>frases hechas, coloquial, perífrasis · 25</em>
+      <span class="hl t-r">referencia</span><em>personas, lugares, cultura · 23</em>
+      <span class="hl t-j">juego · estilo</span><em>juegos de palabras, imágenes, retos de traducción · 13</em>
+    </div>
+    <p class="note">Toca cualquier palabra marcada: abajo aparece qué significa en inglés y por qué está ahí. «＋ Mis notas» la guarda en tu lista.</p></div>
+</section>
+
+<div class="col">
+<div class="card in" id="k-s1"><div class="sec"><span class="kick">Fragmento 1 · estructura</span><h2>El pensamiento pegajoso</h2></div>
+<p class="note">Toca un paso para ir a esos párrafos del texto.</p><ol class="steps"><li class="stp" data-p="e1-1" data-q="e1-2"><b class="sp">§1–2</b><div><h4>El pensamiento que no fluye</h4><p>Lleva tiempo pensando siempre en lo mismo. El pensamiento no «fluye»: se pega como el colesterol, ataca como un terrorista, graniza. Es una sustancia pegajosa, petróleo, arena movediza.</p></div></li><li class="stp" data-p="e1-3" data-q="e1-4"><b class="sp">§3–4</b><div><h4>El libro como cuerda</h4><p>Este libro es una cuerda para salir del engrudo. Otras veces los libros la sacaron del amor, la enfermedad, el miedo. Paradoja: lo que la obsesiona son los propios libros.</p></div></li><li class="stp" data-p="e1-5" data-q="e1-6"><b class="sp">§5–6</b><div><h4>Lo que NO piensa</h4><p>No se pierde en la ficción (Quijote, Bovary, Ana Ozores). No piensa en teoría literaria… ni en la paz mundial.</p></div></li><li class="stp" data-p="e1-7" data-q="e1-8"><b class="sp">§7–8</b><div><h4>Lo que SÍ piensa</h4><p>Editoriales, agasajos, cuentas pendientes. Su carrera como deporte: vallista con uñas largas, futbolista que puede bajar de división. La edad. Paréntesis sobre la palabra «infraestructural».</p></div></li><li class="stp" data-p="e1-9" data-q="e1-10"><b class="sp">§9–10</b><div><h4>Para qué este libro</h4><p>Salvarse de los libros, de la escasez de papel, de las cuentas de resultados — aunque intuye que dinero y literatura se mezclan.</p></div></li><li class="stp" data-p="e1-11" data-q="e1-13"><b class="sp">§11–13</b><div><h4>Autorretrato: «Soy una escritora que…»</h4><p>Tres frases paralelas (anáfora): pide un ascenso y es «demasiado vieja»; no cree en la autonomía de la cultura; se abre camino en la selva con un machete mellado.</p></div></li></ol></div>
+<div class="card lt t-r" id="k-r1"><span class="kick">Fragmento 1</span><h3>Referencias culturales <small>13 · qué es y por qué está ahí</small></h3>
+<div class="gls full"><button type="button" class="gl t-r" data-g="19"><span class="ges">el picahielos de Sharon Stone</span><span class="gen">Sharon Stone&#x27;s ice pick</span><span class="gn">Basic Instinct (Instinto básico, 1992): the killer uses an ice pick. Pop-film reference next to medical words: highbrow and popular mixed, as the course brief says. Freeze the thought into an image (ice) and smash it.</span></button><button type="button" class="gl t-r" data-g="31"><span class="ges">infraestructural</span><span class="gen">material, economic (Marxist «base»)</span><span class="gn">In Marxist theory the «infraestructura» (base) is the economy and material conditions; culture is the «superestructura». Sanz uses it on purpose — her writing looks at money and class. She discusses the word herself in §8.</span></button><button type="button" class="gl t-r" data-g="35"><span class="ges">exorcizarme / el demonio</span><span class="gen">to exorcise myself</span><span class="gn">Links to the title «El padre Karras»: Father Damien Karras, the priest in The Exorcist (El exorcista — Blatty&#x27;s novel 1971, Friedkin&#x27;s film 1973). The obsession is a demon to cast out.</span></button><button type="button" class="gl t-r" data-g="39"><span class="ges">una Alonso Quijano</span><span class="gen">a (female) Don Quixote</span><span class="gn">Alonso Quijano is Don Quixote&#x27;s real name: he went mad from reading chivalry novels. Note «una»: she turns him into a woman. Translation problem: &quot;a female Quixote&quot; loses the real-name game; &quot;an Alonso Quijano&quot; loses most English readers.</span></button><button type="button" class="gl t-r" data-g="40"><span class="ges">una Bovary</span><span class="gen">an Emma Bovary</span><span class="gn">Flaubert&#x27;s Madame Bovary (1857): ruins her life dreaming of the romantic novels she reads.</span></button><button type="button" class="gl t-r" data-g="41"><span class="ges">una Ana Ozores</span><span class="gen">an Ana Ozores</span><span class="gn">The heroine of La Regenta (Clarín, 1884–85), «the Spanish Bovary». Very well known in Spain, almost unknown in the UK: the translator must decide whether to explain, swap or keep.</span></button><button type="button" class="gl t-r" data-g="50"><span class="ges">los cien metros vallas</span><span class="gen">the 100-metre hurdles</span></button><button type="button" class="gl t-r" data-g="52"><span class="ges">Gail Devers</span><span class="gen">Gail Devers</span><span class="gn">US sprinter: Olympic 100 m gold (1992, 1996) and 100 m hurdles world champion, famous for her very long nails. A woman who competes at the top with an image people judge.</span></button><button type="button" class="gl t-r" data-g="54"><span class="ges">bajar a segunda o a tercera regional</span><span class="gen">be relegated to the second division or to the lowest local league</span><span class="gn">Spanish football: Primera División at the top; the «regional» leagues are the amateur bottom tiers. Career as relegation: a writer who might drop out of the top league.</span></button><button type="button" class="gl t-r" data-g="65"><span class="ges">la escasez de papel</span><span class="gen">the paper shortage</span><span class="gn">Probably the paper shortage and price rise of 2021–22, which made printing books more expensive: publishers prefer thinner books. Material (infraestructural) conditions shaping style.</span></button><button type="button" class="gl t-r" data-g="68"><span class="ges">la memoria vegetal (Umberto Eco)</span><span class="gen">«vegetable memory»</span><span class="gn">Umberto Eco&#x27;s essay La memoria vegetal: books (made of paper, from plants) as humanity&#x27;s memory. Paper again.</span></button><button type="button" class="gl t-r" data-g="72"><span class="ges">la cuenta de resultados</span><span class="gen">the profit-and-loss account, the bottom line</span><span class="gn">Accounting term: publishing as a business.</span></button><button type="button" class="gl t-r" data-g="76"><span class="ges">la autonomía del campo cultural</span><span class="gen">the autonomy of the cultural field</span><span class="gn">Pierre Bourdieu&#x27;s «field»: the idea that art lives apart from money and power. She doesn&#x27;t believe it: books are made of paper, money, work.</span></button></div></div>
+<div class="card lt t-j" id="k-j1"><span class="kick">Fragmento 1</span><h3>Juegos y estilo <small>8 · el reto para traducir</small></h3>
+<div class="gls full"><button type="button" class="gl t-j" data-g="10"><span class="ges">hacer bola y trombo</span><span class="gen">it forms a lump and a clot</span><span class="gn">«Hacer bola» / «se me hace bola» = food that forms a lump in your mouth and won&#x27;t go down (also: something you can&#x27;t bear any more). «Trombo» = a blood clot (medical). Everyday kitchen phrase + medical word: hard to keep both in English (&quot;it gets stuck in my throat and clots&quot;).</span></button><button type="button" class="gl t-j" data-g="17"><span class="ges">granizar</span><span class="gen">it hails inside me</span><span class="gn">«Granizar» is weather-only (graniza = it&#x27;s hailing). Sanz gives it a person: «me graniza». Thought doesn&#x27;t flow like water — it hits like hail. Inventive, keep the image in English.</span></button><button type="button" class="gl t-j" data-g="20"><span class="ges">no es un torrente</span><span class="gen">it isn&#x27;t a film, it isn&#x27;t a torrent</span><span class="gn">Against «flujo de conciencia» (stream of consciousness): her thought is not a film running or water rushing. Same attack as «fluye» in §1.</span></button><button type="button" class="gl t-j" data-g="34"><span class="ges">la paradoja se redobla entre los palillos del tambor</span><span class="gen">the paradox doubles — a drum roll between the drumsticks</span><span class="gn">Pun: «redoblarse» = to double, and «redoble» = drum roll; «palillos del tambor» = drumsticks. A classic untranslatable pun: the translator needs an English word that means both (e.g. «the paradox rolls on like a drum»).</span></button><button type="button" class="gl t-j" data-g="44"><span class="ges">la paz mundial</span><span class="gen">world peace</span><span class="gn">The beauty-queen cliché («I want world peace») ending a list of serious literary theory: a deflating joke.</span></button><button type="button" class="gl t-j" data-g="58"><span class="ges">las licantropías</span><span class="gen">its beautiful lycanthropies (werewolf transformations)</span><span class="gn">Lycanthropy = turning into a wolf. Feminism as shape-shifting, and maybe as something people fear. Unusual, learned word used playfully.</span></button><button type="button" class="gl t-j" data-g="67"><span class="ges">estilo sílfide / estilo selvático</span><span class="gen">a sylph-like (slim) style versus a jungle (dense) style</span><span class="gn">«Sílfide» = sylph, a slim airy creature; «selvático» = of the jungle. Short, slim books versus thick, wild ones. Sanz&#x27;s style is the jungle — see the machete at the end.</span></button><button type="button" class="gl t-j" data-g="74"><span class="ges">la probeta medidora</span><span class="gen">measuring cylinder (lab)</span><span class="gn">Lab glassware: she «measures» pettiness against literature like a chemist. Same science field as «compuestos».</span></button></div></div>
+<div class="card lt t-x" id="k-x1"><span class="kick">Fragmento 1</span><h3>Expresiones <small>11 · toca para verla en el texto</small></h3>
+<div class="gls full"><button type="button" class="gl t-x" data-g="0"><span class="ges">llevar + tiempo + gerundio</span><span class="gen">I&#x27;ve spent many nights (…-ing)</span><span class="gn">Periphrasis from her course: «llevo muchas noches reparando» = I&#x27;ve been noticing for many nights. English uses the present perfect continuous.</span></button><button type="button" class="gl t-x" data-g="7"><span class="ges">qué mierda va a fluir…</span><span class="gen">flow, my arse! — I wish it did</span><span class="gn">Colloquial, vulgar. «Qué + noun + va a + verb» = rhetorical denial (¡Qué va a llover! = Rain? No way). The sudden swear word breaks the cultured register: that clash IS Sanz&#x27;s voice. «ojalá» = «I wish it did flow».</span></button><button type="button" class="gl t-x" data-g="12"><span class="ges">pillar a alguien en falta</span><span class="gen">to catch someone out / red-handed</span><span class="gn">Colloquial «pillar» = to catch (Spain). «En falta» = doing something wrong.</span></button><button type="button" class="gl t-x" data-g="14"><span class="ges">ser más fuerte que yo</span><span class="gen">I can&#x27;t help it</span><span class="gn">Fixed expression: something you can&#x27;t control.</span></button><button type="button" class="gl t-x" data-g="23"><span class="ges">digámoslo de una vez</span><span class="gen">let&#x27;s just say it, let&#x27;s be honest</span><span class="gn">Imperative of «nosotros» (digamos) + lo. Conversational aside to the reader.</span></button><button type="button" class="gl t-x" data-g="33"><span class="ges">más … que de costumbre</span><span class="gen">more … than usual</span></button><button type="button" class="gl t-x" data-g="47"><span class="ges">tener cuentas pendientes</span><span class="gen">unfinished business, scores to settle</span><span class="gn">Also literally «unpaid bills»: next to «listas de la compra» the double meaning (money / grudges) is on purpose.</span></button><button type="button" class="gl t-x" data-g="53"><span class="ges">correr el riesgo de</span><span class="gen">to run the risk of</span></button><button type="button" class="gl t-x" data-g="57"><span class="ges">dejar de estar de moda</span><span class="gen">will go out of fashion</span><span class="gn">Periphrasis from her course: dejar de + infinitivo.</span></button><button type="button" class="gl t-x" data-g="73"><span class="ges">aunque + pres. subj.</span><span class="gen">even if I sense (that)</span><span class="gn">Subjunctive after «aunque» — the idea is admitted but not stressed.</span></button><button type="button" class="gl t-x" data-g="77"><span class="ges">abrirse camino</span><span class="gen">to make one&#x27;s way</span><span class="gn">Also figurative: to make it in a career.</span></button></div></div>
+<div class="card lt t-v" id="k-v1"><span class="kick">Fragmento 1</span><h3>Vocabulario <small>47 · toca para verla en el texto</small></h3>
+<div class="gls"><button type="button" class="gl t-v" data-g="1"><span class="ges">la temporada</span><span class="gen">season, spell, stretch of time</span></button><button type="button" class="gl t-v" data-g="2"><span class="ges">reparar en algo</span><span class="gen">to notice, to become aware of</span></button><button type="button" class="gl t-v" data-g="3"><span class="ges">forzarse</span><span class="gen">is forced (is made by effort)</span></button><button type="button" class="gl t-v" data-g="4"><span class="ges">suceder</span><span class="gen">to happen</span></button><button type="button" class="gl t-v" data-g="5"><span class="ges">el alarde (de)</span><span class="gen">show, display (showing off)</span></button><button type="button" class="gl t-v" data-g="6"><span class="ges">pretencioso/a</span><span class="gen">pretentious</span></button><button type="button" class="gl t-v" data-g="8"><span class="ges">quedarse pegado a</span><span class="gen">to get stuck to</span></button><button type="button" class="gl t-v" data-g="9"><span class="ges">la carótida</span><span class="gen">carotid artery</span></button><button type="button" class="gl t-v" data-g="11"><span class="ges">atravesar</span><span class="gen">to go through, to cross</span></button><button type="button" class="gl t-v" data-g="13"><span class="ges">indigno/a de</span><span class="gen">unworthy of, beneath (me)</span></button><button type="button" class="gl t-v" data-g="15"><span class="ges">carecer de</span><span class="gen">to lack</span></button><button type="button" class="gl t-v" data-g="16"><span class="ges">no lograr + infinitivo</span><span class="gen">I can&#x27;t manage to</span></button><button type="button" class="gl t-v" data-g="18"><span class="ges">congelar</span><span class="gen">to freeze</span></button><button type="button" class="gl t-v" data-g="21"><span class="ges">el liquidillo</span><span class="gen">a little bit of liquid</span></button><button type="button" class="gl t-v" data-g="22"><span class="ges">el algodón hidrófilo</span><span class="gen">cotton wool (UK), absorbent cotton</span></button><button type="button" class="gl t-v" data-g="24"><span class="ges">el espesante</span><span class="gen">thickener</span></button><button type="button" class="gl t-v" data-g="25"><span class="ges">pegajoso/a</span><span class="gen">sticky</span></button><button type="button" class="gl t-v" data-g="26"><span class="ges">segregar</span><span class="gen">to secrete</span></button><button type="button" class="gl t-v" data-g="27"><span class="ges">la arena movediza</span><span class="gen">quicksand</span></button><button type="button" class="gl t-v" data-g="28"><span class="ges">el engrudo</span><span class="gen">paste (flour-and-water glue); a sticky mess</span></button><button type="button" class="gl t-v" data-g="29"><span class="ges">el compuesto asqueroso</span><span class="gen">disgusting compounds</span></button><button type="button" class="gl t-v" data-g="30"><span class="ges">la desdicha</span><span class="gen">misfortune</span></button><button type="button" class="gl t-v" data-g="32"><span class="ges">el empeño</span><span class="gen">the effort, the undertaking</span></button><button type="button" class="gl t-v" data-g="36"><span class="ges">la rumiación</span><span class="gen">rumination, obsessive overthinking</span></button><button type="button" class="gl t-v" data-g="37"><span class="ges">condenar a + infinitivo</span><span class="gen">to condemn to</span></button><button type="button" class="gl t-v" data-g="38"><span class="ges">enajenarse</span><span class="gen">to lose oneself, to go out of one&#x27;s mind</span></button><button type="button" class="gl t-v" data-g="42"><span class="ges">el narrador testigo</span><span class="gen">witness narrator</span></button><button type="button" class="gl t-v" data-g="43"><span class="ges">la autoficción</span><span class="gen">autofiction</span></button><button type="button" class="gl t-v" data-g="45"><span class="ges">la editorial</span><span class="gen">publishing house, publisher</span></button><button type="button" class="gl t-v" data-g="46"><span class="ges">el agasajo</span><span class="gen">lavish hospitality, being wined and dined</span></button><button type="button" class="gl t-v" data-g="48"><span class="ges">la lista de la compra</span><span class="gen">shopping lists</span></button><button type="button" class="gl t-v" data-g="49"><span class="ges">aterrador/a</span><span class="gen">terrifying</span></button><button type="button" class="gl t-v" data-g="51"><span class="ges">la uña</span><span class="gen">nail (fingernail)</span></button><button type="button" class="gl t-v" data-g="55"><span class="ges">la melena</span><span class="gen">long hair, mane</span></button><button type="button" class="gl t-v" data-g="56"><span class="ges">difuminar</span><span class="gen">to blur, to fade</span></button><button type="button" class="gl t-v" data-g="59"><span class="ges">abordar</span><span class="gen">to tackle, to approach (a topic)</span></button><button type="button" class="gl t-v" data-g="60"><span class="ges">caber</span><span class="gen">to fit, to have a place</span></button><button type="button" class="gl t-v" data-g="61"><span class="ges">el ensanchamiento</span><span class="gen">widening, broadening</span></button><button type="button" class="gl t-v" data-g="62"><span class="ges">heteropatriarcal</span><span class="gen">heteropatriarchal</span></button><button type="button" class="gl t-v" data-g="63"><span class="ges">esclerotizado/a</span><span class="gen">hardened, ossified</span></button><button type="button" class="gl t-v" data-g="64"><span class="ges">el bucle</span><span class="gen">loop</span></button><button type="button" class="gl t-v" data-g="66"><span class="ges">la pertinencia</span><span class="gen">relevance, appropriateness</span></button><button type="button" class="gl t-v" data-g="69"><span class="ges">acuñar</span><span class="gen">to coin (a word, a phrase)</span></button><button type="button" class="gl t-v" data-g="70"><span class="ges">el oficio</span><span class="gen">trade, craft, job</span></button><button type="button" class="gl t-v" data-g="71"><span class="ges">la mezquindad</span><span class="gen">pettiness, meanness</span></button><button type="button" class="gl t-v" data-g="75"><span class="ges">el ascenso</span><span class="gen">promotion</span></button><button type="button" class="gl t-v" data-g="78"><span class="ges">el machete mellado</span><span class="gen">a little blunt, chipped machete</span></button></div></div>
+</div>
+
+<div class="col">
+  <div class="card" id="k-text">
+    <div class="txh"><span class="kick">El texto</span><h2>Los íntimos</h2><p class="note">Marta Sanz · 2025 · toca las palabras marcadas</p>
+      <div class="key mini"><span class="hl t-v">vocabulario</span><span class="hl t-x">expresión</span><span class="hl t-r">referencia</span><span class="hl t-j">juego · estilo</span></div></div>
+    <div class="ext x1" id="ext1"><div class="exh"><span class="kick">Fragmento 1</span><h3>El padre Karras</h3><small>Inicio del libro, pp. 11–13 (del fragmento «El padre Karras», pp. 11–16)</small></div>
+<p class="tp" id="e1-1"><b class="pn">1</b><span class="hl t-x" data-g="0">Llevo muchas noches</span>, incluso una larga <span class="hl t-v" data-g="1">temporada</span>, <span class="hl t-v" data-g="2">reparando en</span> que cada vez que pienso en algo estoy pensando en lo mismo. El pensamiento <span class="hl t-v" data-g="3">se fuerza</span>, pero también <span class="hl t-v" data-g="4">sucede</span>. El pensamiento se produce, y decir que “fluye” me parece un <span class="hl t-v" data-g="5">alarde</span> de <span class="hl t-v" data-g="6">pretenciosa</span> facilidad –<span class="hl t-x" data-g="7">qué mierda va a fluir el pensamiento, ojalá</span>–. El pensamiento se va quedando <span class="hl t-v" data-g="8">pegado</span> a la <span class="hl t-v" data-g="9">carótida</span> y al nervio óptico como el colesterol a las arterias. <span class="hl t-j" data-g="10">Hace bola y trombo</span>.</p>
+<p class="tp" id="e1-2"><b class="pn">2</b>El pensamiento me <span class="hl t-v" data-g="11">atraviesa</span> la cabeza con tácticas terroristas y, entonces, lo sorprendo, lo atrapo, <span class="hl t-x" data-g="12">lo pillo en falta</span>. Mi pensamiento está construyendo hipótesis y recordando acontecimientos <span class="hl t-v" data-g="13">indignos de mí</span>. Pero <span class="hl t-x" data-g="14">es más fuerte que yo</span>. <span class="hl t-v" data-g="15">Carezco de</span> la energía suficiente para detenerlo. <span class="hl t-v" data-g="16">No logro</span> ser la policía de este pensamiento mío que no fluye, pero <span class="hl t-j" data-g="17">me graniza por dentro</span>. No logro <span class="hl t-v" data-g="18">congelarlo</span> en una imagen y romperlo con <span class="hl t-r" data-g="19">el picahielos de Sharon Stone</span>. <span class="hl t-j" data-g="20">No es una proyección cinematográfica. No es un torrente.</span> Ni un <span class="hl t-v" data-g="21">liquidillo</span> que puede absorberse con <span class="hl t-v" data-g="22">algodón hidrófilo</span>. Ese pensamiento obsesivo –<span class="hl t-x" data-g="23">digámoslo de una vez</span>– actúa como el <span class="hl t-v" data-g="24">espesante</span> o la sustancia <span class="hl t-v" data-g="25">pegajosa</span> que algunos insectos <span class="hl t-v" data-g="26">segregan</span> para comerse a otros insectos. Petróleo en el que me quedo atrapada. <span class="hl t-v" data-g="27">Arena movediza</span>.</p>
+<p class="tp" id="e1-3"><b class="pn">3</b>Este libro es una cuerda para salir de ese <span class="hl t-v" data-g="28">engrudo</span>.</p>
+<p class="tp" id="e1-4"><b class="pn">4</b>He usado otras veces los libros para salir de todo tipo de <span class="hl t-v" data-g="29">compuestos asquerosos</span>: amor, enfermedad, miedo, <span class="hl t-v" data-g="30">desdichas</span> <span class="hl t-r" data-g="31">infraestructurales</span> o neuróticas. Pero reconozco que hoy <span class="hl t-v" data-g="32">el empeño</span> es más indigno <span class="hl t-x" data-g="33">que de costumbre</span>, y <span class="hl t-j" data-g="34">la paradoja se redobla entre los palillos del tambor</span>, porque el pensamiento del que quiero <span class="hl t-r" data-g="35">exorcizarme</span>, como si <span class="hl t-v" data-g="36">la rumiación</span> fuese un demonio, es el que <span class="hl t-v" data-g="37">me condena</span> a volver a los libros una y otra vez.</p>
+<p class="tp" id="e1-5"><b class="pn">5</b>No digo a <span class="hl t-v" data-g="38">enajenarme</span> con lo que cuentan los libros. No soy <span class="hl t-r" data-g="39">una Alonso Quijano</span> ni <span class="hl t-r" data-g="40">una Bovary</span> ni <span class="hl t-r" data-g="41">una Ana Ozores</span>.</p>
+<p class="tp" id="e1-6"><b class="pn">6</b>Tampoco pienso en la diferencia entre narradores protagonistas y <span class="hl t-v" data-g="42">narradores testigos</span>, autobiografía y <span class="hl t-v" data-g="43">autoficción</span>, primeras y terceras personas del verbo, <span class="hl t-j" data-g="44">la paz mundial</span>.</p>
+<p class="tp" id="e1-7"><b class="pn">7</b>Pienso en <span class="hl t-v" data-g="45">editoriales</span> y <span class="hl t-v" data-g="46">agasajos</span>. En <span class="hl t-x" data-g="47">cuentas pendientes</span>. En <span class="hl t-v" data-g="48">listas de la compra</span>. En omisiones y <span class="hl t-v" data-g="49">aterradoras</span> presencias.</p>
+<p class="tp" id="e1-8"><b class="pn">8</b>Pienso como una profesional que compite en la carrera de <span class="hl t-r" data-g="50">cien metros vallas</span> con las <span class="hl t-v" data-g="51">uñas</span> ultralargas –magnífica <span class="hl t-r" data-g="52">Gail Devers</span>– o como una futbolista de primera división que <span class="hl t-x" data-g="53">corre el riesgo de</span> bajar a segunda o a <span class="hl t-r" data-g="54">tercera regional</span>. Porque ni sus rodillas ni su <span class="hl t-v" data-g="55">melena</span> son lo que eran, y la edad nos <span class="hl t-v" data-g="56">difumina</span>. Y el fútbol femenino también <span class="hl t-x" data-g="57">dejará de estar de moda</span> porque el feminismo y <span class="hl t-j" data-g="58">sus bellas licantropías</span> no <span class="hl t-v" data-g="59">se abordan</span> desde una perspectiva infraestructural. Me pregunto si la palabra “infraestructural” <span class="hl t-v" data-g="60">cabe</span> en un texto literario, pero en este momento no me importa o lo justifico en el necesario <span class="hl t-v" data-g="61">ensanchamiento</span> de un léxico artístico <span class="hl t-v" data-g="62">heteropatriarcal</span> y <span class="hl t-v" data-g="63">esclerotizado</span>. Estoy hablando completamente en serio. Con las palabras “heteropatriarcal” y “esclerotizado” me pasa lo mismo que con la palabra “infraestructural”. Y no voy a caer en ese <span class="hl t-v" data-g="64">bucle</span>.</p>
+<p class="tp" id="e1-9"><b class="pn">9</b>Con este libro me quiero salvar de los libros y de <span class="hl t-r" data-g="65">la escasez de papel</span> que se filtra en la <span class="hl t-v" data-g="66">pertinencia</span> de <span class="hl t-j" data-g="67">un estilo sílfide frente a un estilo selvático</span>. Umberto Eco <span class="hl t-v" data-g="69">acuñó</span> la expresión <span class="hl t-r" data-g="68">“memoria vegetal”</span>. Hermosa expresión y hermoso proceso el de acuñar expresiones: es nuestro <span class="hl t-v" data-g="70">oficio</span>.</p>
+<p class="tp" id="e1-10"><b class="pn">10</b>Con un libro me quiero salvar de la <span class="hl t-v" data-g="71">mezquindad</span> de las <span class="hl t-r" data-g="72">cuentas de resultados</span>, <span class="hl t-x" data-g="73">aunque intuya</span> que esa mezquindad coincide en mi <span class="hl t-j" data-g="74">probeta medidora</span> con la humanidad exacta de la palabra literaria.</p>
+<p class="tp" id="e1-11"><b class="pn">11</b>Soy una escritora que pide un <span class="hl t-v" data-g="75">ascenso</span> y ya es demasiado vieja para ascender.</p>
+<p class="tp" id="e1-12"><b class="pn">12</b>Soy una escritora que no cree –para nada– en <span class="hl t-r" data-g="76">la autonomía del campo cultural</span>.</p>
+<p class="tp" id="e1-13"><b class="pn">13</b>Soy una escritora, en medio de la selva, que <span class="hl t-x" data-g="77">se abre camino</span> entre la vegetación con un <span class="hl t-v" data-g="78">machetito mellado</span>.</p>
+</div>
+    <div class="ext x2" id="ext2"><div class="exh"><span class="kick">Fragmento 2</span><h3>Petricor</h3><small>Parte del fragmento «Petricor», pp. 223–230</small></div>
+<p class="tp" id="e2-1"><b class="pn">1</b>Cuento estas cosas, <span class="hl t-v" data-g="80">enumero</span> estas maravillas, porque <span class="hl t-x" data-g="81">no las doy por supuestas</span>. Porque <span class="hl t-x" data-g="82">me parece increíble que me hayan sucedido</span> a mí, aunque <span class="hl t-x" data-g="83">a ratos</span> <span class="hl t-x" data-g="84">caiga en la tentación</span> de sentirlas como un <span class="hl t-v" data-g="85">merecimiento</span>. <span class="hl t-x" data-g="86">Se me pasa la borrachera</span>. <span class="hl t-v" data-g="87">El efluvio</span>. Yo lucho. <span class="hl t-j" data-g="88">Me dejo las tres cuartas partes de la osamenta</span>. Pero agradezco a quien <span class="hl t-x" data-g="89">me ha franqueado el paso</span> porque hay personas que, igual que yo, merecen el acceso a los jardines y a los dormitorios de <span class="hl t-r" data-g="90">Formentor</span>, a los patios floridos de <span class="hl t-r" data-g="91">Cartagena de Indias</span> – ay – o al <span class="hl t-r" data-g="92">parador de los Reyes Católicos</span> y, sin embargo, nunca consiguen <span class="hl t-v" data-g="93">la llave electrónica</span>. <span class="hl t-r" data-g="94">Dónde están las llaves, matarile-rile-rile</span>, dónde están las llaves, matarile-rile-rón…</p>
+<p class="tp" id="e2-2"><b class="pn">2</b>Otras veces, pienso que ninguna de estas maravillas es suficiente. Ni <span class="hl t-r" data-g="95">el país de las maravillas</span> entero, con <span class="hl t-r" data-g="96">su liebre y su niño-cochinillo</span>, es suficiente.</p>
+<p class="tp" id="e2-3"><b class="pn">3</b>Agradezco intentando que la gratitud no sea una manera de <span class="hl t-v" data-g="97">minusvalorar</span> mi trabajo.</p>
+<p class="tp" id="e2-4"><b class="pn">4</b>Porque esto es una novela social que habla de trabajo. <span class="hl t-x" data-g="98">Quedan patentes las desigualdades</span>. <span class="hl t-x" data-g="99">Levanto de memoria</span> esta narración – es fácil con tantas flores aromáticas y <span class="hl t-v" data-g="100">el salitre</span> y el sabor de los alimentos, con la <span class="hl t-v" data-g="101">rentabilidad</span> literaria del estímulo sensorial –, porque me parece increíble que me hayan llegado a suceder estas cosas. Los acontecimientos en los que me moví como figura al fondo o en el centro de cada fotografía <span class="hl t-x" data-g="102">dan cuenta de una época</span>. <span class="hl t-j" data-g="103">Mis manualidades</span> están en la realidad y <span class="hl t-v" data-g="104">se filtran</span> por ella como el agua en el suelo. Peleo. Soy responsable.</p>
+<p class="tp" id="e2-5"><b class="pn">5</b>Todo huele a <span class="hl t-r" data-g="79">petricor</span>. Todo huele a una palabra.</p>
+<p class="tp" id="e2-6"><b class="pn">6</b>Experimento el placer de pronunciarla. Qué, qué increíble que todo esto me haya sucedido a mí. Casi estoy en la misma situación de quien ha visto un alienígena y <span class="hl t-v" data-g="105">ha de contarlo</span>, <span class="hl t-x" data-g="106">aunque ignore si</span> le van a creer. ¿Qué hacía yo en esos <span class="hl t-v" data-g="107">decorados</span> y paisajes?, ¿me lo merecía? O más exactamente, ¿se lo merece alguien en este mundo de <span class="hl t-v" data-g="108">borrones</span> y productos tóxicos, <span class="hl t-r" data-g="109">descampados y freidoras de aceite</span>?, ¿es obligatorio hablar desde la culpa y <span class="hl t-v" data-g="110">la expiación</span>?, ¿por qué solo algunas, las que llegan de <span class="hl t-x" data-g="111">los lugares no previsibles</span>, han de justificar sus <span class="hl t-v" data-g="112">ascensiones</span>, pero nunca <span class="hl t-v" data-g="113">lamentarse</span> de sus caídas?</p>
+<p class="tp" id="e2-7"><b class="pn">7</b>¿Cuándo sacarán <span class="hl t-v" data-g="114">las tijeritas</span> para eliminar del conjunto <span class="hl t-r" data-g="115">mi figura recortable</span>?</p>
+<p class="tp" id="e2-8"><b class="pn">8</b>¿Estoy sintiendo ya el corte sobre mi piel y, por eso, me reescribo y <span class="hl t-x" data-g="116">me repaso los contornos</span>?</p>
+<p class="gapline">[…]</p>
+<p class="tp" id="e2-10"><b class="pn">10</b>Quiero contar que he sido muy feliz. Y que he tenido mucho miedo. Y que ese miedo de perder la felicidad que se tiene es un sentimiento profundamente <span class="hl t-v" data-g="117">burgués</span>. Y que lo burgués es lo que hemos confundido, razonablemente, con lo humano.</p>
+<p class="tp" id="e2-11"><b class="pn">11</b>Quiero contar <span class="hl t-v" data-g="118">el desgaste</span>. Las mujeres somos condenadas a una humildad obligatoria y a una gratitud muy muy sincera. Sabemos que no somos casi nada y, si lo somos, es porque alguien <span class="hl t-x" data-g="119">nos ha abierto un hueco</span> que toda la vida tendremos que justificar. Nuestra <span class="hl t-v" data-g="120">listeza</span> da miedo. Nuestra listeza siempre es demasiada. <span class="hl t-v" data-g="121">Abruma</span>. Irrita.</p>
+<p class="tp" id="e2-12"><b class="pn">12</b>Quiero contar que quiero estar y <span class="hl t-x" data-g="122">que me dejen en paz</span>. Y eso es imposible.</p>
+<p class="tp" id="e2-13"><b class="pn">13</b>No quiero que mi gratitud hacia los otros <span class="hl t-v" data-g="123">aminore</span> la posibilidad de que mi trabajo haya sido un buen trabajo.</p>
+<p class="tp" id="e2-14"><b class="pn">14</b>Soy una <span class="hl t-v" data-g="124">malcriada</span>. Pero, sobre todo, una trabajadora <span class="hl t-v" data-g="125">feroz</span>.</p>
+<p class="tp" id="e2-15"><b class="pn">15</b><span class="hl t-r" data-g="126">Welsh, Moran, Ellroy</span>: los tres <span class="hl t-j" data-g="127">me habrán olvidado</span>. La elección del futuro perfecto es un acto de optimismo. Quizá <span class="hl t-j" data-g="128">me han olvidado</span> en pretérito perfecto. El tiempo verbal es otro acto de optimismo porque el pretérito perfecto se proyecta hacia el presente y, sin embargo, Irvine, Caitlin y James <span class="hl t-j" data-g="129">me olvidaron a los cinco minutos</span> de conocerme. Los tres me olvidaron, en un cerrado y redondo pretérito indefinido, a los cinco minutos de conocerme.</p>
+</div>
+  </div>
+  <div class="card co2" id="k-subj"><span class="kick">Tu gramática dentro del texto</span><h3>El subjuntivo en Sanz <small>enlaza con tu mapa del subjuntivo</small></h3>
+<ul class="sbj"><li><span class="sx">«qué mierda va a fluir el pensamiento, ojalá»</span><b>ojalá (fluyera)</b><small>wish — the verb is left out</small></li><li><span class="sx">«como si la rumiación fuese un demonio»</span><b>como si + imp. subj.</b><small>«fuese» = «fuera», the -se form, more literary</small></li><li><span class="sx">«aunque intuya que esa mezquindad coincide»</span><b>aunque + pres. subj.</b><small>admitted, not stressed</small></li><li><span class="sx">«me parece increíble que me hayan sucedido a mí»</span><b>reacción + que → subj.</b><small>perfect subjunctive (haya + participio)</small></li><li><span class="sx">«aunque a ratos caiga en la tentación»</span><b>aunque + pres. subj.</b></li><li><span class="sx">«intentando que la gratitud no sea una manera de minusvalorar»</span><b>intentar que + subj.</b><small>influence</small></li><li><span class="sx">«aunque ignore si le van a creer»</span><b>aunque + pres. subj.</b></li><li><span class="sx">«quiero estar y que me dejen en paz»</span><b>querer que + subj.</b><small>different subject → subjunctive</small></li><li><span class="sx">«No quiero que mi gratitud … aminore la posibilidad de que mi trabajo haya sido un buen trabajo»</span><b>no quiero que + subj. / la posibilidad de que + subj.</b><small>two subjunctives in a row</small></li></ul></div>
+  <div class="card so" id="k-qc"><div class="sec"><span class="kick">Para entenderlo</span><h2>Preguntas de comprensión</h2></div><ol class="qs2"><li><p class="qq"><b>1</b>¿Por qué no le gusta decir que el pensamiento «fluye»?</p><details class="ans"><summary>Ver respuesta</summary><p>Porque «fluir» suena fácil y pretencioso (un «alarde de pretenciosa facilidad»). Su pensamiento real se atasca, se pega y duele: hace bola y trombo, graniza.</p></details></li><li><p class="qq"><b>2</b>Enumera las imágenes del pensamiento obsesivo. ¿Qué tienen en común?</p><details class="ans"><summary>Ver respuesta</summary><p>Colesterol, trombo, tácticas terroristas, granizo, espesante, sustancia pegajosa de insectos, petróleo, arena movediza, engrudo. Todas son cosas que atrapan o atascan: lo contrario de algo que fluye.</p></details></li><li><p class="qq"><b>3</b>¿Cuál es la paradoja del §4?</p><details class="ans"><summary>Ver respuesta</summary><p>Siempre ha usado los libros para salir de sus problemas, pero ahora el problema que la obsesiona son los libros (editoriales, carrera, dinero). Usa un libro para salir de los libros.</p></details></li><li><p class="qq"><b>4</b>¿Por qué menciona a Alonso Quijano, Bovary y Ana Ozores?</p><details class="ans"><summary>Ver respuesta</summary><p>Son lectores que se volvieron locos o se perdieron por lo que leían. Ella dice que su problema no es ese: no se aliena con las historias, sino con la industria del libro.</p></details></li><li><p class="qq"><b>5</b>¿Qué significan la vallista y la futbolista del §8?</p><details class="ans"><summary>Ver respuesta</summary><p>Ve su carrera como una competición profesional: hay que rendir, y con la edad se puede «bajar de división». Además son mujeres juzgadas por su imagen (uñas, melena), como las escritoras.</p></details></li><li><p class="qq"><b>6</b>«No cree en la autonomía del campo cultural»: ¿qué quiere decir?</p><details class="ans"><summary>Ver respuesta</summary><p>Que la literatura no vive aparte del dinero, el mercado y la clase social: depende del papel, de las ventas, de las editoriales. Por eso habla de cuentas de resultados y escasez de papel.</p></details></li><li><p class="qq"><b>7</b>En «Petricor», ¿por qué la gratitud es un problema?</p><details class="ans"><summary>Ver respuesta</summary><p>Porque a las mujeres (y a las que vienen de abajo) se les exige estar agradecidas, y esa gratitud puede hacer pensar que su éxito fue un regalo y no fruto de su trabajo.</p></details></li><li><p class="qq"><b>8</b>¿Quiénes tienen que «justificar sus ascensiones»?</p><details class="ans"><summary>Ver respuesta</summary><p>Las que llegan de «lugares no previsibles»: mujeres de clase trabajadora. No pueden quejarse cuando caen, y su subida siempre parece sospechosa.</p></details></li><li><p class="qq"><b>9</b>Explica el final con los tres tiempos verbales.</p><details class="ans"><summary>Ver respuesta</summary><p>Futuro perfecto (me habrán olvidado) y pretérito perfecto (me han olvidado) dejan algo de relación con el presente: son «optimistas». El indefinido (me olvidaron a los cinco minutos) cierra la acción: la verdad es que la olvidaron enseguida.</p></details></li></ol></div>
+  <div class="card pr" id="k-qt"><div class="sec"><span class="kick">Para la clase de traducción</span><h2>Retos de traducción</h2></div><ol class="qs2"><li><p class="qq"><b>1</b>¿Cómo traducirías «qué mierda va a fluir el pensamiento, ojalá»?</p><details class="ans"><summary>Ver respuesta</summary><p>Hay que mantener el golpe de registro: «flow, my arse — I wish it did» (UK) o «flow? like hell it does — if only». No suavizarlo.</p></details></li><li><p class="qq"><b>2</b>«No soy una Alonso Quijano ni una Bovary ni una Ana Ozores»: ¿qué haces con Ana Ozores?</p><details class="ans"><summary>Ver respuesta</summary><p>Opciones: mantenerla (pierde a muchos lectores), «a Regenta» con una pista, o añadir «a Spanish Bovary». Y con «una Alonso Quijano» se pierde el juego del nombre real y el femenino si se escribe «a Don Quixote».</p></details></li><li><p class="qq"><b>3</b>«La paradoja se redobla entre los palillos del tambor»</p><details class="ans"><summary>Ver respuesta</summary><p>Buscar una palabra con doble sentido en inglés: «the paradox gets a drum roll», «the paradox doubles, beaten out on the drum»… La exactitud literal importa menos que mantener el juego.</p></details></li><li><p class="qq"><b>4</b>«Hace bola y trombo»</p><details class="ans"><summary>Ver respuesta</summary><p>«Se me hace bola» no existe en inglés. Posibles: «It forms a lump and clots», «it sticks in my throat and clots». Hay que elegir entre la comida y la medicina, o mezclar las dos.</p></details></li><li><p class="qq"><b>5</b>«Dónde están las llaves, matarile-rile-rile…»</p><details class="ans"><summary>Ver respuesta</summary><p>Opciones: dejarla en español en cursiva (sonido, color local), cambiarla por una canción infantil inglesa sobre llaves o puertas, o traducir la letra y mantener «matarile» como sonido.</p></details></li><li><p class="qq"><b>6</b>«Me dejo las tres cuartas partes de la osamenta»</p><details class="ans"><summary>Ver respuesta</summary><p>Es «dejarse la piel» llevado más lejos. En inglés: «I work three quarters of my bones away», «I work myself to the bone — three quarters of it».</p></details></li><li><p class="qq"><b>7</b>¿Cómo se traduce el juego de tiempos final si el inglés no tiene la misma distinción?</p><details class="ans"><summary>Ver respuesta</summary><p>El inglés tiene «will have forgotten», «have forgotten», «forgot», pero el futuro de probabilidad suena raro. Se puede mantener el nombre de los tiempos (future perfect, present perfect, simple past) porque el propio texto los nombra.</p></details></li></ol></div>
+  <div class="card" id="k-write">
+    <h2>✍︎ Mis notas</h2>
+    <p class="note">Tus dudas, tu lista de palabras, tu traducción. Se guarda en este iPad.</p>
+    <textarea id="draft" placeholder="Escribe aquí… o toca «＋ Mis notas» en una palabra" spellcheck="true" lang="es"></textarea>
+    <div class="wbar"><span class="wc" id="wc">0 palabras</span><span class="paras" id="paras"></span>
+      <button class="btn" id="undoBtn" type="button" disabled>↶ Deshacer</button><button class="btn" id="copyBtn" type="button">Copiar</button></div>
+  </div>
+</div>
+
+<div class="col">
+<div class="card co" id="k-s2"><div class="sec"><span class="kick">Fragmento 2 · estructura</span><h2>Gratitud y trabajo</h2></div>
+<p class="note">Toca un paso para ir a esos párrafos del texto.</p><ol class="steps"><li class="stp" data-p="e2-1" data-q="e2-3"><b class="sp">§1–3</b><div><h4>Gratitud y merecimiento</h4><p>Enumera las maravillas del éxito (Formentor, Cartagena, el parador) y no las da por supuestas. Agradece, pero otros también las merecen y no tienen «la llave». No quiere que la gratitud quite valor a su trabajo.</p></div></li><li class="stp" data-p="e2-4" data-q="e2-4"><b class="sp">§4</b><div><h4>«Una novela social que habla de trabajo»</h4><p>Escribe de memoria, con los sentidos. Su vida da cuenta de una época; sus libros se filtran en la realidad.</p></div></li><li class="stp" data-p="e2-5" data-q="e2-8"><b class="sp">§5–8</b><div><h4>Petricor y preguntas</h4><p>El placer de una palabra. Incredulidad: como haber visto un alienígena. ¿Lo merecía? ¿Por qué solo las que vienen de abajo tienen que justificar su subida? Miedo a ser recortada de la foto.</p></div></li><li class="stp" data-p="e2-10" data-q="e2-14"><b class="sp">§10–14</b><div><h4>«Quiero contar…»</h4><p>Felicidad y miedo a perderla (burgués = humano). El desgaste de las mujeres: humildad y gratitud obligatorias, «nuestra listeza da miedo». Quiere que la dejen en paz. «Malcriada», pero trabajadora feroz.</p></div></li><li class="stp" data-p="e2-15" data-q="e2-15"><b class="sp">§15</b><div><h4>Coda gramatical</h4><p>Welsh, Moran y Ellroy la olvidaron: futuro perfecto (optimista), pretérito perfecto (optimista), pretérito indefinido (la verdad: a los cinco minutos).</p></div></li></ol></div>
+<div class="card lt t-r" id="k-r2"><span class="kick">Fragmento 2</span><h3>Referencias culturales <small>10 · qué es y por qué está ahí</small></h3>
+<div class="gls full"><button type="button" class="gl t-r" data-g="79"><span class="ges">el petricor</span><span class="gen">petrichor</span><span class="gn">The smell of rain on dry earth. A rare, beautiful word: «Todo huele a una palabra».</span></button><button type="button" class="gl t-r" data-g="90"><span class="ges">Formentor</span><span class="gen">Formentor (Mallorca)</span><span class="gn">The Hotel Formentor in Mallorca, a luxury hotel linked to literature: the Conversaciones Literarias de Formentor and the Formentor prize. Gardens, bedrooms: the perks of literary success.</span></button><button type="button" class="gl t-r" data-g="91"><span class="ges">Cartagena de Indias</span><span class="gen">Cartagena (Colombia)</span><span class="gn">Colonial city on the Caribbean coast of Colombia, home of the Hay Festival Cartagena. «Ay» = a nostalgic sigh.</span></button><button type="button" class="gl t-r" data-g="92"><span class="ges">el parador de los Reyes Católicos</span><span class="gen">the Parador of the Catholic Monarchs (Santiago de Compostela)</span><span class="gn">Paradores are state-run luxury hotels in historic buildings. This one, next to Santiago cathedral, was a pilgrims&#x27; hospital built by Isabel and Fernando (1499).</span></button><button type="button" class="gl t-r" data-g="94"><span class="ges">«¿Dónde están las llaves?»</span><span class="gen">«Where are the keys?», a children&#x27;s song</span><span class="gn">Traditional Spanish children&#x27;s song and circle game. «Matarile-rile-rile / -rón» has no meaning: it&#x27;s a nonsense refrain everyone in Spain knows from childhood. Translation problem: an English nursery-rhyme refrain, or keep it with a note?</span></button><button type="button" class="gl t-r" data-g="95"><span class="ges">el país de las maravillas (Alicia)</span><span class="gen">Wonderland</span><span class="gn">Alice&#x27;s Adventures in Wonderland (Alicia en el país de las maravillas). Play on «maravillas»: her «wonders» → Wonderland.</span></button><button type="button" class="gl t-r" data-g="96"><span class="ges">la liebre y el niño-cochinillo</span><span class="gen">the March Hare and the baby that turns into a pig</span><span class="gn">In Alice, the Duchess&#x27;s baby turns into a pig. «Cochinillo» is also the roast suckling pig of Segovia: a local Spanish echo in English literature.</span></button><button type="button" class="gl t-r" data-g="109"><span class="ges">descampados y freidoras de aceite</span><span class="gen">waste ground and deep-fat fryers</span><span class="gn">Images of the working-class city outskirts — the «lugares no previsibles» she comes from, as opposed to Formentor and paradores.</span></button><button type="button" class="gl t-r" data-g="115"><span class="ges">la figura recortable</span><span class="gen">my cut-out paper figure</span><span class="gn">«Recortables» = cut-out paper dolls from children&#x27;s magazines. She imagines being cut out of the group photo of literary life.</span></button><button type="button" class="gl t-r" data-g="126"><span class="ges">Welsh, Moran, Ellroy</span><span class="gen">Irvine Welsh, Caitlin Moran, James Ellroy</span><span class="gn">Famous English-language authors she met (at festivals or literary events): Welsh (Trainspotting), Moran (How to Be a Woman), Ellroy (L.A. Confidential).</span></button></div></div>
+<div class="card lt t-j" id="k-j2"><span class="kick">Fragmento 2</span><h3>Juegos y estilo <small>5 · el reto para traducir</small></h3>
+<div class="gls full"><button type="button" class="gl t-j" data-g="88"><span class="ges">dejarse la piel → dejarse la osamenta</span><span class="gen">I leave three quarters of my skeleton behind (I work myself to the bone)</span><span class="gn">Twisted idiom: the normal phrase is «dejarse la piel» (to give it everything). She goes deeper than skin, to the bones, and measures it: «three quarters». English has «to work your fingers to the bone».</span></button><button type="button" class="gl t-j" data-g="103"><span class="ges">las manualidades</span><span class="gen">my arts and crafts</span><span class="gn">School «manualidades» (crafts with glue and scissors): a modest, almost childish word for her books. Links to «recortable» and «tijeritas».</span></button><button type="button" class="gl t-j" data-g="127"><span class="ges">futuro perfecto: me habrán olvidado</span><span class="gen">they&#x27;ll have forgotten me / they&#x27;ve probably forgotten me</span><span class="gn">Futuro perfecto of probability. She calls it «optimistic»: it implies they remembered her for a while.</span></button><button type="button" class="gl t-j" data-g="128"><span class="ges">pretérito perfecto: me han olvidado</span><span class="gen">they have forgotten me</span><span class="gn">Linked to the present: also «optimistic».</span></button><button type="button" class="gl t-j" data-g="129"><span class="ges">pretérito indefinido: me olvidaron</span><span class="gen">they forgot me five minutes after meeting me</span><span class="gn">The closed, finished past: the honest version. Grammar as a joke about fame.</span></button></div></div>
+<div class="card gr" id="k-tn"><span class="kick">Fragmento 2 · §15</span><h3>Tres tiempos, tres optimismos</h3>
+<p class="por">Sanz pone el mismo hecho («me olvidaron») en tres tiempos, del más esperanzado al más honesto:</p>
+<div class="tns"><div class="tn co"><b>me habrán olvidado</b><span class="tl2">futuro perfecto</span><i>they&#x27;ll have forgotten me / they&#x27;ve probably forgotten me</i><p>Probability now. «Optimista»: at least they remembered for a while.</p></div><div class="tn in"><b>me han olvidado</b><span class="tl2">pretérito perfecto</span><i>they have forgotten me</i><p>Past that touches the present. «Otro acto de optimismo».</p></div><div class="tn pr"><b>me olvidaron</b><span class="tl2">pretérito indefinido</span><i>they forgot me (five minutes after meeting me)</i><p>«Cerrado y redondo»: finished, no link to now. The bitter truth.</p></div></div>
+<p class="note">Para traducir: el inglés tiene <i>will have forgotten · have forgotten · forgot</i>, pero el futuro de probabilidad no existe igual. El texto nombra los tiempos, así que la traducción también puede nombrarlos.</p></div>
+<div class="card lt t-x" id="k-x2"><span class="kick">Fragmento 2</span><h3>Expresiones <small>14 · toca para verla en el texto</small></h3>
+<div class="gls full"><button type="button" class="gl t-x" data-g="81"><span class="ges">dar algo por supuesto</span><span class="gen">to take something for granted</span></button><button type="button" class="gl t-x" data-g="82"><span class="ges">me parece increíble que + subj.</span><span class="gen">I find it incredible that … have happened to me</span><span class="gn">Reaction + que → subjunctive (her grammar).</span></button><button type="button" class="gl t-x" data-g="83"><span class="ges">a ratos</span><span class="gen">at times, now and then</span></button><button type="button" class="gl t-x" data-g="84"><span class="ges">caer en la tentación de</span><span class="gen">to give in to the temptation to</span></button><button type="button" class="gl t-x" data-g="86"><span class="ges">se me pasa la borrachera</span><span class="gen">I sober up, the high wears off</span><span class="gn">Literal and figurative: the dazzle of success fades.</span></button><button type="button" class="gl t-x" data-g="89"><span class="ges">franquear el paso a alguien</span><span class="gen">to let someone through, to open the way</span><span class="gn">Formal. Normal: dejar pasar / abrir la puerta.</span></button><button type="button" class="gl t-x" data-g="98"><span class="ges">quedar patente</span><span class="gen">inequalities are laid bare / become obvious</span><span class="gn">Formal. patente = evident.</span></button><button type="button" class="gl t-x" data-g="99"><span class="ges">levantar de memoria</span><span class="gen">I build from memory</span><span class="gn">«levantar» = to put up (a building): narration as construction work.</span></button><button type="button" class="gl t-x" data-g="102"><span class="ges">dar cuenta de</span><span class="gen">to bear witness to, to give an account of</span></button><button type="button" class="gl t-x" data-g="106"><span class="ges">aunque + pres. subj.</span><span class="gen">even though they don&#x27;t know whether</span><span class="gn">«ignorar» = not to know (false friend: not «to ignore» = no hacer caso).</span></button><button type="button" class="gl t-x" data-g="111"><span class="ges">los lugares no previsibles</span><span class="gen">unexpected places (unlikely backgrounds)</span><span class="gn">People from a class or place where success isn&#x27;t expected: they must justify every rise.</span></button><button type="button" class="gl t-x" data-g="116"><span class="ges">repasar los contornos</span><span class="gen">to trace over my outlines</span><span class="gn">Like a child going over a drawing&#x27;s lines: writing herself again so as not to disappear.</span></button><button type="button" class="gl t-x" data-g="119"><span class="ges">abrir un hueco a alguien</span><span class="gen">to make room for someone</span></button><button type="button" class="gl t-x" data-g="122"><span class="ges">que me dejen en paz</span><span class="gen">(I want) to be left alone</span><span class="gn">Quiero que + subjunctive, like «quiero que me llames».</span></button></div></div>
+<div class="card lt t-v" id="k-v2"><span class="kick">Fragmento 2</span><h3>Vocabulario <small>22 · toca para verla en el texto</small></h3>
+<div class="gls"><button type="button" class="gl t-v" data-g="80"><span class="ges">enumerar</span><span class="gen">to list</span></button><button type="button" class="gl t-v" data-g="85"><span class="ges">el merecimiento</span><span class="gen">something deserved, merit</span></button><button type="button" class="gl t-v" data-g="87"><span class="ges">el efluvio</span><span class="gen">the scent, the fumes, the emanation</span></button><button type="button" class="gl t-v" data-g="93"><span class="ges">la llave electrónica</span><span class="gen">the key card (hotel)</span></button><button type="button" class="gl t-v" data-g="97"><span class="ges">minusvalorar</span><span class="gen">to undervalue, to underrate</span></button><button type="button" class="gl t-v" data-g="100"><span class="ges">el salitre</span><span class="gen">salt air, sea salt (saltpetre)</span></button><button type="button" class="gl t-v" data-g="101"><span class="ges">la rentabilidad</span><span class="gen">profitability</span></button><button type="button" class="gl t-v" data-g="104"><span class="ges">filtrarse</span><span class="gen">to seep, to filter through</span></button><button type="button" class="gl t-v" data-g="105"><span class="ges">haber de + infinitivo</span><span class="gen">has to tell it</span></button><button type="button" class="gl t-v" data-g="107"><span class="ges">el decorado</span><span class="gen">set (theatre, film), scenery</span></button><button type="button" class="gl t-v" data-g="108"><span class="ges">el borrón</span><span class="gen">smudge, blot</span></button><button type="button" class="gl t-v" data-g="110"><span class="ges">la expiación</span><span class="gen">atonement, expiation</span></button><button type="button" class="gl t-v" data-g="112"><span class="ges">la ascensión</span><span class="gen">ascent, rise</span></button><button type="button" class="gl t-v" data-g="113"><span class="ges">lamentarse de</span><span class="gen">to complain about, to lament</span></button><button type="button" class="gl t-v" data-g="114"><span class="ges">las tijeras / tijeritas</span><span class="gen">(little) scissors</span></button><button type="button" class="gl t-v" data-g="117"><span class="ges">burgués / burguesa</span><span class="gen">bourgeois, middle-class</span></button><button type="button" class="gl t-v" data-g="118"><span class="ges">el desgaste</span><span class="gen">wear and tear, exhaustion</span></button><button type="button" class="gl t-v" data-g="120"><span class="ges">la listeza</span><span class="gen">cleverness, smartness</span></button><button type="button" class="gl t-v" data-g="121"><span class="ges">abrumar</span><span class="gen">to overwhelm</span></button><button type="button" class="gl t-v" data-g="123"><span class="ges">aminorar</span><span class="gen">to reduce, to lessen</span></button><button type="button" class="gl t-v" data-g="124"><span class="ges">malcriado/a</span><span class="gen">spoilt</span></button><button type="button" class="gl t-v" data-g="125"><span class="ges">feroz</span><span class="gen">fierce, ferocious</span></button></div></div>
+</div>
+
+</div>
+</div>
+
+<div class="gloss" id="gloss" hidden role="dialog" aria-live="polite">
+  <div class="gh"><span class="gt"></span><button class="gx" type="button" aria-label="Cerrar">✕</button></div>
+  <div class="gw"></div><div class="ge"></div><p class="gq"></p><p class="gnote"></p>
+  <div class="ga"><button class="btn" id="gIn" type="button">Ver en el texto</button><button class="btn" id="gAdd" type="button">＋ Mis notas</button></div>
+</div>
+
+<div class="nav">
+  <div class="go" id="go">
+    <button type="button" data-go="all">Todo</button>
+    <button type="button" data-go="k-text" data-k="w">El texto</button>
+    <button type="button" data-go="info" data-k="gr">El libro</button>
+    <button type="button" data-go="k-s1" data-k="in">Fragmento 1</button>
+    <button type="button" data-go="k-r1" data-k="pr">Referencias 1</button>
+    <button type="button" data-go="k-v1" data-k="gr">Vocabulario 1</button>
+    <button type="button" data-go="k-s2" data-k="co">Fragmento 2</button>
+    <button type="button" data-go="k-r2" data-k="pr">Referencias 2</button>
+    <button type="button" data-go="k-tn" data-k="gr">Tres tiempos</button>
+    <button type="button" data-go="k-v2" data-k="gr">Vocabulario 2</button>
+    <button type="button" data-go="k-subj" data-k="co">Subjuntivo</button>
+    <button type="button" data-go="k-qc" data-k="so">Preguntas</button>
+    <button type="button" data-go="k-qt" data-k="pr">Traducción</button>
+    <button type="button" data-go="k-write">Mis notas</button>
+  </div>
+  <div class="zoom"><button class="btn" id="zo" type="button" aria-label="Alejar">−</button><button class="btn" id="zi" type="button" aria-label="Acercar">+</button></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+
+const view=document.getElementById('view'), board=document.getElementById('board');
+const MIN=0.05, MAX=2.6, PAGE='mapa-intimos', LO=0, HI=1e9;
+let s=1, x=0, y=0, anim=null, settleT=null;
+
+function apply(){
+  board.style.transform=`translate(${x}px,${y}px) scale(${s})`;
+  board.classList.add('moving');
+  clearTimeout(settleT);
+  settleT=setTimeout(()=>board.classList.remove('moving'),180); // re-rasterise text crisply at rest
+}
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+function zoomAt(f,cx,cy){ const ns=clamp(s*f,MIN,MAX); f=ns/s; x=cx-(cx-x)*f; y=cy-(cy-y)*f; s=ns; apply(); }
+function stopAnim(){ if(anim){cancelAnimationFrame(anim);anim=null;} }
+
+function insets(){
+  const t=document.querySelector('.top').getBoundingClientRect().bottom;
+  const b=document.querySelector('.nav').getBoundingClientRect().height;
+  return {t:t+16,b:b+16,l:16,r:16};
+}
+function worldRect(el){            // layout position, independent of the current zoom
+  let x0=0,y0=0,n=el;
+  while(n && n!==board){ x0+=n.offsetLeft; y0+=n.offsetTop; n=n.offsetParent; }
+  return {x:x0, y:y0, w:el.offsetWidth, h:el.offsetHeight};
+}
+function fitTarget(r,maxS,topW){
+  const vr=view.getBoundingClientRect(), i=insets(), aw=vr.width-i.l-i.r, ah=vr.height-i.t-i.b;
+  const ns=clamp(topW?Math.min(aw/r.w,maxS):Math.min(aw/r.w,ah/r.h,maxS),MIN,MAX);
+  return {s:ns, x:i.l+(aw-r.w*ns)/2-r.x*ns, y:(r.h*ns>ah ? i.t : i.t+(ah-r.h*ns)/2)-r.y*ns};
+}
+function flyTo(t,ms=650){
+  stopAnim();
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) ms=0;
+  const s0=s,x0=x,y0=y,t0=performance.now(), ease=k=>1-Math.pow(1-k,3);
+  (function step(now){
+    const k=ms?Math.min(1,((now||t0)-t0)/ms):1, e=ease(k);
+    s=Math.exp(Math.log(s0)+(Math.log(t.s)-Math.log(s0))*e); x=x0+(t.x-x0)*e; y=y0+(t.y-y0)*e; apply();
+    anim=k<1?requestAnimationFrame(step):null;
+  })();
+}
+function goAll(ms){ flyTo(fitTarget({x:0,y:0,w:board.offsetWidth,h:board.offsetHeight},1),ms); }
+function goEl(id,ms){
+  if(id==='all') return goAll(ms);
+  const el=document.getElementById(id); if(!el) return;
+  const tall=id==='k-text'||id==='info'||id==='c1'||id==='c2';
+  flyTo(fitTarget(worldRect(el), id==='k-text'?1:id==='k-write'?0.85:1.2, tall), ms);
+}
+
+/* ---- gestures ----
+   Touch and pencil: one finger only taps; two fingers pan and pinch (like FigJam, tldraw or a Google Map
+   embedded in a page), so the map never moves by accident. Mouse: drag pans. Trackpad: scroll pans, pinch zooms. */
+const pts=new Map(); let last=null, moved=0, pinch=null, hinted=false;
+const two=document.createElement('div');   // no two-finger notice on these maps
+let twoT, twoSeen=true;
+function hintTwo(){ if(twoSeen) return; twoSeen=true; try{localStorage.setItem(PAGE+'-two','1');}catch(_){} two.classList.add('on'); clearTimeout(twoT); twoT=setTimeout(()=>two.classList.remove('on'),1300); }
+let inField=false;
+view.addEventListener('pointerdown',e=>{
+  if(pts.size>=2) return;                                  // ignore a palm or third finger
+  // a finger on the text or a button still counts for a two-finger pinch, but is not captured,
+  // so a single tap keeps placing the cursor or pressing the button as usual
+  const field=!!e.target.closest('textarea,button,summary');
+  if(field && e.pointerType==='mouse') return;
+  stopAnim();
+  if(!field){ try{ view.setPointerCapture(e.pointerId); }catch(_){} }
+  if(pts.size===0) inField=field;
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY,type:e.pointerType});
+  if(e.pointerType!=='mouse') lastTouch=performance.now();
+  if(pts.size===1){ last={x:e.clientX,y:e.clientY}; moved=0; hinted=false; }
+  if(pts.size===2){ const [a,b]=[...pts.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y),cx:(a.x+b.x)/2,cy:(a.y+b.y)/2};
+    moved=99; hinted=true; two.classList.remove('on'); }
+  if(e.pointerType==='mouse') view.classList.add('grabbing');
+});
+addEventListener('pointermove',e=>{
+  const p=pts.get(e.pointerId); if(!p) return;
+  p.x=e.clientX; p.y=e.clientY;
+  if(pts.size===2 && pinch){
+    const [a,b]=[...pts.values()], d=Math.hypot(a.x-b.x,a.y-b.y), cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
+    x+=cx-pinch.cx; y+=cy-pinch.cy;
+    zoomAt(d/pinch.d,cx,cy);   // #view is fixed at 0,0: no layout read per frame
+    pinch={d,cx,cy};
+  } else if(pts.size===1 && last){
+    const dx=e.clientX-last.x, dy=e.clientY-last.y;
+    moved+=Math.abs(dx)+Math.abs(dy);
+    last={x:e.clientX,y:e.clientY};
+    if(p.type==='mouse'){ x+=dx; y+=dy; apply(); }
+    else if(moved>14 && !hinted && !inField){ hinted=true; hintTwo(); }
+  }
+});
+function up(e){
+  if(!pts.has(e.pointerId)) return;
+  pts.delete(e.pointerId);
+  if(pts.size===1){                                        // one finger of a pinch lifted: stop, don't pan
+    pinch=null; const q=[...pts.values()][0]; last={x:q.x,y:q.y}; return;
+  }
+  if(pts.size===0){ pinch=null; view.classList.remove('grabbing'); }   // no glide: the map stops where the fingers left it
+}
+addEventListener('pointerup',up); addEventListener('pointercancel',up);
+/* Trackpad and mouse wheel. Chrome, Edge and Firefox send a trackpad pinch as ctrl+wheel; scroll pans.
+   ZOOM_SPEED 0.02 = twice the browser's own pinch rate, which felt sluggish on a big board.
+   Line and page deltas (some mice) become pixels; one wheel notch is capped so a mouse doesn't jump. */
+const ZOOM_SPEED=0.02;
+let gs=null, lastTouch=-1e9;
+view.addEventListener('wheel',e=>{
+  e.preventDefault(); stopAnim();
+  if(gs!==null) return;                                    // Safari pinch in progress: the gesture events zoom
+  const k=e.deltaMode===1?16:e.deltaMode===2?view.clientHeight:1;
+  if(e.ctrlKey||e.metaKey) zoomAt(Math.exp(-clamp(e.deltaY*k,-20,20)*ZOOM_SPEED),e.clientX,e.clientY);
+  else { x-=e.deltaX*k; y-=e.deltaY*k; apply(); }
+},{passive:false});
+/* Safari on the Mac (and an iPad with a trackpad) sends a pinch as gesturestart/change/end with a cumulative
+   scale, not as ctrl+wheel. On a touch screen the pointer code already handles the pinch, so a gesture that
+   comes with or right after a finger is ignored (otherwise iPad and iPhone would zoom twice). */
+document.addEventListener('gesturestart',e=>{ e.preventDefault(); if(pts.size||performance.now()-lastTouch<800) return; stopAnim(); gs=e.scale||1; });
+document.addEventListener('gesturechange',e=>{ e.preventDefault(); if(gs===null) return; const sc=e.scale||1; zoomAt(Math.pow(sc/gs,1.4),e.clientX,e.clientY); gs=sc; });
+document.addEventListener('gestureend',e=>{ e.preventDefault(); gs=null; });
+function zoomCenter(f){ const vr=view.getBoundingClientRect(), ns=clamp(s*f,MIN,MAX);
+  flyTo({s:ns, x:vr.width/2-(vr.width/2-x)*ns/s, y:vr.height/2-(vr.height/2-y)*ns/s},300); }
+document.getElementById('zi').onclick=()=>zoomCenter(1.5);
+document.getElementById('zo').onclick=()=>zoomCenter(1/1.5);
+
+// the board moves only by transform; never let the browser scroll the container (hash links, focus)
+const unscroll=()=>{ if(view.scrollTop||view.scrollLeft){ view.scrollTop=0; view.scrollLeft=0; } };
+view.addEventListener('scroll',unscroll);
+
+
+/* ---- mini dictionary EN ⇄ ES: topic words + everyday base; anything else → WordReference in a small window ---- */
+const TOPIC=`la temporada|season, spell, stretch of time;reparar en algo|to notice, to become aware of;forzarse|is forced (is made by effort);suceder|to happen;el alarde (de)|show, display (showing off);pretencioso/a|pretentious;qué mierda va a fluir…|flow, my arse! — I wish it did;quedarse pegado a|to get stuck to;la carótida|carotid artery;hacer bola y trombo|it forms a lump and a clot;atravesar|to go through, to cross;pillar a alguien en falta|to catch someone out / red-handed;indigno/a de|unworthy of, beneath (me);ser más fuerte que yo|I can't help it;carecer de|to lack;granizar|it hails inside me;congelar|to freeze;el picahielos de Sharon Stone|Sharon Stone's ice pick;no es un torrente|it isn't a film, it isn't a torrent;el liquidillo|a little bit of liquid;el algodón hidrófilo|cotton wool (UK), absorbent cotton;digámoslo de una vez|let's just say it, let's be honest;el espesante|thickener;pegajoso/a|sticky;segregar|to secrete;la arena movediza|quicksand;el engrudo|paste (flour-and-water glue), a sticky mess;el compuesto asqueroso|disgusting compounds;la desdicha|misfortune;infraestructural|material, economic (Marxist «base»);el empeño|the effort, the undertaking;más … que de costumbre|more … than usual;la paradoja se redobla entre los palillos del tambor|the paradox doubles — a drum roll between the drumsticks;exorcizarme / el demonio|to exorcise myself;la rumiación|rumination, obsessive overthinking;enajenarse|to lose oneself, to go out of one's mind;una Alonso Quijano|a (female) Don Quixote;una Bovary|an Emma Bovary;una Ana Ozores|an Ana Ozores;el narrador testigo|witness narrator;la autoficción|autofiction;la paz mundial|world peace;la editorial|publishing house, publisher;el agasajo|lavish hospitality, being wined and dined;tener cuentas pendientes|unfinished business, scores to settle;la lista de la compra|shopping lists;aterrador/a|terrifying;los cien metros vallas|the 100-metre hurdles;la uña|nail (fingernail);Gail Devers|Gail Devers;correr el riesgo de|to run the risk of;bajar a segunda o a tercera regional|be relegated to the second division or to the lowest local league;la melena|long hair, mane;difuminar|to blur, to fade;dejar de estar de moda|will go out of fashion;las licantropías|its beautiful lycanthropies (werewolf transformations);abordar|to tackle, to approach (a topic);caber|to fit, to have a place;el ensanchamiento|widening, broadening;heteropatriarcal|heteropatriarchal;esclerotizado/a|hardened, ossified;el bucle|loop;la escasez de papel|the paper shortage;la pertinencia|relevance, appropriateness;estilo sílfide / estilo selvático|a sylph-like (slim) style versus a jungle (dense) style;la memoria vegetal (Umberto Eco)|«vegetable memory»;acuñar|to coin (a word, a phrase);el oficio|trade, craft, job;la mezquindad|pettiness, meanness;la cuenta de resultados|the profit-and-loss account, the bottom line;la probeta medidora|measuring cylinder (lab);el ascenso|promotion;la autonomía del campo cultural|the autonomy of the cultural field;abrirse camino|to make one's way;el machete mellado|a little blunt, chipped machete;el petricor|petrichor;enumerar|to list;dar algo por supuesto|to take something for granted;a ratos|at times, now and then;caer en la tentación de|to give in to the temptation to;el merecimiento|something deserved, merit;se me pasa la borrachera|I sober up, the high wears off;el efluvio|the scent, the fumes, the emanation;dejarse la piel → dejarse la osamenta|I leave three quarters of my skeleton behind (I work myself to the bone);franquear el paso a alguien|to let someone through, to open the way;Formentor|Formentor (Mallorca);Cartagena de Indias|Cartagena (Colombia);el parador de los Reyes Católicos|the Parador of the Catholic Monarchs (Santiago de Compostela);la llave electrónica|the key card (hotel);«¿Dónde están las llaves?»|«Where are the keys?», a children's song;el país de las maravillas (Alicia)|Wonderland;la liebre y el niño-cochinillo|the March Hare and the baby that turns into a pig;minusvalorar|to undervalue, to underrate;quedar patente|inequalities are laid bare / become obvious;levantar de memoria|I build from memory;el salitre|salt air, sea salt (saltpetre);la rentabilidad|profitability;dar cuenta de|to bear witness to, to give an account of;las manualidades|my arts and crafts;filtrarse|to seep, to filter through;el decorado|set (theatre, film), scenery;el borrón|smudge, blot;descampados y freidoras de aceite|waste ground and deep-fat fryers;la expiación|atonement, expiation;los lugares no previsibles|unexpected places (unlikely backgrounds);la ascensión|ascent, rise;lamentarse de|to complain about, to lament;las tijeras / tijeritas|(little) scissors;la figura recortable|my cut-out paper figure;repasar los contornos|to trace over my outlines;burgués / burguesa|bourgeois, middle-class;el desgaste|wear and tear, exhaustion;abrir un hueco a alguien|to make room for someone;la listeza|cleverness, smartness;abrumar|to overwhelm;que me dejen en paz|(I want) to be left alone;aminorar|to reduce, to lessen;malcriado/a|spoilt;feroz|fierce, ferocious;Welsh, Moran, Ellroy|Irvine Welsh, Caitlin Moran, James Ellroy;futuro perfecto: me habrán olvidado|they'll have forgotten me / they've probably forgotten me;pretérito perfecto: me han olvidado|they have forgotten me;pretérito indefinido: me olvidaron|they forgot me five minutes after meeting me`;
+const BASE=`ser|to be (who, what);estar|to be (where, how);tener|to have;haber (hay)|there is, there are;hacer|to do, to make;ir|to go;venir|to come;volver|to come back, to return;salir|to go out, to leave;llegar|to arrive;entrar|to go in, to enter;quedarse|to stay;quedar|to meet up, to be left;irse|to leave, to go away;marcharse|to leave;subir|to go up, to get on;bajar|to go down, to get off;caer|to fall;caerse|to fall over;correr|to run;andar|to walk;caminar|to walk;pasear|to go for a walk;nadar|to swim;volar|to fly;viajar|to travel;conducir|to drive;coger|to take, to catch;tomar|to take, to have (drink);llevar|to carry, to wear, to take;traer|to bring;mover|to move;mudarse|to move house;cambiar|to change;poner|to put;ponerse|to put on, to become;quitar|to take away, to remove;dejar|to leave, to let, to lend;dar|to give;recibir|to receive;enviar|to send;mandar|to send, to order;coger el avión|to take the plane;perder|to lose, to miss;encontrar|to find;buscar|to look for; vivir|to live;trabajar|to work;estudiar|to study;aprender|to learn;enseñar|to teach, to show;hablar|to speak, to talk;decir|to say, to tell;contar|to tell, to count;explicar|to explain;preguntar|to ask (a question);pedir|to ask for, to order;contestar|to answer;responder|to reply;llamar|to call;escribir|to write;leer|to read;escuchar|to listen;oír|to hear;ver|to see, to watch;mirar|to look at;parecer|to seem;sentir|to feel, to be sorry;sentirse|to feel (well, bad);pensar|to think;creer|to believe, to think;saber|to know (facts), to know how;conocer|to know (people, places), to meet;entender|to understand;comprender|to understand;recordar|to remember;acordarse de|to remember;olvidar|to forget;decidir|to decide;elegir|to choose;intentar|to try;tratar de|to try to;conseguir|to get, to manage;lograr|to achieve;poder|to be able to, can;deber|must, should, to owe;querer|to want, to love;gustar|to like;encantar|to love (things);odiar|to hate;preferir|to prefer;necesitar|to need;esperar|to wait, to hope, to expect;empezar|to start, to begin;terminar|to finish, to end;acabar|to finish;seguir|to follow, to keep on;continuar|to continue;parar|to stop;dejar de|to stop (doing);volver a|to do again;soler|to usually do; comer|to eat;beber|to drink;cocinar|to cook;desayunar|to have breakfast;comer fuera|to eat out;cenar|to have dinner;probar|to try, to taste;comprar|to buy;vender|to sell;pagar|to pay;costar|to cost;gastar|to spend (money);ahorrar|to save (money);ganar|to earn, to win;cobrar|to charge, to get paid;alquilar|to rent;reservar|to book; dormir|to sleep;despertarse|to wake up;levantarse|to get up;acostarse|to go to bed;ducharse|to have a shower;vestirse|to get dressed;arreglarse|to get ready;maquillarse|to put on make-up;peinarse|to do your hair;descansar|to rest;relajarse|to relax; jugar|to play (a game);tocar|to touch, to play (an instrument);bailar|to dance;cantar|to sing;reír|to laugh;sonreír|to smile;llorar|to cry;gritar|to shout;besar|to kiss;abrazar|to hug;ayudar|to help;cuidar|to look after;proteger|to protect;compartir|to share;invitar|to invite;celebrar|to celebrate;quejarse|to complain; abrir|to open;cerrar|to close;romper|to break;arreglar|to fix;limpiar|to clean;lavar|to wash;usar|to use;utilizar|to use;funcionar|to work (a machine);llenar|to fill;vaciar|to empty;cortar|to cut;construir|to build;crear|to create;crecer|to grow;nacer|to be born;morir|to die;matar|to kill;sufrir|to suffer;doler|to hurt, to ache;enfermar|to get ill;curar|to cure, to heal; ocurrir|to happen;pasar|to happen, to pass, to spend (time);suceder|to happen;existir|to exist;faltar|to be missing, to lack;sobrar|to be left over;bastar|to be enough;depender de|to depend on;tener que|to have to;hay que|one must;tener ganas de|to feel like;tener miedo|to be afraid;tener razón|to be right;tener suerte|to be lucky;tener prisa|to be in a hurry; el avión|plane;el aeropuerto|airport;el vuelo|flight;el billete|ticket;la maleta|suitcase;el equipaje|luggage;el tren|train;el coche|car;el autobús|bus;el metro|underground, metro;el taxi|taxi;el barco|boat, ship;el hotel|hotel;el viaje|trip, journey;las vacaciones|holidays;el pasaporte|passport;el retraso|delay;cancelar|to cancel; la persona|person;la gente|people;el hombre|man;la mujer|woman;el chico|boy, guy;la chica|girl;el niño|child, boy;la niña|child, girl;el bebé|baby;el amigo|friend (m);la amiga|friend (f);el vecino|neighbour;el jefe|boss;el compañero|colleague, classmate;la familia|family;la madre|mother;el padre|father;los padres|parents;el hermano|brother;la hermana|sister;el hijo|son;la hija|daughter;el marido|husband;la mujer (esposa)|wife; el cuerpo|body;la cabeza|head;la cara|face;los ojos|eyes;la boca|mouth;el pelo|hair;la mano|hand;el brazo|arm;la pierna|leg;el pie|foot;el corazón|heart;la piel|skin;la espalda|back;el estómago|stomach;la salud|health;el médico|doctor;la enfermedad|illness;el dolor|pain; la casa|house, home;el piso|flat, apartment;la habitación|room;la cocina|kitchen;el baño|bathroom;la puerta|door;la ventana|window;la mesa|table;la silla|chair;la cama|bed;la ciudad|city;el pueblo|village, town;el barrio|neighbourhood;la calle|street;el país|country;el mundo|world;el campo|countryside, field;el mar|sea;la playa|beach;la montaña|mountain;el río|river; el tiempo|time, weather;el momento|moment;la vez|time (occasion);el día|day;la semana|week;el mes|month;el año|year;la hora|hour, time;el minuto|minute;hoy|today;ayer|yesterday;mañana|tomorrow;ahora|now;antes|before;después|after, afterwards;luego|later, then;siempre|always;nunca|never;a veces|sometimes;todavía|still, yet;ya|already;pronto|soon;tarde|late;temprano|early;de repente|suddenly;hace un año|a year ago;el año pasado|last year;el año que viene|next year; el trabajo|work, job;la empresa|company;la oficina|office;la reunión|meeting;el dinero|money;el precio|price;la tienda|shop;el problema|problem;la solución|solution;la idea|idea;la razón|reason;la verdad|truth;la mentira|lie;la vida|life;la muerte|death;el amor|love;la suerte|luck;el miedo|fear;la fiesta|party;el regalo|present, gift;la foto|photo;el móvil|mobile phone;la noticia|piece of news;el sueño|dream, sleepiness; la comida|food, lunch;la cena|dinner;el desayuno|breakfast;el agua|water;el vino|wine;la cerveza|beer;el café|coffee;el pan|bread;la carne|meat;el pescado|fish (food);la fruta|fruit;la verdura|vegetables;el huevo|egg;el queso|cheese; bueno|good;malo|bad;mejor|better, best;peor|worse, worst;grande|big;pequeño|small;nuevo|new;viejo|old;joven|young;guapo|good-looking;feo|ugly;bonito|pretty, nice;delgado|thin, slim;gordo|fat;alto|tall, high;bajo|short, low;fuerte|strong;débil|weak;rico|rich, tasty;pobre|poor;caro|expensive;barato|cheap;fácil|easy;difícil|difficult;importante|important;necesario|necessary;posible|possible;imposible|impossible;seguro|sure, safe;peligroso|dangerous;libre|free (not busy);gratis|free (no cost);lleno|full;vacío|empty;cansado|tired;enfadado|angry;triste|sad;feliz|happy;contento|glad, happy;preocupado|worried;nervioso|nervous;tranquilo|calm, quiet;aburrido|bored, boring;divertido|fun, funny;raro|strange;normal|normal;listo|clever, ready;tonto|silly, stupid;amable|kind;simpático|nice, friendly; muy|very;mucho|a lot, much;poco|a little;bastante|quite, enough;demasiado|too, too much;más|more;menos|less;también|also, too;tampoco|neither, not either;solo|only;casi|almost;incluso|even;quizás|maybe, perhaps;tal vez|maybe;a lo mejor|maybe;y|and;o|or;pero|but;porque|because;como|as, since, like;si|if;aunque|although, even if;entonces|then, so;así que|so;por eso|that's why;sin embargo|however;además|besides, moreover;con|with;sin|without;para|for, in order to;por|for, because of, through;hasta|until, up to;desde|since, from;durante|during;mientras|while;cuando|when;donde|where;nadie|nobody;nada|nothing;algo|something;alguien|someone;todo|everything, all;cada|each, every;otro|other, another;la mosca|fly (insect)`;
+const WR_EN='enes', WR_TL='esen';
+const DICT=(()=>{ const seen=new Set(), out=[];
+  (TOPIC+';'+BASE).split(';').map(s=>s.trim()).filter(Boolean).forEach(s=>{ const [es,en]=s.split('|'); if(!en||seen.has(es)) return; seen.add(es); out.push({es,en}); });
+  return out; })();
+const fold=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+const ART=/^(el|la|los|las) /;
+DICT.forEach(d=>{ d.fe=fold(d.es.replace(ART,'')); d.fn=fold(d.en).split(/,\s*/).map(x=>x.replace(/^to /,'').replace(/\s*\(.*\)$/,'')); });
+/* English forms → the dictionary form: flew → fly, dresses → dress, crying → cry */
+const IRR={flew:'fly',flown:'fly',went:'go',gone:'go',ate:'eat',eaten:'eat',drank:'drink',saw:'see',seen:'see',took:'take',taken:'take',gave:'give',given:'give',came:'come',got:'get',made:'make',said:'say',told:'tell',thought:'think',knew:'know',known:'know',felt:'feel',left:'leave',met:'meet',bought:'buy',brought:'bring',fell:'fall',fallen:'fall',broke:'break',broken:'break',wore:'wear',worn:'wear',ran:'run',swam:'swim',sang:'sing',slept:'sleep',woke:'wake',wrote:'write',written:'write',spoke:'speak',spoken:'speak',tore:'tear',torn:'tear',lost:'lose',found:'find',kept:'keep',began:'begin',begun:'begin',chose:'choose',chosen:'choose',forgot:'forget',forgotten:'forget',understood:'understand',sold:'sell',paid:'pay',spent:'spend',won:'win',did:'do',done:'do',was:'be',were:'be',been:'be',had:'have',sent:'send',stood:'stand',sat:'sit',lay:'lie',hurt:'hurt',grew:'grow',grown:'grow',drove:'drive',driven:'drive',rode:'ride',hid:'hide',hidden:'hide',shook:'shake',caught:'catch',taught:'teach',fought:'fight',built:'build',cut:'cut',put:'put',children:'child',women:'woman',men:'man',feet:'foot',teeth:'tooth',people:'person'};
+function forms(q){
+  const f=new Set([q]); if(IRR[q]) f.add(IRR[q]);
+  if(!/\s/.test(q) && q.length>3){
+    [[/ies$/,'y'],[/ied$/,'y'],[/(ss|sh|ch|x|o)es$/,'$1'],[/s$/,''],[/ing$/,''],[/ing$/,'e'],[/(.)\1ing$/,'$1'],[/ed$/,''],[/ed$/,'e'],[/(.)\1ed$/,'$1']]
+      .forEach(([r,t])=>{ if(r.test(q)) f.add(q.replace(r,t)); });
+  }
+  return [...f];
+}
+const dq=document.getElementById('dq'), dres=document.getElementById('dres'), dl=document.getElementById('dl'), dwr=document.getElementById('dwr');
+function dscore(d,qs){
+  let best=9;
+  qs.forEach((q,i)=>{ const p=i?1:0;                         // an inflected form ranks just below the exact word
+    const try1=w=>{ if(w===q) best=Math.min(best,p); else if(w.startsWith(q)) best=Math.min(best,p+2); else if(w.split(/\s+/).some(x=>x===q)) best=Math.min(best,p+3); else if(q.length>2&&(w.split(/\s+/).some(x=>x.startsWith(q))||w.includes(' '+q))) best=Math.min(best,p+4); };
+    try1(d.fe); d.fn.forEach(try1); });
+  return best;
+}
+/* WordReference opens in a small pop-up window over the map, not a new tab.
+   It cannot be embedded in the page: inside an iframe it only says "WordReference needs cookies" (third-party
+   cookies are blocked; Safari always blocks them) — tested 2026-11-25. iPad Safari ignores window sizes and
+   opens a tab; a blocked pop-up falls back to the link's normal new tab. */
+function openWR(word,dict){
+  const url='https://www.wordreference.com/'+dict+'/'+encodeURIComponent(word);
+  const w=Math.min(560,screen.availWidth-40), h=Math.min(720,screen.availHeight-80);
+  const win=window.open(url,'wordreference','popup=yes,width='+w+',height='+h+',left='+(screen.availWidth-w-20)+',top=60');
+  if(!win) return false;
+  try{ win.focus(); }catch(_){}
+  dres.hidden=true; dq.blur(); return true;
+}
+let wrDict=WR_EN;
+dwr.addEventListener('click',e=>{ if(openWR(dq.value.trim(),wrDict)) e.preventDefault(); });
+function dsearch(){
+  const raw=dq.value.trim(), q=fold(raw).replace(/^to /,'');
+  if(!q){ dres.hidden=true; return; }
+  const qs=forms(q);
+  const hits=DICT.map(d=>[dscore(d,qs),d]).filter(r=>r[0]<9).sort((a,b)=>a[0]-b[0]||a[1].es.length-b[1].es.length).slice(0,8);
+  dl.innerHTML='';
+  if(!hits.length){ const n=document.createElement('div'); n.className='none'; n.textContent='No está en la lista. Búscala en WordReference ↓'; dl.appendChild(n); }
+  hits.forEach(([,d])=>{
+    const b=document.createElement('button'); b.type='button'; b.className='dr';
+    const m=d.es.match(ART), es=document.createElement('span'); es.className='es';
+    if(m){ const sm=document.createElement('small'); sm.textContent=m[1]; es.appendChild(sm); }
+    es.appendChild(document.createTextNode(d.es.replace(ART,'')));
+    const en=document.createElement('span'); en.className='en'; en.textContent=d.en;
+    b.append(es,en);
+    b.onclick=()=>{ insert(d.es.replace(/ \(.*\)$/,'')+' '); dres.hidden=true; dq.blur(); };
+    dl.appendChild(b);
+  });
+  const tlFirst=hits.length && hits[0][1].fe.startsWith(q) && !hits[0][1].fn.some(w=>w.startsWith(q));
+  wrDict=tlFirst?WR_TL:WR_EN;
+  dwr.href='https://www.wordreference.com/'+wrDict+'/'+encodeURIComponent(raw);
+  dwr.textContent='«'+raw+'» en WordReference ↗';
+  dres.hidden=false;
+}
+dq.addEventListener('input',dsearch);
+dq.addEventListener('focus',()=>{ if(dq.value.trim()) dsearch(); });
+dq.addEventListener('keydown',e=>{ if(e.key==='Escape'){ dres.hidden=true; dq.blur(); } if(e.key==='Enter'){ const f=dl.querySelector('.dr'); if(f) f.click(); else openWR(dq.value.trim(),wrDict); } });
+document.addEventListener('pointerdown',e=>{ if(!e.target.closest('#dict')) dres.hidden=true; });
+
+
+
+/* ---- glossary: tap a marked word in the text, or an entry around it ---- */
+const G=[["x", 1, "Llevo muchas noches", "llevar + tiempo + gerundio", "I've spent many nights (…-ing)", "Periphrasis from her course: «llevo muchas noches reparando» = I've been noticing for many nights. English uses the present perfect continuous."], ["v", 1, "temporada", "la temporada", "season, spell, stretch of time", ""], ["v", 1, "reparando en", "reparar en algo", "to notice, to become aware of", "Formal. Not «reparar» = to repair. Normal speech: darse cuenta de."], ["v", 1, "se fuerza", "forzarse", "is forced (is made by effort)", ""], ["v", 1, "sucede", "suceder", "to happen", "Formal synonym of pasar / ocurrir. Comes back in extract 2: «me hayan sucedido a mí»."], ["v", 1, "alarde", "el alarde (de)", "show, display (showing off)", "hacer alarde de = to show off about."], ["v", 1, "pretenciosa", "pretencioso/a", "pretentious", ""], ["x", 1, "qué mierda va a fluir el pensamiento, ojalá", "qué mierda va a fluir…", "flow, my arse! — I wish it did", "Colloquial, vulgar. «Qué + noun + va a + verb» = rhetorical denial (¡Qué va a llover! = Rain? No way). The sudden swear word breaks the cultured register: that clash IS Sanz's voice. «ojalá» = «I wish it did flow»."], ["v", 1, "pegado", "quedarse pegado a", "to get stuck to", ""], ["v", 1, "carótida", "la carótida", "carotid artery", "Medical vocabulary: the thought is a disease of the body (colesterol, arterias, trombo)."], ["j", 1, "Hace bola y trombo", "hacer bola y trombo", "it forms a lump and a clot", "«Hacer bola» / «se me hace bola» = food that forms a lump in your mouth and won't go down (also: something you can't bear any more). «Trombo» = a blood clot (medical). Everyday kitchen phrase + medical word: hard to keep both in English (\"it gets stuck in my throat and clots\")."], ["v", 1, "atraviesa", "atravesar", "to go through, to cross", ""], ["x", 1, "lo pillo en falta", "pillar a alguien en falta", "to catch someone out / red-handed", "Colloquial «pillar» = to catch (Spain). «En falta» = doing something wrong."], ["v", 1, "indignos de mí", "indigno/a de", "unworthy of, beneath (me)", ""], ["x", 1, "es más fuerte que yo", "ser más fuerte que yo", "I can't help it", "Fixed expression: something you can't control."], ["v", 1, "Carezco de", "carecer de", "to lack", "Formal (yo carezco). Normal speech: no tengo."], ["v", 1, "No logro", "no lograr + infinitivo", "I can't manage to", "lograr = conseguir."], ["j", 1, "me graniza por dentro", "granizar", "it hails inside me", "«Granizar» is weather-only (graniza = it's hailing). Sanz gives it a person: «me graniza». Thought doesn't flow like water — it hits like hail. Inventive, keep the image in English."], ["v", 1, "congelarlo", "congelar", "to freeze", ""], ["r", 1, "el picahielos de Sharon Stone", "el picahielos de Sharon Stone", "Sharon Stone's ice pick", "Basic Instinct (Instinto básico, 1992): the killer uses an ice pick. Pop-film reference next to medical words: highbrow and popular mixed, as the course brief says. Freeze the thought into an image (ice) and smash it."], ["j", 1, "No es una proyección cinematográfica. No es un torrente.", "no es un torrente", "it isn't a film, it isn't a torrent", "Against «flujo de conciencia» (stream of consciousness): her thought is not a film running or water rushing. Same attack as «fluye» in §1."], ["v", 1, "liquidillo", "el liquidillo", "a little bit of liquid", "-illo = diminutive, slightly dismissive."], ["v", 1, "algodón hidrófilo", "el algodón hidrófilo", "cotton wool (UK), absorbent cotton", "The chemist's cotton wool. Everyday Spanish object with a technical name."], ["x", 1, "digámoslo de una vez", "digámoslo de una vez", "let's just say it, let's be honest", "Imperative of «nosotros» (digamos) + lo. Conversational aside to the reader."], ["v", 1, "espesante", "el espesante", "thickener", "Cooking/industrial word: a thickening agent."], ["v", 1, "pegajosa", "pegajoso/a", "sticky", ""], ["v", 1, "segregan", "segregar", "to secrete", ""], ["v", 1, "Arena movediza", "la arena movediza", "quicksand", ""], ["v", 1, "engrudo", "el engrudo", "paste (flour-and-water glue); a sticky mess", "The homemade glue of school crafts. Ends the sticky series: espesante, sustancia pegajosa, petróleo, arena movediza, engrudo."], ["v", 1, "compuestos asquerosos", "el compuesto asqueroso", "disgusting compounds", "Chemistry word: love, illness and fear are «compounds» she has to get out of."], ["v", 1, "desdichas", "la desdicha", "misfortune", ""], ["r", 1, "infraestructurales", "infraestructural", "material, economic (Marxist «base»)", "In Marxist theory the «infraestructura» (base) is the economy and material conditions; culture is the «superestructura». Sanz uses it on purpose — her writing looks at money and class. She discusses the word herself in §8."], ["v", 1, "el empeño", "el empeño", "the effort, the undertaking", ""], ["x", 1, "que de costumbre", "más … que de costumbre", "more … than usual", ""], ["j", 1, "la paradoja se redobla entre los palillos del tambor", "la paradoja se redobla entre los palillos del tambor", "the paradox doubles — a drum roll between the drumsticks", "Pun: «redoblarse» = to double, and «redoble» = drum roll; «palillos del tambor» = drumsticks. A classic untranslatable pun: the translator needs an English word that means both (e.g. «the paradox rolls on like a drum»)."], ["r", 1, "exorcizarme", "exorcizarme / el demonio", "to exorcise myself", "Links to the title «El padre Karras»: Father Damien Karras, the priest in The Exorcist (El exorcista — Blatty's novel 1971, Friedkin's film 1973). The obsession is a demon to cast out."], ["v", 1, "la rumiación", "la rumiación", "rumination, obsessive overthinking", "Cows ruminate (chew again): psychology word."], ["v", 1, "me condena", "condenar a + infinitivo", "to condemn to", ""], ["v", 1, "enajenarme", "enajenarse", "to lose oneself, to go out of one's mind", "Literally «to become alien to oneself». Here: losing touch with reality because of what books tell."], ["r", 1, "una Alonso Quijano", "una Alonso Quijano", "a (female) Don Quixote", "Alonso Quijano is Don Quixote's real name: he went mad from reading chivalry novels. Note «una»: she turns him into a woman. Translation problem: \"a female Quixote\" loses the real-name game; \"an Alonso Quijano\" loses most English readers."], ["r", 1, "una Bovary", "una Bovary", "an Emma Bovary", "Flaubert's Madame Bovary (1857): ruins her life dreaming of the romantic novels she reads."], ["r", 1, "una Ana Ozores", "una Ana Ozores", "an Ana Ozores", "The heroine of La Regenta (Clarín, 1884–85), «the Spanish Bovary». Very well known in Spain, almost unknown in the UK: the translator must decide whether to explain, swap or keep."], ["v", 1, "narradores testigos", "el narrador testigo", "witness narrator", "Literary theory: a narrator who watches rather than acts."], ["v", 1, "autoficción", "la autoficción", "autofiction", "A novel built on the author's own life. Los íntimos is between memoir and autofiction."], ["j", 1, "la paz mundial", "la paz mundial", "world peace", "The beauty-queen cliché («I want world peace») ending a list of serious literary theory: a deflating joke."], ["v", 1, "editoriales", "la editorial", "publishing house, publisher", "False friend: «editorial» is NOT an editorial article. The publisher's job person = el editor / la editora."], ["v", 1, "agasajos", "el agasajo", "lavish hospitality, being wined and dined", "Dinners, hotels, gifts given to an author by festivals and publishers. Comes back in extract 2 (Formentor, parador)."], ["x", 1, "cuentas pendientes", "tener cuentas pendientes", "unfinished business, scores to settle", "Also literally «unpaid bills»: next to «listas de la compra» the double meaning (money / grudges) is on purpose."], ["v", 1, "listas de la compra", "la lista de la compra", "shopping lists", ""], ["v", 1, "aterradoras", "aterrador/a", "terrifying", ""], ["r", 1, "cien metros vallas", "los cien metros vallas", "the 100-metre hurdles", ""], ["v", 1, "uñas", "la uña", "nail (fingernail)", ""], ["r", 1, "Gail Devers", "Gail Devers", "Gail Devers", "US sprinter: Olympic 100 m gold (1992, 1996) and 100 m hurdles world champion, famous for her very long nails. A woman who competes at the top with an image people judge."], ["x", 1, "corre el riesgo de", "correr el riesgo de", "to run the risk of", ""], ["r", 1, "tercera regional", "bajar a segunda o a tercera regional", "be relegated to the second division or to the lowest local league", "Spanish football: Primera División at the top; the «regional» leagues are the amateur bottom tiers. Career as relegation: a writer who might drop out of the top league."], ["v", 1, "melena", "la melena", "long hair, mane", ""], ["v", 1, "difumina", "difuminar", "to blur, to fade", "la edad nos difumina = age makes us fade (women become invisible with age)."], ["x", 1, "dejará de estar de moda", "dejar de estar de moda", "will go out of fashion", "Periphrasis from her course: dejar de + infinitivo."], ["j", 1, "sus bellas licantropías", "las licantropías", "its beautiful lycanthropies (werewolf transformations)", "Lycanthropy = turning into a wolf. Feminism as shape-shifting, and maybe as something people fear. Unusual, learned word used playfully."], ["v", 1, "se abordan", "abordar", "to tackle, to approach (a topic)", ""], ["v", 1, "cabe", "caber", "to fit, to have a place", "¿cabe en un texto literario? = does it belong in a literary text?"], ["v", 1, "ensanchamiento", "el ensanchamiento", "widening, broadening", ""], ["v", 1, "heteropatriarcal", "heteropatriarcal", "heteropatriarchal", "Activist-academic word. She asks herself (metalinguistic play) if these words belong in literature."], ["v", 1, "esclerotizado", "esclerotizado/a", "hardened, ossified", "From sclerosis (hardening of tissue): again medical."], ["v", 1, "bucle", "el bucle", "loop", "caer en un bucle = to get stuck in a loop."], ["r", 1, "la escasez de papel", "la escasez de papel", "the paper shortage", "Probably the paper shortage and price rise of 2021–22, which made printing books more expensive: publishers prefer thinner books. Material (infraestructural) conditions shaping style."], ["v", 1, "pertinencia", "la pertinencia", "relevance, appropriateness", ""], ["j", 1, "un estilo sílfide frente a un estilo selvático", "estilo sílfide / estilo selvático", "a sylph-like (slim) style versus a jungle (dense) style", "«Sílfide» = sylph, a slim airy creature; «selvático» = of the jungle. Short, slim books versus thick, wild ones. Sanz's style is the jungle — see the machete at the end."], ["r", 1, "“memoria vegetal”", "la memoria vegetal (Umberto Eco)", "«vegetable memory»", "Umberto Eco's essay La memoria vegetal: books (made of paper, from plants) as humanity's memory. Paper again."], ["v", 1, "acuñó", "acuñar", "to coin (a word, a phrase)", "Literally to mint coins: links to the money vocabulary of the next paragraph."], ["v", 1, "oficio", "el oficio", "trade, craft, job", "Sanz insists on writing as work."], ["v", 1, "mezquindad", "la mezquindad", "pettiness, meanness", ""], ["r", 1, "cuentas de resultados", "la cuenta de resultados", "the profit-and-loss account, the bottom line", "Accounting term: publishing as a business."], ["x", 1, "aunque intuya", "aunque + pres. subj.", "even if I sense (that)", "Subjunctive after «aunque» — the idea is admitted but not stressed."], ["j", 1, "probeta medidora", "la probeta medidora", "measuring cylinder (lab)", "Lab glassware: she «measures» pettiness against literature like a chemist. Same science field as «compuestos»."], ["v", 1, "ascenso", "el ascenso", "promotion", "Also «promotion» in football: it closes the relegation image of §8. «ascender» = to be promoted / to go up."], ["r", 1, "la autonomía del campo cultural", "la autonomía del campo cultural", "the autonomy of the cultural field", "Pierre Bourdieu's «field»: the idea that art lives apart from money and power. She doesn't believe it: books are made of paper, money, work."], ["x", 1, "se abre camino", "abrirse camino", "to make one's way", "Also figurative: to make it in a career."], ["v", 1, "machetito mellado", "el machete mellado", "a little blunt, chipped machete", "mellado = notched, chipped (also a gap-toothed mouth). -ito = small, modest."], ["r", 2, "petricor", "el petricor", "petrichor", "The smell of rain on dry earth. A rare, beautiful word: «Todo huele a una palabra»."], ["v", 2, "enumero", "enumerar", "to list", ""], ["x", 2, "no las doy por supuestas", "dar algo por supuesto", "to take something for granted", ""], ["x", 2, "me parece increíble que me hayan sucedido", "me parece increíble que + subj.", "I find it incredible that … have happened to me", "Reaction + que → subjunctive (her grammar)."], ["x", 2, "a ratos", "a ratos", "at times, now and then", ""], ["x", 2, "caiga en la tentación", "caer en la tentación de", "to give in to the temptation to", ""], ["v", 2, "merecimiento", "el merecimiento", "something deserved, merit", "merecer = to deserve: the word family runs through the extract (me lo merecía, se lo merece alguien)."], ["x", 2, "Se me pasa la borrachera", "se me pasa la borrachera", "I sober up, the high wears off", "Literal and figurative: the dazzle of success fades."], ["v", 2, "El efluvio", "el efluvio", "the scent, the fumes, the emanation", "Learned word for a smell or vapour: prepares «petricor»."], ["j", 2, "Me dejo las tres cuartas partes de la osamenta", "dejarse la piel → dejarse la osamenta", "I leave three quarters of my skeleton behind (I work myself to the bone)", "Twisted idiom: the normal phrase is «dejarse la piel» (to give it everything). She goes deeper than skin, to the bones, and measures it: «three quarters». English has «to work your fingers to the bone»."], ["x", 2, "me ha franqueado el paso", "franquear el paso a alguien", "to let someone through, to open the way", "Formal. Normal: dejar pasar / abrir la puerta."], ["r", 2, "Formentor", "Formentor", "Formentor (Mallorca)", "The Hotel Formentor in Mallorca, a luxury hotel linked to literature: the Conversaciones Literarias de Formentor and the Formentor prize. Gardens, bedrooms: the perks of literary success."], ["r", 2, "Cartagena de Indias", "Cartagena de Indias", "Cartagena (Colombia)", "Colonial city on the Caribbean coast of Colombia, home of the Hay Festival Cartagena. «Ay» = a nostalgic sigh."], ["r", 2, "parador de los Reyes Católicos", "el parador de los Reyes Católicos", "the Parador of the Catholic Monarchs (Santiago de Compostela)", "Paradores are state-run luxury hotels in historic buildings. This one, next to Santiago cathedral, was a pilgrims' hospital built by Isabel and Fernando (1499)."], ["v", 2, "la llave electrónica", "la llave electrónica", "the key card (hotel)", "Metaphor: access. Many deserve it, few get the key."], ["r", 2, "Dónde están las llaves, matarile-rile-rile", "«¿Dónde están las llaves?»", "«Where are the keys?», a children's song", "Traditional Spanish children's song and circle game. «Matarile-rile-rile / -rón» has no meaning: it's a nonsense refrain everyone in Spain knows from childhood. Translation problem: an English nursery-rhyme refrain, or keep it with a note?"], ["r", 2, "el país de las maravillas", "el país de las maravillas (Alicia)", "Wonderland", "Alice's Adventures in Wonderland (Alicia en el país de las maravillas). Play on «maravillas»: her «wonders» → Wonderland."], ["r", 2, "su liebre y su niño-cochinillo", "la liebre y el niño-cochinillo", "the March Hare and the baby that turns into a pig", "In Alice, the Duchess's baby turns into a pig. «Cochinillo» is also the roast suckling pig of Segovia: a local Spanish echo in English literature."], ["v", 2, "minusvalorar", "minusvalorar", "to undervalue, to underrate", ""], ["x", 2, "Quedan patentes las desigualdades", "quedar patente", "inequalities are laid bare / become obvious", "Formal. patente = evident."], ["x", 2, "Levanto de memoria", "levantar de memoria", "I build from memory", "«levantar» = to put up (a building): narration as construction work."], ["v", 2, "el salitre", "el salitre", "salt air, sea salt (saltpetre)", "The salty smell and crust of the sea."], ["v", 2, "rentabilidad", "la rentabilidad", "profitability", "Money word inside a sentence about flowers: senses «pay off» in literature. Ironic."], ["x", 2, "dan cuenta de una época", "dar cuenta de", "to bear witness to, to give an account of", ""], ["j", 2, "Mis manualidades", "las manualidades", "my arts and crafts", "School «manualidades» (crafts with glue and scissors): a modest, almost childish word for her books. Links to «recortable» and «tijeritas»."], ["v", 2, "se filtran", "filtrarse", "to seep, to filter through", "Same verb as in extract 1 (la escasez de papel que se filtra…)."], ["v", 2, "ha de contarlo", "haber de + infinitivo", "has to tell it", "Literary for «tener que». Again: «han de justificar»."], ["x", 2, "aunque ignore si", "aunque + pres. subj.", "even though they don't know whether", "«ignorar» = not to know (false friend: not «to ignore» = no hacer caso)."], ["v", 2, "decorados", "el decorado", "set (theatre, film), scenery", ""], ["v", 2, "borrones", "el borrón", "smudge, blot", ""], ["r", 2, "descampados y freidoras de aceite", "descampados y freidoras de aceite", "waste ground and deep-fat fryers", "Images of the working-class city outskirts — the «lugares no previsibles» she comes from, as opposed to Formentor and paradores."], ["v", 2, "la expiación", "la expiación", "atonement, expiation", ""], ["x", 2, "los lugares no previsibles", "los lugares no previsibles", "unexpected places (unlikely backgrounds)", "People from a class or place where success isn't expected: they must justify every rise."], ["v", 2, "ascensiones", "la ascensión", "ascent, rise", "Echo of «ascenso» in extract 1."], ["v", 2, "lamentarse", "lamentarse de", "to complain about, to lament", ""], ["v", 2, "las tijeritas", "las tijeras / tijeritas", "(little) scissors", ""], ["r", 2, "mi figura recortable", "la figura recortable", "my cut-out paper figure", "«Recortables» = cut-out paper dolls from children's magazines. She imagines being cut out of the group photo of literary life."], ["x", 2, "me repaso los contornos", "repasar los contornos", "to trace over my outlines", "Like a child going over a drawing's lines: writing herself again so as not to disappear."], ["v", 2, "burgués", "burgués / burguesa", "bourgeois, middle-class", ""], ["v", 2, "el desgaste", "el desgaste", "wear and tear, exhaustion", ""], ["x", 2, "nos ha abierto un hueco", "abrir un hueco a alguien", "to make room for someone", ""], ["v", 2, "listeza", "la listeza", "cleverness, smartness", "From «listo». Less common and more colloquial than «inteligencia»: smartness people find annoying."], ["v", 2, "Abruma", "abrumar", "to overwhelm", ""], ["x", 2, "que me dejen en paz", "que me dejen en paz", "(I want) to be left alone", "Quiero que + subjunctive, like «quiero que me llames»."], ["v", 2, "aminore", "aminorar", "to reduce, to lessen", "No quiero que … aminore … que mi trabajo haya sido: two subjunctives in a row."], ["v", 2, "malcriada", "malcriado/a", "spoilt", ""], ["v", 2, "feroz", "feroz", "fierce, ferocious", ""], ["r", 2, "Welsh, Moran, Ellroy", "Welsh, Moran, Ellroy", "Irvine Welsh, Caitlin Moran, James Ellroy", "Famous English-language authors she met (at festivals or literary events): Welsh (Trainspotting), Moran (How to Be a Woman), Ellroy (L.A. Confidential)."], ["j", 2, "me habrán olvidado", "futuro perfecto: me habrán olvidado", "they'll have forgotten me / they've probably forgotten me", "Futuro perfecto of probability. She calls it «optimistic»: it implies they remembered her for a while."], ["j", 2, "me han olvidado", "pretérito perfecto: me han olvidado", "they have forgotten me", "Linked to the present: also «optimistic»."], ["j", 2, "me olvidaron a los cinco minutos", "pretérito indefinido: me olvidaron", "they forgot me five minutes after meeting me", "The closed, finished past: the honest version. Grammar as a joke about fame."]], TN={v:'Vocabulario',x:'Expresión',r:'Referencia cultural',j:'Juego · estilo'};
+const gloss=document.getElementById('gloss');
+let cur=null;
+function spanOf(i){ return board.querySelector('.tp .hl[data-g="'+i+'"]'); }
+function showGloss(i){
+  const g=G[i]; cur=i;
+  board.querySelectorAll('.hl.on').forEach(n=>n.classList.remove('on'));
+  const sp=spanOf(i); if(sp) sp.classList.add('on');
+  gloss.className='gloss t-'+g[0];
+  gloss.querySelector('.gt').textContent=TN[g[0]]+' · fragmento '+g[1];
+  gloss.querySelector('.gw').textContent=g[3]||g[2];
+  gloss.querySelector('.ge').textContent=g[4];
+  const nt=gloss.querySelector('.gnote'); nt.textContent=g[5]; nt.hidden=!g[5];
+  const q=gloss.querySelector('.gq'); q.textContent=g[3]&&g[3]!==g[2]?'En el texto: «'+g[2]+'»':''; q.hidden=!q.textContent;
+  gloss.hidden=false;
+}
+function flyToSpan(i){
+  const sp=spanOf(i); if(!sp) return;
+  const p=sp.closest('.tp');
+  flyTo(fitTarget(worldRect(p),1.1));
+  sp.classList.remove('flash'); void sp.offsetWidth; sp.classList.add('flash');
+}
+gloss.querySelector('.gx').onclick=()=>{ gloss.hidden=true; board.querySelectorAll('.hl.on').forEach(n=>n.classList.remove('on')); };
+document.getElementById('gIn').onclick=()=>{ if(cur!=null) flyToSpan(cur); };
+document.getElementById('gAdd').onclick=()=>{ if(cur==null) return; const g=G[cur]; insertLine((g[3]||g[2])+' — '+g[4]); };
+function goParas(a,b){
+  const ra=worldRect(document.getElementById(a)), rb=worldRect(document.getElementById(b));
+  const r={x:Math.min(ra.x,rb.x), y:ra.y, w:Math.max(ra.w,rb.w), h:rb.y+rb.h-ra.y};
+  flyTo(fitTarget(r,1.1));
+  [...document.querySelectorAll('.tp')].forEach(n=>{ const id=n.id, ex=id.split('-')[0], k=+id.split('-')[1];
+    if(ex===a.split('-')[0] && k>=+a.split('-')[1] && k<=+b.split('-')[1]){ n.classList.add('pul'); setTimeout(()=>n.classList.remove('pul'),1600); } });
+}
+
+/* ---- taps ---- */
+view.addEventListener('click',e=>{
+  if(moved>8) return;                                   // that was a drag
+  const hl=e.target.closest('.tp .hl'); if(hl){ showGloss(+hl.dataset.g); return; }
+  const gl=e.target.closest('.gl'); if(gl){ showGloss(+gl.dataset.g); flyToSpan(+gl.dataset.g); return; }
+  const st=e.target.closest('.stp'); if(st){ goParas(st.dataset.p, st.dataset.q); return; }
+  if(e.target.closest('details,#dict,textarea,button')) return;
+  const card=e.target.closest('.card');
+  if(card && card.id!=='k-write' && card.id!=='k-text') flyTo(fitTarget(worldRect(card),1.2));
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.nav [data-go], .top [data-go]'); if(b) goEl(b.dataset.go);
+});
+
+/* ---- notes ---- */
+const draft=document.getElementById('draft'), wc=document.getElementById('wc'), paras=document.getElementById('paras'), undoBtn=document.getElementById('undoBtn');
+const KEY=PAGE+'-draft', WORD=/[A-Za-zÀ-ÿ0-9]+(?:['’-][A-Za-zÀ-ÿ]+)*/g;
+try{ draft.value=localStorage.getItem(KEY)||''; }catch(_){}
+function grow(){ draft.style.height='auto'; draft.style.height=Math.max(460,draft.scrollHeight+40)+'px'; }
+function refresh(){
+  const n=(draft.value.match(WORD)||[]).length;
+  wc.textContent=n+(n===1?' palabra':' palabras'); wc.className='wc';
+  const p=draft.value.split(/\n/).filter(t=>t.trim()).length;
+  paras.textContent=p?p+(p===1?' línea':' líneas'):'';
+  grow(); try{localStorage.setItem(KEY,draft.value);}catch(_){}
+}
+draft.addEventListener('input',refresh);
+let caret=null; const undo=[];
+draft.addEventListener('blur',()=>{ caret=[draft.selectionStart,draft.selectionEnd]; });
+function insert(txt){
+  const v=draft.value;
+  const [a,b]=document.activeElement===draft?[draft.selectionStart,draft.selectionEnd]:(caret||[v.length,v.length]);
+  const before=v.slice(0,a), after=v.slice(b);
+  if(before && !/\s$/.test(before)) txt=' '+txt;
+  undo.push(v); if(undo.length>30) undo.shift(); undoBtn.disabled=false;
+  draft.value=before+txt+after;
+  const pos=(before+txt).length; caret=[pos,pos];
+  if(document.activeElement===draft) draft.setSelectionRange(pos,pos);
+  refresh(); toast('→ '+txt.trim());
+}
+function insertLine(txt){
+  const v=draft.value; undo.push(v); if(undo.length>30) undo.shift(); undoBtn.disabled=false;
+  draft.value=v+(v && !/\n$/.test(v)?'\n':'')+txt+'\n'; caret=null; refresh(); toast('＋ '+txt);
+}
+undoBtn.onclick=()=>{ if(!undo.length) return; draft.value=undo.pop(); caret=null; refresh(); undoBtn.disabled=!undo.length; toast('Deshecho'); };
+document.getElementById('copyBtn').onclick=async()=>{
+  try{ await navigator.clipboard.writeText(draft.value); toast('Texto copiado'); }
+  catch(_){ draft.focus(); draft.select(); toast('Selecciona y copia'); }
+};
+let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),1400); }
+
+/* start on the text; re-fit once fonts load unless she has already moved */
+function start(){ unscroll(); refresh(); const id=location.hash.slice(1); if(id&&document.getElementById(id)) goEl(id,0); else goAll(0); }
+let touched=false; view.addEventListener('pointerdown',()=>touched=true,{once:true});
+const again=()=>{ if(!touched) start(); };
+start(); addEventListener('load',again);
+if(document.fonts){ document.fonts.ready.then(again); document.fonts.addEventListener('loadingdone',again); }
+let rz; addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(!pts.size && !touched) goAll(300); },250); });
+})();
+
+</script>
+</body></html>
